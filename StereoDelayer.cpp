@@ -20,12 +20,22 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     prepareSynchronProcessing(max_channels,synchronblocksize);
     m_Latency += synchronblocksize;
     // here your code
+    m_delayline.setSamplingrate(static_cast<float> (sampleRate));
+    m_delayline.setMaxDelaySeconds(2.0);
+    m_delayline.setNrOfChns(max_channels);
+
+    // testing
+    m_delayline.setDelaySeconds(0.5f,0);
+    m_delayline.setDelaySeconds(1.f,1);
 
 }
 
 int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, juce::MidiBuffer &midiMessages, int NrOfBlocksSinceLastProcessBlock)
 {
-    juce::ignoreUnused(buffer, midiMessages, NrOfBlocksSinceLastProcessBlock);
+    juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
+
+    m_delayline.processSamples(buffer);
+
     return 0;
 }
 
@@ -65,7 +75,7 @@ void StereoDelayerGUI::paint(juce::Graphics &g)
     g.setFont (15.0f);
     
     juce::String text2display = "StereoDelayer V " + juce::String(PLUGIN_VERSION_MAJOR) + "." + juce::String(PLUGIN_VERSION_MINOR) + "." + juce::String(PLUGIN_VERSION_PATCH);
-    g.drawFittedText (text2display, getLocalBounds(), juce::Justification::centred, 1);
+    g.drawFittedText (text2display, getLocalBounds(), juce::Justification::bottomLeft, 1);
 
 }
 
