@@ -6,7 +6,7 @@
 #include "tools/SynchronBlockProcessor.h"
 #include "PluginSettings.h"
 
-#include "BasicDelayLine.h"
+#include "BasicDelayLineTV.h"
 
 class StereoDelayerAudioProcessor;
 
