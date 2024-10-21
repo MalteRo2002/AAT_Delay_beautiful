@@ -6,7 +6,7 @@
 #include "tools/SynchronBlockProcessor.h"
 #include "PluginSettings.h"
 
-#include "BasicDelayLine.h"
+#include "BasicDelayLineTV.h"
 
 class StereoDelayerAudioProcessor;
 
@@ -41,6 +41,8 @@ private:
     int m_Latency = 0;
 
 	jade::BasicDelayLine m_delay;
+	size_t m_counter = 0;
+	size_t m_switchTime = 44100;
 };
 
 class StereoDelayerGUI : public juce::Component

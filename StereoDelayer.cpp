@@ -25,12 +25,28 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_delay.setNrOfChns(2);
     m_delay.setDelay_s(0.5,0);
     m_delay.setDelay_s(1.f,1);
+    m_delay.setSwitchTime(sampleRate*0.5);
+    m_switchTime = sampleRate*0.4f;
+    m_counter = 0;
 
 }
 
 int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, juce::MidiBuffer &midiMessages, int NrOfBlocksSinceLastProcessBlock)
 {
     juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
+
+    int nrofsamples = buffer.getNumSamples();
+
+    m_counter += nrofsamples;
+
+    if (m_counter >= m_switchTime)
+    {
+        m_counter -= m_switchTime;
+        float rnd = static_cast<float> (rand())/RAND_MAX;
+        float chn = rand()%2;
+        m_delay.setDelay_s(rnd,chn);
+    }
+
     m_delay.processSamples(buffer);
     return 0;
 }

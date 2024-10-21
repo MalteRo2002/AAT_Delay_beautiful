@@ -14,6 +14,13 @@ namespace jade
 class BasicDelayLine
 {
 public: 
+    enum class switchState
+    {
+        normal,
+        changeTime,
+        futureValueSet,
+    };
+
     BasicDelayLine();
     void setMaxDelay(size_t maxdelay){m_maxdelay = maxdelay; changeBufferSize();};
     void setMaxDelay_s(float delay_s){size_t delay = static_cast<size_t> (delay_s*m_fs); setMaxDelay(delay);};
@@ -24,6 +31,7 @@ public:
     void setDelay_s(float delay_s, size_t chn){size_t delay = static_cast<size_t> (delay_s*m_fs); setDelay(delay, chn);};
 
     int processSamples(juce::AudioBuffer<float>& data);
+    void setSwitchTime(size_t time){m_switchTime = time;};
 
 private:
     void changeBufferSize();
@@ -34,6 +42,13 @@ private:
 
     size_t m_writePos = 0;
     std::vector<size_t> m_delays;
+
+    // Fade Switch
+    size_t m_switchTime = 100;
+    std::vector<size_t> m_switchCounter;
+    std::vector<switchState> m_switchState;
+    std::vector<size_t> m_newdelays;
+    std::vector<size_t> m_futuredelays;
 
 };
 
