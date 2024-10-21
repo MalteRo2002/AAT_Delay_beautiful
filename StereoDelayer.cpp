@@ -21,11 +21,17 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_Latency += synchronblocksize;
     // here your code
 
+    m_delay.setMaxDelay(2*sampleRate);
+    m_delay.setNrOfChns(2);
+    m_delay.setDelay(0.5*sampleRate,0);
+    m_delay.setDelay(1*sampleRate,1);
+
 }
 
 int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, juce::MidiBuffer &midiMessages, int NrOfBlocksSinceLastProcessBlock)
 {
-    juce::ignoreUnused(buffer, midiMessages, NrOfBlocksSinceLastProcessBlock);
+    juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
+    m_delay.processSamples(buffer);
     return 0;
 }
 
