@@ -6,8 +6,6 @@
 #include "tools/SynchronBlockProcessor.h"
 #include "PluginSettings.h"
 
-#include "BasicDelayLine.h"
-
 class StereoDelayerAudioProcessor;
 
 // This is how we define our parameter as globals to use it in the audio processor as well as in the editor
@@ -39,11 +37,6 @@ public:
 private:
 	juce::AudioProcessor* m_processor;
     int m_Latency = 0;
-
-	// your code
-	jade::BasicDelayLine m_delayline;
-
-
 };
 
 class StereoDelayerGUI : public juce::Component
