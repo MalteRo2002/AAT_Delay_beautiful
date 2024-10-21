@@ -20,11 +20,11 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     prepareSynchronProcessing(max_channels,synchronblocksize);
     m_Latency += synchronblocksize;
     // here your code
-
-    m_delay.setMaxDelay(2*sampleRate);
+    m_delay.setSamplerate(sampleRate);
+    m_delay.setMaxDelay_s(2.f);
     m_delay.setNrOfChns(2);
-    m_delay.setDelay(0.5*sampleRate,0);
-    m_delay.setDelay(1*sampleRate,1);
+    m_delay.setDelay_s(0.5,0);
+    m_delay.setDelay_s(1.f,1);
 
 }
 

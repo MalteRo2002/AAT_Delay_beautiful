@@ -40,7 +40,7 @@ juce_add_plugin(${TARGET_NAME}
     # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
     VST3_CATEGORIES "Fx" "Delay"                        
     AU_MAIN_TYPE "kAudioUnitType_Effect"
-    COPY_PLUGIN_AFTER_BUILD TRUE               # Should the plugin be installed to a default location after building?
+    COPY_PLUGIN_AFTER_BUILD FALSE               # Should the plugin be installed to a default location after building?
     PLUGIN_MANUFACTURER_CODE IHAJ               # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE dEl0                            # A unique four-character plugin id with at least one upper-case character
     FORMATS AU VST3 Standalone                  # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
