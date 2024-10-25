@@ -25,8 +25,9 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_delay.setNrOfChns(2);
     m_delay.setDelay_s(0.5,0);
     m_delay.setDelay_s(1.f,1);
-    m_delay.setSwitchTime(sampleRate*0.5);
-    m_switchTime = sampleRate*0.4f;
+    m_delay.setSwitchTime(sampleRate*1.f);
+    m_switchTime = sampleRate*4.f;
+    m_delay.setSwitchAlgorithm(jade::BasicDelayLine::switchAlgorithm::Tape);
     m_counter = 0;
 
 }
@@ -44,7 +45,7 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
         m_counter -= m_switchTime;
         float rnd = static_cast<float> (rand())/RAND_MAX;
         float chn = rand()%2;
-        m_delay.setDelay_s(rnd,chn);
+        m_delay.setDelay_s(rnd*0.1,chn);
     }
 
     m_delay.processSamples(buffer);

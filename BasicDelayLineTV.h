@@ -3,6 +3,7 @@
 // Rahmenbedingungen
 // JUCE nutzen ==> AudioBuffer 
 // ncHns fähig
+// https://www.geeksforgeeks.org/lagrange-interpolation-formula/
 
 #include <vector>
 #include <juce_core/juce_core.h>
@@ -20,6 +21,12 @@ public:
         changeTime,
         futureValueSet,
     };
+    enum class switchAlgorithm
+    {
+        Digital,
+        Fade,
+        Tape
+    };
 
     BasicDelayLine();
     void setMaxDelay(size_t maxdelay){m_maxdelay = maxdelay; changeBufferSize();};
@@ -32,16 +39,18 @@ public:
 
     int processSamples(juce::AudioBuffer<float>& data);
     void setSwitchTime(size_t time){m_switchTime = time;};
+    void setSwitchAlgorithm (switchAlgorithm algo){m_algorithmswitch = algo; resetSwitchStatus();};
 
 private:
     void changeBufferSize();
+    void resetSwitchStatus();
     float m_fs;
     size_t m_maxdelay = 1000;
     size_t m_nrOfChns = 2;
     juce::AudioBuffer<float> m_buffer;
 
     size_t m_writePos = 0;
-    std::vector<size_t> m_delays;
+    std::vector<double> m_delays;
 
     // Fade Switch
     size_t m_switchTime = 100;
@@ -49,6 +58,9 @@ private:
     std::vector<switchState> m_switchState;
     std::vector<size_t> m_newdelays;
     std::vector<size_t> m_futuredelays;
+
+    switchAlgorithm m_algorithmswitch = switchAlgorithm::Digital;
+    std::vector<double> m_incStep;
 
 };
 
