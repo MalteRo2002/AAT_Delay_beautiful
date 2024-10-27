@@ -101,7 +101,7 @@ int jade::BasicDelayLine::processSamples(juce::AudioBuffer<float> &data)
                     if (m_switchCounter[cc] == 0)
                     {
                         m_switchState[cc] = switchState::normal;
-                        m_delays[cc] = static_cast<double> (static_cast<int> (m_delays[cc]));
+                        m_delays[cc] = static_cast<double> (static_cast<int> (m_delays[cc] + 0.5));
                     }
                     double readPosFrac = static_cast<double> (m_writePos) - m_delays[cc];
                     if (readPosFrac < 0.0)
