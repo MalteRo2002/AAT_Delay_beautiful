@@ -21,12 +21,13 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_Latency += synchronblocksize;
     // here your code
     m_delay.setSamplerate(sampleRate);
-    m_delay.setMaxDelay_s(2.f);
+    m_delay.setMaxDelay_s(4.f);
     m_delay.setNrOfChns(2);
     m_delay.setDelay_s(0.5,0);
     m_delay.setDelay_s(1.f,1);
     m_delay.setSwitchTime(sampleRate*0.5);
-    m_switchTime = sampleRate*0.4f;
+    m_switchTime = sampleRate*1.5f;
+    m_delay.setSwitchAlgorithm(jade::BasicDelayLine::switchAlgorithm::fade);
     m_counter = 0;
 
 }
