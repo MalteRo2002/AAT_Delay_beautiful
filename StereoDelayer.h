@@ -4,6 +4,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "tools/SynchronBlockProcessor.h"
+#include "tools/AudioProcessParameter.h"
 #include "PluginSettings.h"
 
 #include "BasicDelayLineTV.h"
@@ -13,13 +14,43 @@ class StereoDelayerAudioProcessor;
 // This is how we define our parameter as globals to use it in the audio processor as well as in the editor
 const struct
 {
-	const std::string ID = "ExampleID";
-	const std::string name = "Example";
-	const std::string unitName = "xyz";
+	const std::string ID = "DelayTimeLeftID";
+	const std::string name = "DelayTimeLeft";
+	const std::string unitName = " ms";
 	const float minValue = 1.f;
-	const float maxValue = 2.f;
-	const float defaultValue = 1.2f;
-}g_paramExample;
+	const float maxValue = 1000.f;
+	const float defaultValue = 10.f;
+}g_paramDelayTimeLeft;
+
+const struct
+{
+	const std::string ID = "DelayTimeRightID";
+	const std::string name = "DelayTimeRight";
+	const std::string unitName = " ms";
+	const float minValue = 1.f;
+	const float maxValue = 1000.f;
+	const float defaultValue = 10.f;
+}g_paramDelayTimeRight;
+
+// param for the RangedValueType Bool
+const struct
+{
+	const std::string ID = "LinkID";
+	const std::string name = "LinkLR";
+	const std::string unitName = "";
+	const bool defaultValue = false;
+}g_paramLink;
+
+// param for the RangedValueType choice
+const struct
+{
+	const std::string ID = "SwitchAlgoID";
+	const std::string name = "SwitchAlgo";
+	const std::string unitName = "";
+	const juce::StringArray choices = { "Digital", "Fade", "Tape" };
+	const int defaultIndex = 0;
+}g_paramSwitchAlgo;
+
 
 
 class StereoDelayerAudio : public SynchronBlockProcessor
@@ -43,6 +74,14 @@ private:
 	jade::BasicDelayLine m_delay;
 	size_t m_counter = 0;
 	size_t m_switchTime = 44100;
+
+	// parameter handling
+	jade::AudioProcessParameter<float> m_delayTimeLeftParam;
+	jade::AudioProcessParameter<float> m_delayTimeRightParam;
+	jade::AudioProcessParameter<bool> m_linkParam;
+	jade::AudioProcessParameter<int> m_switchAlgoParam;
+	float m_delayTimeLeft = g_paramDelayTimeLeft.defaultValue;
+	float m_delayTimeRight = g_paramDelayTimeRight.defaultValue;
 };
 
 class StereoDelayerGUI : public juce::Component
