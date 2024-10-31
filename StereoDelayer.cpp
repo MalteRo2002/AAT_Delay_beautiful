@@ -44,7 +44,7 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
         auto param = processor->m_parameterVTS->getParameter(g_paramDelayTimeRight.ID);
         
         param->beginChangeGesture();
-        param->setValueNotifyingHost((m_delayTimeLeft - g_paramDelayTimeLeft.minValue )/(g_paramDelayTimeLeft.maxValue - g_paramDelayTimeLeft.minValue));
+        param->setValueNotifyingHost(param->convertTo0to1(m_delayTimeLeft));
         param->endChangeGesture();
     }
     somethingchanged = m_delayTimeRightParam.updateWithNotification(m_delayTimeRight);
@@ -53,7 +53,7 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
         m_delay.setDelay_s(m_delayTimeRight*0.001,1);
         auto param = processor->m_parameterVTS->getParameter(g_paramDelayTimeLeft.ID);
         param->beginChangeGesture();
-        param->setValueNotifyingHost((m_delayTimeRight - g_paramDelayTimeLeft.minValue )/(g_paramDelayTimeLeft.maxValue - g_paramDelayTimeLeft.minValue));
+        param->setValueNotifyingHost(param->convertTo0to1(m_delayTimeRight));
         param->endChangeGesture();
     }    
     juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
