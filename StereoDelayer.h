@@ -4,22 +4,55 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include "tools/SynchronBlockProcessor.h"
+#include "tools/AudioProcessParameter.h"
+
+
 #include "PluginSettings.h"
 
-#include "BasicDelayLineTV.h"
+#include "BasicDelayEffect.h"
 
 class StereoDelayerAudioProcessor;
 
 // This is how we define our parameter as globals to use it in the audio processor as well as in the editor
 const struct
 {
-	const std::string ID = "ExampleID";
-	const std::string name = "Example";
-	const std::string unitName = "xyz";
+	const std::string ID = "LeftDelaymsID";
+	const std::string name = "LeftDelayms";
+	const std::string unitName = " ms";
 	const float minValue = 1.f;
-	const float maxValue = 2.f;
-	const float defaultValue = 1.2f;
-}g_paramExample;
+	const float maxValue = 5000.f;
+	const float defaultValue = 500.f;
+}g_paramLeftDelayms;
+
+const struct
+{
+	const std::string ID = "RightDelaymsID";
+	const std::string name = "RightDelayms";
+	const std::string unitName = " ms";
+	const float minValue = 1.f;
+	const float maxValue = 5000.f;
+	const float defaultValue = 500.f;
+}g_paramRightDelayms;
+
+const struct
+{
+	const std::string ID = "LeftFeedbackID";
+	const std::string name = "LeftFeedback";
+	const std::string unitName = " %";
+	const float minValue = 0.f;
+	const float maxValue = 0.999f;
+	const float defaultValue = 0.f;
+}g_paramLeftFeedback;
+
+const struct
+{
+	const std::string ID = "RightFeedbackID";
+	const std::string name = "RightFeedback";
+	const std::string unitName = " %";
+	const float minValue = 0.f;
+	const float maxValue = 0.999f;
+	const float defaultValue = 0.f;
+}g_paramRightFeedback;
 
 
 class StereoDelayerAudio : public SynchronBlockProcessor
@@ -40,9 +73,20 @@ private:
 	juce::AudioProcessor* m_processor;
     int m_Latency = 0;
 
-	jade::BasicDelayLine m_delay;
-	size_t m_counter = 0;
-	size_t m_switchTime = 44100;
+	jade::BasicDelayEffect m_delay;
+
+	// parameter code
+	float m_delayTimeLeft_ms = 1.f;
+	float m_delayTimeRight_ms = 1.f;
+	jade::AudioProcessParameter<float> m_LeftDelaymsParam;
+	jade::AudioProcessParameter<float> m_RightDelaymsParam;
+	float m_feedbackLeft = 0.f;
+	float m_feedbackRight = 0.f;
+	jade::AudioProcessParameter<float> m_LeftFeedbackParam;
+	jade::AudioProcessParameter<float> m_RightFeedbackParam;
+
+
+
 };
 
 class StereoDelayerGUI : public juce::Component

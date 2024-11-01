@@ -1,12 +1,12 @@
-#include "BasicDelayLineTV.h"
+#include "BasicDelayEffect.h"
 
-jade::BasicDelayLine::BasicDelayLine()
+jade::BasicDelayEffect::BasicDelayEffect()
 {
     changeBufferSize();
 
 }
 
-void jade::BasicDelayLine::setDelay(size_t delay, size_t chn)
+void jade::BasicDelayEffect::setDelay(size_t delay, size_t chn)
 {
     if (delay >= m_maxdelay || chn >= m_nrOfChns)
         return;
@@ -39,7 +39,7 @@ void jade::BasicDelayLine::setDelay(size_t delay, size_t chn)
     }
 }
 
-int jade::BasicDelayLine::processSamples(juce::AudioBuffer<float> &data)
+int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
 {
     size_t nrofchns = data.getNumChannels();
     size_t nrofsamples = data.getNumSamples();
@@ -50,7 +50,7 @@ int jade::BasicDelayLine::processSamples(juce::AudioBuffer<float> &data)
     {
         for (auto cc = 0; cc < nrofchns; ++cc)
         {
-            float in = dataPtr[cc][kk];
+            float in = dataPtr[cc][kk] + m_oldOut[cc]*m_feedback[cc];
             bufferPtr[cc][m_writePos] = in; 
 
             float out = 0.f;
@@ -137,6 +137,7 @@ int jade::BasicDelayLine::processSamples(juce::AudioBuffer<float> &data)
                 }
 
             }
+            m_oldOut[cc] = out;
             dataPtr[cc][kk] = out;
         }
 
@@ -148,7 +149,7 @@ int jade::BasicDelayLine::processSamples(juce::AudioBuffer<float> &data)
     return 0;
 }
 
-void jade::BasicDelayLine::changeBufferSize()
+void jade::BasicDelayEffect::changeBufferSize()
 {
     m_buffer.setSize (static_cast<int>(m_nrOfChns), static_cast<int>(m_maxdelay));
     m_buffer.clear();
@@ -158,6 +159,8 @@ void jade::BasicDelayLine::changeBufferSize()
     m_switchCounter.resize(m_nrOfChns);
     m_switchState.resize(m_nrOfChns);
     m_fadeInc.resize(m_nrOfChns);
+    m_feedback.resize(m_nrOfChns);
+    m_oldOut.resize(m_nrOfChns);
     for (auto cc = 0; cc < m_nrOfChns; ++cc)
     {
         m_delays[cc] = 0.0;
@@ -166,10 +169,12 @@ void jade::BasicDelayLine::changeBufferSize()
         m_futuredelays[cc] = 0;
         m_fadeInc[cc] = 0.0;
         m_switchState[cc] = switchState::normal;
+        m_feedback[cc] = 0.f;
+        m_oldOut[cc] = 0.f;
     }
 }
 
-void jade::BasicDelayLine::switchalgorithmChanged()
+void jade::BasicDelayEffect::switchalgorithmChanged()
 {
     for (size_t cc = 0; cc < m_nrOfChns; ++cc)
     {
