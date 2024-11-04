@@ -95,4 +95,9 @@ private:
 	StereoDelayerAudioProcessor& m_processor;
     juce::AudioProcessorValueTreeState& m_apvts; 
 
+	juce::Slider m_delayTimeLeftSlider;
+	juce::Slider m_delayTimeRightSlider;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DelayTimeLeftAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DelayTimeRightAttachment;
+
 };

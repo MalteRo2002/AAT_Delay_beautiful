@@ -95,8 +95,8 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
         AudioParameterFloatAttributes().withLabel (g_paramDelayTimeRight.unitName)
                                         .withCategory (juce::AudioProcessorParameter::genericParameter)
                                         // or two additional lines with lambdas to convert data for display
-                                        // .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int(exp(value) * 10) * 0.1f;  return (String(value, MaxLen) + " Hz"); }))
-                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int((value) * 10) * 0.1f;  return (String(value, MaxLen)); }))
+                                        .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
 
     paramVector.push_back(std::make_unique<AudioParameterBool>(g_paramLink.ID,
@@ -138,7 +138,34 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
 StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioProcessorValueTreeState& apvts)
 :m_processor(p) ,m_apvts(apvts)
 {
-    
+    m_delayTimeLeftSlider.setSliderStyle(juce::Slider::SliderStyle::LinearBar);
+
+    m_delayTimeLeftSlider.setRange(g_paramDelayTimeLeft.minValue, g_paramDelayTimeLeft.maxValue);
+    m_delayTimeLeftSlider.setTextValueSuffix(g_paramDelayTimeLeft.unitName);
+    m_delayTimeLeftSlider.setSliderSnapsToMousePosition(false);
+    m_delayTimeLeftSlider.setMouseClickGrabsKeyboardFocus(true);
+ 
+    auto val = m_apvts.getRawParameterValue(g_paramDelayTimeLeft.ID);
+    m_delayTimeLeftSlider.setValue(*val);
+    m_DelayTimeLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDelayTimeLeft.ID, m_delayTimeLeftSlider);
+    addAndMakeVisible(m_delayTimeLeftSlider);
+
+    m_delayTimeRightSlider.setSliderStyle(juce::Slider::SliderStyle::LinearBarVertical);
+    m_delayTimeRightSlider.setSliderSnapsToMousePosition(false);
+    //m_delayTimeRightSlider.setVelocityBasedMode(true);
+    m_delayTimeRightSlider.setNumDecimalPlacesToDisplay(1);
+    m_delayTimeRightSlider.setMouseClickGrabsKeyboardFocus(true);
+    m_delayTimeRightSlider.setTextValueSuffix(g_paramDelayTimeRight.unitName);
+    val = m_apvts.getRawParameterValue(g_paramDelayTimeRight.ID);
+    m_delayTimeRightSlider.setValue(*val);
+    m_delayTimeRightSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 10, 20);
+    m_delayTimeRightSlider.setTextBoxIsEditable(false);
+    m_delayTimeRightSlider.setColour(Slider::trackColourId, Colours::transparentBlack);
+    m_delayTimeRightSlider.setRange(g_paramDelayTimeRight.minValue, g_paramDelayTimeRight.maxValue);
+    m_DelayTimeRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDelayTimeRight.ID, m_delayTimeRightSlider);
+    addAndMakeVisible(m_delayTimeRightSlider);
+
+
 }
 
 void StereoDelayerGUI::paint(juce::Graphics &g)
@@ -162,5 +189,8 @@ void StereoDelayerGUI::resized()
 	//float scaleFactor = float(width)/g_minGuiSize_x;
 
     // use the given canvas in r
-    juce::ignoreUnused(r);
+    int height = r.getHeight();
+    m_delayTimeLeftSlider.setBounds(40,40,60,20);
+    m_delayTimeRightSlider.setBounds(40,120,60,20);
+
 }
