@@ -1,7 +1,7 @@
 #include <math.h>
 #include "StereoDelayer.h"
 
-
+#include "PluginProcessor.h"
 StereoDelayerAudio::StereoDelayerAudio(juce::AudioProcessor* processor)
 :SynchronBlockProcessor(), m_processor(processor)
 {
@@ -35,6 +35,8 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
 int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, juce::MidiBuffer &midiMessages, int NrOfBlocksSinceLastProcessBlock)
 {
     juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
+    
+    m_rms = buffer.getRMSLevel(0,0,buffer.getNumSamples());
 
     bool somethingChanged = false;
     somethingChanged = m_LeftDelaymsParam.updateWithNotification(m_delayTimeLeft_ms);
@@ -123,18 +125,48 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
 StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioProcessorValueTreeState& apvts)
 :m_processor(p) ,m_apvts(apvts)
 {
-    
+    startTimerHz(30);
 }
 
 void StereoDelayerGUI::paint(juce::Graphics &g)
 {
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId).brighter(0.3f));
 
+    int startx = 20;
+    int starty = 20;
+    int width = 30;
+    int height = 150;
+
+    int reduce = 5;
+    g.setColour(juce::Colours::cornflowerblue);
+    g.fillRect(startx, starty, width, height);
+
+    g.setColour(juce::Colours::black);
+    g.fillRect(startx + reduce, starty + reduce, width - 2*reduce, height-2*reduce);
+
+    g.setColour(juce::Colours::green.brighter(0.3));
+
+    m_rms = jlimit(-60.f,0.f,m_rms);
+
+    int startdisplay = static_cast<int> ((height-2*reduce)*m_rms/(-60.f));
+    int heightdisplay = static_cast<int> (1 + (height - 2*reduce)*(1.f - m_rms/(-60.f)));
+
+    if (startdisplay < 0 || startdisplay > height)
+    {
+        startdisplay = 0;
+    }
+    if (heightdisplay < 0 || heightdisplay>height)
+        heightdisplay = 0;
+
+
+
+    g.fillRect(startx + reduce, starty + reduce + startdisplay  ,width - 2*reduce, heightdisplay);
+
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
     
     juce::String text2display = "StereoDelayer V " + juce::String(PLUGIN_VERSION_MAJOR) + "." + juce::String(PLUGIN_VERSION_MINOR) + "." + juce::String(PLUGIN_VERSION_PATCH);
-    g.drawFittedText (text2display, getLocalBounds(), juce::Justification::centred, 1);
+    g.drawFittedText (text2display, getLocalBounds(), juce::Justification::bottomLeft, 1);
 
 }
 
@@ -148,4 +180,10 @@ void StereoDelayerGUI::resized()
 
     // use the given canvas in r
     juce::ignoreUnused(r);
+}
+
+void StereoDelayerGUI::timerCallback()
+{
+    m_rms = m_processor.m_algo.getRMS();
+    repaint();
 }

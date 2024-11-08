@@ -68,6 +68,7 @@ public:
     
     // some necessary info for the host
     int getLatency(){return m_Latency;};
+	float getRMS(){return 20.f*logf(m_rms + 0.000001f);};
 
 private:
 	juce::AudioProcessor* m_processor;
@@ -85,19 +86,22 @@ private:
 	jade::AudioProcessParameter<float> m_LeftFeedbackParam;
 	jade::AudioProcessParameter<float> m_RightFeedbackParam;
 
-
+	// meter
+	float m_rms = 0.f;
 
 };
 
-class StereoDelayerGUI : public juce::Component
+class StereoDelayerGUI : public juce::Component, public juce::Timer
 {
 public:
 	StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioProcessorValueTreeState& apvts);
-
+	~StereoDelayerGUI(){stopTimer();};
 	void paint(juce::Graphics& g) override;
 	void resized() override;
 private:
 	StereoDelayerAudioProcessor& m_processor;
     juce::AudioProcessorValueTreeState& m_apvts; 
+	void timerCallback() override;
+	float m_rms;
 
 };
