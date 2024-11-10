@@ -50,7 +50,14 @@ int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
     {
         for (auto cc = 0; cc < nrofchns; ++cc)
         {
-            float in = dataPtr[cc][kk];
+            float in;
+            if (cc == 0 && nrofchns == 2)
+                in = dataPtr[cc][kk] + m_feedback[cc]*m_oldOut[cc] + m_Crossfeedback[cc]*m_oldOut[1];
+
+            if (cc == 1)
+                in = dataPtr[cc][kk] + m_feedback[cc]*m_oldOut[cc] + m_Crossfeedback[cc]*m_oldOut[0];
+
+            
             bufferPtr[cc][m_writePos] = in; 
 
             float out = 0.f;
@@ -138,6 +145,7 @@ int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
 
             }
             dataPtr[cc][kk] = out;
+            m_oldOut[cc] = out;
         }
 
         m_writePos++;
@@ -158,6 +166,11 @@ void jade::BasicDelayEffect::changeBufferSize()
     m_switchCounter.resize(m_nrOfChns);
     m_switchState.resize(m_nrOfChns);
     m_fadeInc.resize(m_nrOfChns);
+
+    m_feedback.resize(m_nrOfChns);
+    m_Crossfeedback.resize(m_nrOfChns);
+    m_oldOut.resize(m_nrOfChns);
+
     for (auto cc = 0; cc < m_nrOfChns; ++cc)
     {
         m_delays[cc] = 0.0;
@@ -166,6 +179,10 @@ void jade::BasicDelayEffect::changeBufferSize()
         m_futuredelays[cc] = 0;
         m_fadeInc[cc] = 0.0;
         m_switchState[cc] = switchState::normal;
+
+        m_feedback[cc] = 0.f;
+        m_Crossfeedback[cc] = 0.f;
+        m_oldOut[cc] = 0.f;
     }
 }
 

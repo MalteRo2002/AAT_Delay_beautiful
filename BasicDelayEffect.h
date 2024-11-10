@@ -40,6 +40,10 @@ public:
     void setSwitchTime(size_t time){m_switchTime = time;};
     void setSwitchAlgorithm (switchAlgorithm algo){m_switchalgorithm = algo;switchalgorithmChanged();};
 
+    // feedback
+    void setFeedback(float feedback, size_t chn) {m_feedback[chn] = feedback;};
+    void setCrossFeedback(float feedback, size_t chn) {m_Crossfeedback[chn] = feedback;};
+
 private:
     void changeBufferSize();
     void switchalgorithmChanged();
@@ -61,6 +65,12 @@ private:
 
     // tape switch
     std::vector <double> m_fadeInc;
+
+    // feedback
+    std::vector <float> m_feedback;
+    std::vector <float> m_oldOut;
+    std::vector <float> m_Crossfeedback;
+
 
 };
 

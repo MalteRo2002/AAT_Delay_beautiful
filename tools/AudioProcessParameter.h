@@ -6,6 +6,8 @@
     It can transform the parameter value to a different representation.
     Version 1.0 
     Version 1.1: changed variable names to be more descriptive
+    Version 1.2: changed prepareParameter to prepareParameter(std::atomic<float>* parampointer) and m_param to be a float pointer
+                    since the parameter is always a pointer to an atomic float
     License: MIT
 */
 #pragma once
@@ -28,21 +30,21 @@ public:
         changeTransformer(transformerFunc::notransform);
         
     };
-    void prepareParameter(std::atomic<T>* parampointer) {m_param = parampointer;};
+    void prepareParameter(std::atomic<float>* parampointer) {m_param = parampointer;};
     T update(){
         if (*m_param != m_ParamOld)
         {
             m_ParamOld = *m_param;
             m_transformedParam =  m_transformParamFunc();
         }
-        return m_transformedParam;
+        return static_cast<T> (m_transformedParam);
     };
     bool updateWithNotification(T& param){
         if (*m_param != m_ParamOld)
         {
             m_ParamOld = *m_param;
             m_transformedParam =  m_transformParamFunc();
-            param = m_transformedParam;
+            param = static_cast<T> (m_transformedParam);
             return true;
         }
         param = m_transformedParam;
@@ -78,7 +80,7 @@ public:
     }
 
 private:
-    std::atomic<T>* m_param = nullptr; 
+    std::atomic<float>* m_param = nullptr; 
     T m_ParamOld = std::numeric_limits<T>::min(); //smallest possible number, will change in the first block
     T m_transformedParam = std::numeric_limits<T>::min(); //smallest possible number, will change in the first block
 
