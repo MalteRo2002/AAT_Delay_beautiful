@@ -11,7 +11,7 @@
 namespace jade
 {
 
-class BasicDelayLine
+class BasicDelayEffect
 {
 public: 
     enum class switchState
@@ -27,7 +27,7 @@ public:
         tape
     };
 
-    BasicDelayLine();
+    BasicDelayEffect();
     void setMaxDelay(size_t maxdelay){m_maxdelay = maxdelay; changeBufferSize();};
     void setMaxDelay_s(float delay_s){size_t delay = static_cast<size_t> (delay_s*m_fs); setMaxDelay(delay);};
     void setNrOfChns(size_t chns){m_nrOfChns = chns; changeBufferSize();};

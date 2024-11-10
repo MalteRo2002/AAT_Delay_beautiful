@@ -27,7 +27,7 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_delay.setDelay_s(1.f,1);
     m_delay.setSwitchTime(sampleRate*0.5);
     m_switchTime = sampleRate*1.5f;
-    m_delay.setSwitchAlgorithm(jade::BasicDelayLine::switchAlgorithm::fade);
+    m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::fade);
     m_counter = 0;
 
 }

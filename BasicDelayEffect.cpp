@@ -1,12 +1,12 @@
-#include "BasicDelayLineTV.h"
+#include "BasicDelayEffect.h"
 
-jade::BasicDelayLine::BasicDelayLine()
+jade::BasicDelayEffect::BasicDelayEffect()
 {
     changeBufferSize();
 
 }
 
-void jade::BasicDelayLine::setDelay(size_t delay, size_t chn)
+void jade::BasicDelayEffect::setDelay(size_t delay, size_t chn)
 {
     if (delay >= m_maxdelay || chn >= m_nrOfChns)
         return;
@@ -39,7 +39,7 @@ void jade::BasicDelayLine::setDelay(size_t delay, size_t chn)
     }
 }
 
-int jade::BasicDelayLine::processSamples(juce::AudioBuffer<float> &data)
+int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
 {
     size_t nrofchns = data.getNumChannels();
     size_t nrofsamples = data.getNumSamples();
@@ -148,7 +148,7 @@ int jade::BasicDelayLine::processSamples(juce::AudioBuffer<float> &data)
     return 0;
 }
 
-void jade::BasicDelayLine::changeBufferSize()
+void jade::BasicDelayEffect::changeBufferSize()
 {
     m_buffer.setSize (static_cast<int>(m_nrOfChns), static_cast<int>(m_maxdelay));
     m_buffer.clear();
@@ -169,7 +169,7 @@ void jade::BasicDelayLine::changeBufferSize()
     }
 }
 
-void jade::BasicDelayLine::switchalgorithmChanged()
+void jade::BasicDelayEffect::switchalgorithmChanged()
 {
     for (size_t cc = 0; cc < m_nrOfChns; ++cc)
     {

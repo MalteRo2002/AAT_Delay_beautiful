@@ -6,9 +6,9 @@ const bool g_forcePowerOf2(false); // should be true for FFT Processing
 
 // -------------- GUI -----------------
 // global GUI setting for StereoDelayer
-const int g_minGuiSize_x(400);
-const int g_maxGuiSize_x(1200);
-const int g_minGuiSize_y(200);
+const int g_minGuiSize_x(800);
+const int g_maxGuiSize_x(1600);
+const int g_minGuiSize_y(400);
 const float g_guiratio = float(g_minGuiSize_y)/g_minGuiSize_x;
 
 // ---------- presethandler ----------

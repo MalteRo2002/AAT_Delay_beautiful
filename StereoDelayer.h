@@ -6,7 +6,7 @@
 #include "tools/SynchronBlockProcessor.h"
 #include "PluginSettings.h"
 
-#include "BasicDelayLineTV.h"
+#include "BasicDelayEffect.h"
 
 class StereoDelayerAudioProcessor;
 
@@ -40,7 +40,7 @@ private:
 	juce::AudioProcessor* m_processor;
     int m_Latency = 0;
 
-	jade::BasicDelayLine m_delay;
+	jade::BasicDelayEffect m_delay;
 	size_t m_counter = 0;
 	size_t m_switchTime = 44100;
 };
