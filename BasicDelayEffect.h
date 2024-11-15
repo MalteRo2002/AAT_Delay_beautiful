@@ -8,6 +8,8 @@
 #include <juce_core/juce_core.h>
 #include <juce_audio_basics/juce_audio_basics.h>
 
+#include "FirstOrderFilter.h"
+
 namespace jade
 {
 
@@ -31,7 +33,7 @@ public:
     void setMaxDelay(size_t maxdelay){m_maxdelay = maxdelay; changeBufferSize();};
     void setMaxDelay_s(float delay_s){size_t delay = static_cast<size_t> (delay_s*m_fs); setMaxDelay(delay);};
     void setNrOfChns(size_t chns){m_nrOfChns = chns; changeBufferSize();};
-    void setSamplerate(float fs){m_fs = fs;};
+    void setSamplerate(float fs);
 
     void setDelay(size_t delay, size_t chn);
     void setDelay_s(float delay_s, size_t chn){size_t delay = static_cast<size_t> (delay_s*m_fs); setDelay(delay, chn);};
@@ -43,6 +45,9 @@ public:
     // feedback
     void setFeedback(float feedback, size_t chn) {m_feedback[chn] = feedback;};
     void setCrossFeedback(float feedback, size_t chn) {m_Crossfeedback[chn] = feedback;};
+    void setLowpass(float fcut, int chn);
+    void setHighpass(float fcut, int chn);
+    
 
 private:
     void changeBufferSize();
@@ -71,6 +76,9 @@ private:
     std::vector <float> m_oldOut;
     std::vector <float> m_Crossfeedback;
 
+    // lowpass highpass filter
+    std::vector <jade::FirstOrderLowpass> m_lp;
+    std::vector <jade::FirstOrderLowpass> m_hp;
 
 };
 
