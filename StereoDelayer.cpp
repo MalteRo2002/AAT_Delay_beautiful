@@ -43,103 +43,36 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
     juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
     bool somethingchanged = false;
 
-    somethingchanged = m_paramLinkLR.updateWithNotification(m_LinkLR);
-
     somethingchanged = m_paramDelayLeft.updateWithNotification(m_delayLeft);
     if (somethingchanged)
     {
         m_delay.setDelay_s(m_delayLeft*0.001f,0);
-        if (m_LinkLR)
-        {
-            //m_delay.setDelay_s(m_delayLeft*0.001f,1);
-            auto param = processor->m_parameterVTS->getParameter(g_paramDelayRight_ms.ID);
-            param->beginChangeGesture();
-            param->setValueNotifyingHost(param->convertTo0to1(m_delayLeft));
-            param->endChangeGesture();
-        }
     }
     somethingchanged = m_paramDelayRight.updateWithNotification(m_delayRight);
     if (somethingchanged)
     {
         m_delay.setDelay_s(m_delayRight*0.001f,1);
-        if (m_LinkLR)
-        {
-            auto param = processor->m_parameterVTS->getParameter(g_paramDelayLeft_ms.ID);
-            param->beginChangeGesture();
-            param->setValueNotifyingHost(param->convertTo0to1(m_delayRight));
-            param->endChangeGesture();
-        }
             
     }
     somethingchanged = m_paramFeedbackLeft.updateWithNotification(m_FeedbackLeft);
     if (somethingchanged)
     {
         m_delay.setFeedback(m_FeedbackLeft,0);
-        if (m_LinkLR)
-        {
-            auto param = processor->m_parameterVTS->getParameter(g_paramFeedbackRight.ID);
-            param->beginChangeGesture();
-            param->setValueNotifyingHost(param->convertTo0to1(m_FeedbackLeft));
-            param->endChangeGesture();
-        }
-
     }
     somethingchanged = m_paramFeedbackRight.updateWithNotification(m_FeedbackRight);
     if (somethingchanged)
     {
         m_delay.setFeedback(m_FeedbackRight,1);
-        if (m_LinkLR)
-        {
-            auto param = processor->m_parameterVTS->getParameter(g_paramFeedbackLeft.ID);
-            param->beginChangeGesture();
-            param->setValueNotifyingHost(param->convertTo0to1(m_FeedbackRight));
-            param->endChangeGesture();
-        }
-        
     }
     somethingchanged = m_paramCrossFeedbackLeft.updateWithNotification(m_CrossFeedbackLeft);
     if (somethingchanged)
     {
         m_delay.setCrossFeedback(m_CrossFeedbackLeft,0);
-        if (m_LinkLR)
-        {
-            auto param = processor->m_parameterVTS->getParameter(g_paramCrossFeedbackRight.ID);
-            param->beginChangeGesture();
-            param->setValueNotifyingHost(param->convertTo0to1(m_CrossFeedbackLeft));
-            param->endChangeGesture();
-        }
-
     }
     somethingchanged = m_paramCrossFeedbackRight.updateWithNotification(m_CrossFeedbackRight);
     if (somethingchanged)
     {
         m_delay.setCrossFeedback(m_CrossFeedbackRight,1);
-        if (m_LinkLR)
-        {
-            auto param = processor->m_parameterVTS->getParameter(g_paramCrossFeedbackLeft.ID);
-            param->beginChangeGesture();
-            param->setValueNotifyingHost(param->convertTo0to1(m_CrossFeedbackRight));
-            param->endChangeGesture();
-        }
-
-    }
-    somethingchanged = m_paramSwitchAlgo.updateWithNotification(m_SwitchAlgo);
-    if (somethingchanged)
-    {
-        switch (m_SwitchAlgo)
-        {
-            case 0:
-                m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::digital);
-                break;
-            case 1:
-                m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::fade);
-                break;
-            case 2:
-                m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::tape);
-                break;
-            default:
-                m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::digital);
-        }
     }
 
 
@@ -215,28 +148,6 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
                                         // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
 
-    paramVector.push_back(std::make_unique<AudioParameterBool>(g_paramLinkLR.ID,
-        g_paramLinkLR.name,
-        g_paramLinkLR.defaultValue,
-        AudioParameterBoolAttributes()// .withLabel (g_paramLinkLR.unitName)
-                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
-                                        // or two additional lines with lambdas to convert data for display
-                                        // .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int((value) * 100);  return (String(value, MaxLen)); }))
-                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
-                        ));
-    
-    paramVector.push_back(std::make_unique<AudioParameterChoice>(g_paramSwitchAlgo.ID,
-        g_paramSwitchAlgo.name,
-        g_paramSwitchAlgo.choices,
-        g_paramSwitchAlgo.defaultValue,
-        AudioParameterChoiceAttributes()//.withLabel (g_paramSwitchAlgo.unitName)
-                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
-                                        // or two additional lines with lambdas to convert data for display
-                                        //.withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int((value) * 100);  return (String(value, MaxLen)); }))
-                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
-                        ));
-
-
 
 }
 
@@ -249,8 +160,6 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
     m_paramFeedbackRight.prepareParameter(vts->getRawParameterValue(g_paramFeedbackRight.ID));
     m_paramCrossFeedbackLeft.prepareParameter(vts->getRawParameterValue(g_paramCrossFeedbackLeft.ID));
     m_paramCrossFeedbackRight.prepareParameter(vts->getRawParameterValue(g_paramCrossFeedbackRight.ID));
-    m_paramLinkLR.prepareParameter(vts->getRawParameterValue(g_paramLinkLR.ID));
-    m_paramSwitchAlgo.prepareParameter(vts->getRawParameterValue(g_paramSwitchAlgo.ID));
 }
 
 
