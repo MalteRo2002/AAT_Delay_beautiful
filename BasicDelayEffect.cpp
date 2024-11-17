@@ -6,16 +6,6 @@ jade::BasicDelayEffect::BasicDelayEffect()
 
 }
 
-void jade::BasicDelayEffect::setSamplerate(float fs)
-{
-    m_fs = fs;
-    for (size_t kk = 0; kk < m_lp.size(); kk++)
-    {
-        m_lp[kk].setSamplingrate(m_fs);
-        m_hp[kk].setSamplingrate(m_fs);
-    }
-}
-
 void jade::BasicDelayEffect::setDelay(size_t delay, size_t chn)
 {
     if (delay >= m_maxdelay || chn >= m_nrOfChns)
@@ -154,10 +144,8 @@ int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
                 }
 
             }
-            float filterout = m_lp[cc].processOneSample(out);
-            filterout = m_hp[cc].processOneSample(filterout);
-            dataPtr[cc][kk] = filterout;
-            m_oldOut[cc] = filterout;
+            dataPtr[cc][kk] = out;
+            m_oldOut[cc] = out;
         }
 
         m_writePos++;
@@ -166,19 +154,6 @@ int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
     }
 
     return 0;
-}
-
-void jade::BasicDelayEffect::setLowpass(float fcut, int chn)
-{
-    if (chn < m_nrOfChns)
-        m_lp[chn].setCutoffFrequency(fcut);
-}
-
-void jade::BasicDelayEffect::setHighpass(float fcut, int chn)
-{
-    if (chn < m_nrOfChns)
-        m_hp[chn].setCutoffFrequency(fcut);
-
 }
 
 void jade::BasicDelayEffect::changeBufferSize()
@@ -195,9 +170,6 @@ void jade::BasicDelayEffect::changeBufferSize()
     m_feedback.resize(m_nrOfChns);
     m_Crossfeedback.resize(m_nrOfChns);
     m_oldOut.resize(m_nrOfChns);
-    m_lp.resize(m_nrOfChns);
-    m_hp.resize(m_nrOfChns);
-
 
     for (auto cc = 0; cc < m_nrOfChns; ++cc)
     {
@@ -211,7 +183,6 @@ void jade::BasicDelayEffect::changeBufferSize()
         m_feedback[cc] = 0.f;
         m_Crossfeedback[cc] = 0.f;
         m_oldOut[cc] = 0.f;
-
     }
 }
 

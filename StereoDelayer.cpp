@@ -28,11 +28,6 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_delay.setDelay_s(g_paramDelayRight_ms.defaultValue*0.001,1);
     m_delay.setSwitchTime(static_cast<int> (sampleRate*0.05));
     m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::fade);
-    //m_delay.setLowpass(1500.f,0);
-    //m_delay.setLowpass(3500.f,1);
-    m_delay.setHighpass(1500.f,0);
-    m_delay.setHighpass(3500.f,1);
-
 
     m_delay.setFeedback(g_paramFeedbackLeft.defaultValue,0);
     m_delay.setFeedback(g_paramFeedbackRight.defaultValue,1);
