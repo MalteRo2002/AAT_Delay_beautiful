@@ -73,6 +73,13 @@ const struct
 	const float defaultValue = 0.f;
 }g_paramCrossFeedbackRight;
 
+const struct
+{
+	const std::string ID = "LinkLRID";
+	const std::string name = "LinkLR";
+	const bool defaultValue = false;
+}g_paramLinkLR;
+
 
 class StereoDelayerAudio : public SynchronBlockProcessor
 {
@@ -112,6 +119,9 @@ private:
     jade::AudioProcessParameter<float> m_paramCrossFeedbackRight;
 	float m_CrossFeedbackRight = g_paramCrossFeedbackRight.defaultValue;
 
+    jade::AudioProcessParameter<bool> m_paramLinkLR;
+	bool m_LinkLR = g_paramLinkLR.defaultValue;
+
 
 };
 
@@ -140,4 +150,6 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_CrossFeedbackLeftAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_CrossFeedbackRightAttachment;
 
+	juce::ToggleButton m_LinkLR;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> m_LinkLRAttachment;
 };
