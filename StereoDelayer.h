@@ -80,6 +80,15 @@ const struct
 	const bool defaultValue = false;
 }g_paramLinkLR;
 
+const struct
+{
+	const std::string ID = "SwitchAlgoID";
+	const std::string name = "SwitchAlgo";
+	const juce::StringArray choices = {"Digital","Fade","Tape"};
+	const int defaultValue = 1;
+}g_paramSwitchAlgo;
+
+
 
 class StereoDelayerAudio : public SynchronBlockProcessor
 {
@@ -121,6 +130,9 @@ private:
 
     jade::AudioProcessParameter<bool> m_paramLinkLR;
 	bool m_LinkLR = g_paramLinkLR.defaultValue;
+
+    jade::AudioProcessParameter<int> m_paramSwitchAlgo;
+	int m_SwitchAlgo = g_paramSwitchAlgo.defaultValue;
 
 
 };

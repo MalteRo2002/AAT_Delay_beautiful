@@ -26,7 +26,7 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_delay.setNrOfChns(2);
     m_delay.setDelay_s(g_paramDelayLeft_ms.defaultValue*0.001f,0);
     m_delay.setDelay_s(g_paramDelayRight_ms.defaultValue*0.001,1);
-    m_delay.setSwitchTime(static_cast<int> (sampleRate*0.05));
+    m_delay.setSwitchTime(static_cast<int> (sampleRate*0.5));
     m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::fade);
 
     m_delay.setFeedback(g_paramFeedbackLeft.defaultValue,0);
@@ -118,7 +118,12 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
             param->setValueNotifyingHost(param->convertTo0to1(m_CrossFeedbackRight));
             param->endChangeGesture();
         }
-
+    }
+    somethingchanged = m_paramSwitchAlgo.updateWithNotification(m_SwitchAlgo);
+    if (somethingchanged)
+    {
+        jade::BasicDelayEffect::switchAlgorithm switcher = static_cast<jade::BasicDelayEffect::switchAlgorithm> (m_SwitchAlgo);
+        m_delay.setSwitchAlgorithm(switcher);
     }
 
 
@@ -204,6 +209,18 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
                                         // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
 
+    paramVector.push_back(std::make_unique<AudioParameterChoice>(g_paramSwitchAlgo.ID,
+        g_paramSwitchAlgo.name,
+        g_paramSwitchAlgo.choices,
+        g_paramSwitchAlgo.defaultValue,
+        AudioParameterChoiceAttributes()//.withLabel (g_paramLinkLR.unitName)
+                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
+                                        // or two additional lines with lambdas to convert data for display
+                                        //.withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int((value) * 100);  return (String(value, MaxLen)); }))
+                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+                        ));
+
+
 }
 
 void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorValueTreeState> &vts)
@@ -216,6 +233,7 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
     m_paramCrossFeedbackLeft.prepareParameter(vts->getRawParameterValue(g_paramCrossFeedbackLeft.ID));
     m_paramCrossFeedbackRight.prepareParameter(vts->getRawParameterValue(g_paramCrossFeedbackRight.ID));
     m_paramLinkLR.prepareParameter(vts->getRawParameterValue(g_paramLinkLR.ID));
+    m_paramSwitchAlgo.prepareParameter(vts->getRawParameterValue(g_paramSwitchAlgo.ID));
 }
 
 
