@@ -299,6 +299,11 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
     addAndMakeVisible(m_LinkLR);
 
+    m_AlgoSwitchCombo.addItemList(g_paramSwitchAlgo.choices,1);
+    m_AlgoSwitchComboAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(m_apvts, g_paramSwitchAlgo.ID, m_AlgoSwitchCombo);
+    addAndMakeVisible(m_AlgoSwitchCombo);
+
+
 }
 
 void StereoDelayerGUI::paint(juce::Graphics &g)
@@ -345,5 +350,7 @@ void StereoDelayerGUI::resized()
     int buttonWidth = 60*scaleFactor;
     int buttonHeight = 30*scaleFactor;
     m_LinkLR.setBounds(10,3*height/4,buttonWidth,buttonHeight);
+
+    m_AlgoSwitchCombo.setBoundsRelative(0.9,0.01,0.08,0.04);
 
 }

@@ -164,4 +164,7 @@ private:
 
 	juce::ToggleButton m_LinkLR;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> m_LinkLRAttachment;
+
+	juce::ComboBox m_AlgoSwitchCombo;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> m_AlgoSwitchComboAttachment;
 };
