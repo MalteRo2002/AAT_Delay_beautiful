@@ -50,7 +50,7 @@ public:
     void setHighpassFrequency(float fcut);
     void setLowpassFrequency(float fcut, size_t chn){m_lowpass[chn].setCutoff(fcut);};
     void setHighpassFrequency(float fcut, size_t chn){m_highpass[chn].setCutoff(fcut);};
-
+    void setDryWet(float drywet){m_drywet = drywet;};
 private:
     void changeBufferSize();
     void switchalgorithmChanged();
@@ -79,6 +79,8 @@ private:
     std::vector <float> m_Crossfeedback;
     std::vector <FirstOrderFilter> m_lowpass;
     std::vector <FirstOrderFilter> m_highpass;
+
+    float m_drywet;
 
 };
 

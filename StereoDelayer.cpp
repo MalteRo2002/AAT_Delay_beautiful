@@ -21,7 +21,8 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     prepareSynchronProcessing(max_channels,synchronblocksize);
     m_Latency += synchronblocksize;
     // here your code
-    m_delay.setSamplerate(sampleRate);
+    m_fs = static_cast<float> (sampleRate);
+    m_delay.setSamplerate(m_fs);
     m_delay.setMaxDelay_s(5.1f);
     m_delay.setNrOfChns(2);
     m_delay.setDelay_s(g_paramDelayLeft_ms.defaultValue*0.001f,0);
@@ -127,6 +128,65 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
         jade::BasicDelayEffect::switchAlgorithm switcher = static_cast<jade::BasicDelayEffect::switchAlgorithm> (m_SwitchAlgo);
         m_delay.setSwitchAlgorithm(switcher);
     }
+    somethingchanged = m_paramSwitchTime.updateWithNotification(m_SwitchTime);
+    if (somethingchanged)
+    {
+        m_delay.setSwitchTime(m_SwitchTime*0.001f*m_fs);
+    }
+    somethingchanged = m_paramDryWet.updateWithNotification(m_DryWet);
+    if (somethingchanged)
+    {
+        m_delay.setDryWet(m_DryWet);
+    }
+
+    somethingchanged = m_paramLowpassLeft.updateWithNotification(m_LowpassLeft);
+    if (somethingchanged)
+    {
+        m_delay.setLowpassFrequency(m_LowpassLeft,0);
+        if (m_LinkLR)
+        {
+            auto param = processor->m_parameterVTS->getParameter(g_paramLowpassRight.ID);
+            param->beginChangeGesture();
+            param->setValueNotifyingHost(param->convertTo0to1(log(m_LowpassLeft)));
+            param->endChangeGesture();
+        }
+    }
+    somethingchanged = m_paramLowpassRight.updateWithNotification(m_LowpassRight);
+    if (somethingchanged)
+    {
+        m_delay.setLowpassFrequency(m_LowpassRight,1);
+        if (m_LinkLR)
+        {
+            auto param = processor->m_parameterVTS->getParameter(g_paramLowpassLeft.ID);
+            param->beginChangeGesture();
+            param->setValueNotifyingHost(param->convertTo0to1(log(m_LowpassRight)));
+            param->endChangeGesture();
+        }
+    }
+    somethingchanged = m_paramHighpassLeft.updateWithNotification(m_HighpassLeft);
+    if (somethingchanged)
+    {
+        m_delay.setHighpassFrequency(m_HighpassLeft,0);
+        if (m_LinkLR)
+        {
+            auto param = processor->m_parameterVTS->getParameter(g_paramHighpassRight.ID);
+            param->beginChangeGesture();
+            param->setValueNotifyingHost(param->convertTo0to1(log(m_HighpassLeft)));
+            param->endChangeGesture();
+        }
+    }
+    somethingchanged = m_paramHighpassRight.updateWithNotification(m_HighpassRight);
+    if (somethingchanged)
+    {
+        m_delay.setHighpassFrequency(m_HighpassRight,1);
+        if (m_LinkLR)
+        {
+            auto param = processor->m_parameterVTS->getParameter(g_paramHighpassLeft.ID);
+            param->beginChangeGesture();
+            param->setValueNotifyingHost(param->convertTo0to1(log(m_HighpassRight)));
+            param->endChangeGesture();
+        }
+    }
 
 
     m_delay.processSamples(buffer);
@@ -221,6 +281,71 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
                                         //.withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int((value) * 100);  return (String(value, MaxLen)); }))
                                         // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
+    paramVector.push_back(std::make_unique<AudioParameterFloat>(g_paramSwitchTime_ms.ID,
+        g_paramSwitchTime_ms.name,
+        NormalisableRange<float>(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue),
+        g_paramSwitchTime_ms.defaultValue,
+        AudioParameterFloatAttributes().withLabel (g_paramSwitchTime_ms.unitName)
+                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
+                                        // or two additional lines with lambdas to convert data for display
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int((value) * 10 + 0.5f) * 0.1f;  return (String(value, MaxLen)); }))
+                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+
+                        ));
+    paramVector.push_back(std::make_unique<AudioParameterFloat>(g_paramDryWet.ID,
+        g_paramDryWet.name,
+        NormalisableRange<float>(g_paramDryWet.minValue, g_paramDryWet.maxValue),
+        g_paramDryWet.defaultValue,
+        AudioParameterFloatAttributes().withLabel (g_paramDryWet.unitName)
+                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
+                                        // or two additional lines with lambdas to convert data for display
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = int((value) * 100 );  return (String(value, MaxLen)); }))
+                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+                        ));
+    paramVector.push_back(std::make_unique<AudioParameterFloat>(g_paramLowpassLeft.ID,
+        g_paramLowpassLeft.name,
+        NormalisableRange<float>(g_paramLowpassLeft.minValue, g_paramLowpassLeft.maxValue),
+        g_paramLowpassLeft.defaultValue,
+        AudioParameterFloatAttributes().withLabel (g_paramLowpassLeft.unitName)
+                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
+                                        // or two additional lines with lambdas to convert data for display
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+                        ));
+
+    paramVector.push_back(std::make_unique<AudioParameterFloat>(g_paramLowpassRight.ID,
+        g_paramLowpassRight.name,
+        NormalisableRange<float>(g_paramLowpassRight.minValue, g_paramLowpassRight.maxValue),
+        g_paramLowpassRight.defaultValue,
+        AudioParameterFloatAttributes().withLabel (g_paramLowpassRight.unitName)
+                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
+                                        // or two additional lines with lambdas to convert data for display
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+                        ));
+
+    paramVector.push_back(std::make_unique<AudioParameterFloat>(g_paramHighpassLeft.ID,
+        g_paramHighpassLeft.name,
+        NormalisableRange<float>(g_paramHighpassLeft.minValue, g_paramHighpassLeft.maxValue),
+        g_paramHighpassLeft.defaultValue,
+        AudioParameterFloatAttributes().withLabel (g_paramHighpassLeft.unitName)
+                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
+                                        // or two additional lines with lambdas to convert data for display
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+                        ));
+
+    paramVector.push_back(std::make_unique<AudioParameterFloat>(g_paramHighpassRight.ID,
+        g_paramHighpassRight.name,
+        NormalisableRange<float>(g_paramHighpassRight.minValue, g_paramHighpassRight.maxValue),
+        g_paramHighpassRight.defaultValue,
+        AudioParameterFloatAttributes().withLabel (g_paramHighpassRight.unitName)
+                                        .withCategory (juce::AudioProcessorParameter::genericParameter)
+                                        // or two additional lines with lambdas to convert data for display
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
+                        ));
+
 
 
 }
@@ -236,6 +361,18 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
     m_paramCrossFeedbackRight.prepareParameter(vts->getRawParameterValue(g_paramCrossFeedbackRight.ID));
     m_paramLinkLR.prepareParameter(vts->getRawParameterValue(g_paramLinkLR.ID));
     m_paramSwitchAlgo.prepareParameter(vts->getRawParameterValue(g_paramSwitchAlgo.ID));
+    m_paramSwitchTime.prepareParameter(vts->getRawParameterValue(g_paramSwitchTime_ms.ID));
+    m_paramDryWet.prepareParameter(vts->getRawParameterValue(g_paramDryWet.ID));
+    m_paramLowpassLeft.prepareParameter(vts->getRawParameterValue(g_paramLowpassLeft.ID));
+    m_paramLowpassLeft.changeTransformer(jade::AudioProcessParameter<float>::transformerFunc::exptransform);
+    m_paramLowpassRight.prepareParameter(vts->getRawParameterValue(g_paramLowpassRight.ID));
+    m_paramLowpassRight.changeTransformer(jade::AudioProcessParameter<float>::transformerFunc::exptransform);
+    m_paramHighpassLeft.prepareParameter(vts->getRawParameterValue(g_paramHighpassLeft.ID));
+    m_paramHighpassLeft.changeTransformer(jade::AudioProcessParameter<float>::transformerFunc::exptransform);
+    m_paramHighpassRight.prepareParameter(vts->getRawParameterValue(g_paramHighpassRight.ID));
+    m_paramHighpassRight.changeTransformer(jade::AudioProcessParameter<float>::transformerFunc::exptransform);
+
+
 }
 
 
@@ -301,6 +438,61 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
     addAndMakeVisible(m_LinkLR);
 
+    m_SwitchTime_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_SwitchTime_msSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
+    m_SwitchTime_msSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
+    val = m_apvts.getRawParameterValue(g_paramSwitchTime_ms.ID);
+    m_SwitchTime_msSlider.setValue(*val);
+    m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msSlider);
+    addAndMakeVisible(m_SwitchTime_msSlider);
+
+    m_DryWetSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_DryWetSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_DryWetSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
+    m_DryWetSlider.setTextValueSuffix(g_paramDryWet.unitName);
+    val = m_apvts.getRawParameterValue(g_paramDryWet.ID);
+    m_DryWetSlider.setValue(*val);
+    m_DryWetAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDryWet.ID, m_DryWetSlider);
+    addAndMakeVisible(m_DryWetSlider);
+
+    m_LowpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_LowpassLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_LowpassLeftSlider.setRange(g_paramLowpassLeft.minValue, g_paramLowpassLeft.maxValue);
+    m_LowpassLeftSlider.setTextValueSuffix(g_paramLowpassLeft.unitName);
+    val = m_apvts.getRawParameterValue(g_paramLowpassLeft.ID);
+    m_LowpassLeftSlider.setValue(*val);
+    m_LowpassLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramLowpassLeft.ID, m_LowpassLeftSlider);
+    addAndMakeVisible(m_LowpassLeftSlider);
+
+    m_LowpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_LowpassRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_LowpassRightSlider.setRange(g_paramLowpassRight.minValue, g_paramLowpassRight.maxValue);
+    m_LowpassRightSlider.setTextValueSuffix(g_paramLowpassRight.unitName);
+    val = m_apvts.getRawParameterValue(g_paramLowpassRight.ID);
+    m_LowpassRightSlider.setValue(*val);
+    m_LowpassRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramLowpassRight.ID, m_LowpassRightSlider);
+    addAndMakeVisible(m_LowpassRightSlider);
+
+    m_HighpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_HighpassLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_HighpassLeftSlider.setRange(g_paramHighpassLeft.minValue, g_paramHighpassLeft.maxValue);
+    m_HighpassLeftSlider.setTextValueSuffix(g_paramHighpassLeft.unitName);
+    val = m_apvts.getRawParameterValue(g_paramHighpassLeft.ID);
+    m_HighpassLeftSlider.setValue(*val);
+    m_HighpassLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramHighpassLeft.ID, m_HighpassLeftSlider);
+    addAndMakeVisible(m_HighpassLeftSlider);
+
+    m_HighpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_HighpassRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_HighpassRightSlider.setRange(g_paramHighpassRight.minValue, g_paramHighpassRight.maxValue);
+    m_HighpassRightSlider.setTextValueSuffix(g_paramHighpassRight.unitName);
+    val = m_apvts.getRawParameterValue(g_paramHighpassRight.ID);
+    m_HighpassRightSlider.setValue(*val);
+    m_HighpassRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramHighpassRight.ID, m_HighpassRightSlider);
+    addAndMakeVisible(m_HighpassRightSlider);
+
+
     m_AlgoSwitchCombo.addItemList(g_paramSwitchAlgo.choices,1);
     m_AlgoSwitchComboAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(m_apvts, g_paramSwitchAlgo.ID, m_AlgoSwitchCombo);
     addAndMakeVisible(m_AlgoSwitchCombo);
@@ -348,11 +540,17 @@ void StereoDelayerGUI::resized()
     m_FeedbackRightSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
     m_CrossFeedbackLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_CrossFeedbackRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_LowpassLeftSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_LowpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_HighpassLeftSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_HighpassRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
 
     int buttonWidth = 60*scaleFactor;
     int buttonHeight = 30*scaleFactor;
     m_LinkLR.setBounds(10,3*height/4,buttonWidth,buttonHeight);
 
     m_AlgoSwitchCombo.setBoundsRelative(0.9,0.01,0.08,0.04);
+    m_SwitchTime_msSlider.setBounds(width-90*scaleFactor, 60*scaleFactor,knobwidth,knobheight);
 
 }

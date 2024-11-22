@@ -161,8 +161,8 @@ int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
             }
             out = m_lowpass[cc].processOneSample(out);
             out = m_highpass[cc].processOneSample(out);
-
-            dataPtr[cc][kk] = out;
+            dataPtr[cc][kk] *= (1.f- m_drywet);
+            dataPtr[cc][kk] += m_drywet*out;
             m_oldOut[cc] = out;
         }
 
