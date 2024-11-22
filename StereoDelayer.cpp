@@ -33,7 +33,9 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_delay.setFeedback(g_paramFeedbackRight.defaultValue,1);
     m_delay.setCrossFeedback(g_paramCrossFeedbackLeft.defaultValue,0);
     m_delay.setCrossFeedback(g_paramCrossFeedbackRight.defaultValue,1);
-
+    m_delay.setLowpassFrequency(300.f,0);
+    //m_delay.setHighpassFrequency(300.f,0);
+    m_delay.setHighpassFrequency(5000.f,1);
 }
 
 
