@@ -37,6 +37,9 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     m_delay.setLowpassFrequency(300.f,0);
     //m_delay.setHighpassFrequency(300.f,0);
     m_delay.setHighpassFrequency(5000.f,1);
+
+    m_playhead = m_processor->getPlayHead();
+
 }
 
 
@@ -44,6 +47,29 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
 {
     StereoDelayerAudioProcessor* processor = dynamic_cast<StereoDelayerAudioProcessor*> (m_processor);
     juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
+
+    // get Tempoinfo
+    auto timeinfo = m_playhead->getPosition();
+    float bpm = -1.f;
+    if (timeinfo.hasValue())
+    {
+        auto bpmopt = timeinfo->getBpm();
+        if (bpmopt.hasValue())
+            bpm = *bpmopt;
+    }
+
+    if (bpm != m_oldBpm && bpm >= 0)
+    {
+        m_oldBpm = bpm;
+        float delayLeft = 4.f*60000.f/bpm * m_delayNumeratorLeft / m_delayDenominatorLeft;
+        auto param = processor->m_parameterVTS->getParameter(g_paramDelayLeft_ms.ID);
+        param->beginChangeGesture();
+        param->setValueNotifyingHost(param->convertTo0to1(delayLeft));
+        param->endChangeGesture();
+
+        
+    }
+
     bool somethingchanged = false;
     somethingchanged = m_paramLinkLR.updateWithNotification(m_LinkLR);
 

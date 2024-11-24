@@ -212,6 +212,10 @@ private:
     jade::AudioProcessParameter<float> m_paramHighpassRight;
 	float m_HighpassRight = g_paramHighpassRight.defaultValue;
 
+	juce::AudioPlayHead* m_playhead;
+	float m_oldBpm = -2.f;
+	int m_delayNumeratorLeft = 1;
+	int m_delayDenominatorLeft = 2;
 };
 
 class StereoDelayerGUI : public juce::Component
