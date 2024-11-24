@@ -148,6 +148,46 @@ const struct
 	const float defaultValue = logf(10.f);
 }g_paramHighpassRight;
 
+const struct
+{
+	const std::string ID = "NumeratorLeftID";
+	const std::string name = "NumeratorLeft";
+	const std::string unitName = "";
+	const int minValue = 1;
+	const int maxValue = 64;
+	const int defaultValue = 1;
+}g_paramNumeratorLeft;
+
+const struct
+{
+	const std::string ID = "DenominatorLeftID";
+	const std::string name = "DenominatorLeft";
+	const std::string unitName = "";
+	const int minValue = 1;
+	const int maxValue = 64;
+	const int defaultValue = 16;
+}g_paramDenominatorLeft;
+
+const struct
+{
+	const std::string ID = "NumeratorRightID";
+	const std::string name = "NumeratorRight";
+	const std::string unitName = "";
+	const int minValue = 1;
+	const int maxValue = 64;
+	const int defaultValue = 1;
+}g_paramNumeratorRight;
+
+const struct
+{
+	const std::string ID = "DenominatorRightID";
+	const std::string name = "DenominatorRight";
+	const std::string unitName = "";
+	const int minValue = 1;
+	const int maxValue = 64;
+	const int defaultValue = 16;
+}g_paramDenominatorRight;
+
 
 class StereoDelayerAudio : public SynchronBlockProcessor
 {
@@ -212,6 +252,20 @@ private:
     jade::AudioProcessParameter<float> m_paramHighpassRight;
 	float m_HighpassRight = g_paramHighpassRight.defaultValue;
 
+	juce::AudioPlayHead* m_playhead;
+
+    jade::AudioProcessParameter<int> m_paramNumeratorLeft;
+	int m_NumeratorLeft = 1;
+    jade::AudioProcessParameter<int> m_paramDenominatorLeft;
+	int m_DenominatorLeft = 2;
+
+    jade::AudioProcessParameter<int> m_paramNumeratorRight;
+	int m_NumeratorRight = 1;
+    jade::AudioProcessParameter<int> m_paramDenominatorRight;
+	int m_DenominatorRight = 2;
+
+	float m_oldBpm;
+
 };
 
 class StereoDelayerGUI : public juce::Component
@@ -237,6 +291,10 @@ private:
 	juce::Slider m_LowpassRightSlider;
 	juce::Slider m_HighpassLeftSlider;
 	juce::Slider m_HighpassRightSlider;
+	juce::Slider m_NumeratorLeftSlider;
+	juce::Slider m_DenominatorLeftSlider;
+	juce::Slider m_NumeratorRightSlider;
+	juce::Slider m_DenominatorRightSlider;
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DelayLeft_msAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DelayRight_msAttachment;
@@ -250,6 +308,10 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_LowpassRightAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_HighpassLeftAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_HighpassRightAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_NumeratorLeftAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DenominatorLeftAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_NumeratorRightAttachment;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DenominatorRightAttachment;
 
 	juce::ToggleButton m_LinkLR;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> m_LinkLRAttachment;
