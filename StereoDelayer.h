@@ -9,6 +9,7 @@
 #include "PluginSettings.h"
 
 #include "BasicDelayEffect.h"
+#include "IRDisplay.h"
 
 class StereoDelayerAudioProcessor;
 
@@ -202,7 +203,7 @@ public:
     
     // some necessary info for the host
     int getLatency(){return m_Latency;};
-
+	float getBpm(){return m_oldBpm;};
 private:
 	float m_fs = 44100.f;
 	juce::AudioProcessor* m_processor;
@@ -268,13 +269,15 @@ private:
 
 };
 
-class StereoDelayerGUI : public juce::Component
+class StereoDelayerGUI : public juce::Component, public Timer
 {
 public:
 	StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioProcessorValueTreeState& apvts);
-
+	~StereoDelayerGUI();
 	void paint(juce::Graphics& g) override;
 	void resized() override;
+	void timerCallback() override;
+
 private:
 	StereoDelayerAudioProcessor& m_processor;
     juce::AudioProcessorValueTreeState& m_apvts; 
@@ -318,4 +321,7 @@ private:
 
 	juce::ComboBox m_AlgoSwitchCombo;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> m_AlgoSwitchComboAttachment;
+
+	IRDisplay m_IRDisplay;
+	float m_oldBpm = -1.f;
 };

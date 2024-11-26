@@ -67,6 +67,7 @@ target_sources(${TARGET_NAME}
         PluginProcessor.cpp
         StereoDelayer.cpp
         BasicDelayEffect.cpp
+        IRDisplay.cpp
         tools/MidiModPitchState.cpp
         tools/PresetHandler.cpp
         tools/SynchronBlockProcessor.cpp
