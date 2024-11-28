@@ -106,6 +106,11 @@ public:
 		m_state = instate;
 		return Temp;
 	};
+	void reset()
+	{
+		m_state = 0.0;
+	};
+
 private:
 	double m_b0, m_b1, m_a1;
 	double m_state;
@@ -114,6 +119,19 @@ private:
 	FilterDesign m_design;
 	void computeCoeffs() // music dsp
 	{
+		if (m_cutoff > 0.49 * m_fs)
+		{
+			m_b0 = 1.0;
+			m_a1 = m_b1 = 0.0;
+			return;			
+		}
+		if (m_cutoff < 10.f)
+		{
+			m_b0 = 1.0;
+			m_a1 = m_b1 = 0.0;
+			return;
+		}
+			
 		double fcut;
 		double w;
 		double Norm;
@@ -174,10 +192,6 @@ private:
 
 		}
 
-	};
-	void reset()
-	{
-		m_state = 0.0;
 	};
 };
 

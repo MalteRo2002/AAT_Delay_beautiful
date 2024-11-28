@@ -1,4 +1,42 @@
 #include "IRDisplay.h"
+IRDisplay::IRDisplay(juce::AudioProcessorValueTreeState& vts)
+:m_vts(vts)
+{
+    m_delay_msLeft = 120.f;
+    m_delay_msRight = 250.f;
+    m_feedbackLeft = 0.5f;
+    m_feedbackRight = 0.5f;
+    m_crossFeedbackLeft = 0.3f;
+    m_crossFeedbackRight = 0.3f;
+    m_bpm = -2.f;
+    m_scaleFactor = 1.f;
+    m_dryWet = 0.5f;
+    m_fs = 48000.f;
+    m_maxLen_s = 10.f;
+    m_lenIR = m_maxLen_s*m_fs;
+    m_delta.setSize(2, m_lenIR);
+    m_delta.clear();
+    
+    m_delay.setSamplerate(m_fs);
+    m_delay.setMaxDelay_s(m_maxLen_s);
+    m_delay.setNrOfChns(2);
+    m_delay.setDelay_s(m_delay_msLeft*0.001f,0);
+    m_delay.setDelay_s(m_delay_msRight*0.001f,1);
+    m_delay.setSwitchTime(static_cast<int> (m_fs*0.5));
+    m_delay.setSwitchAlgorithm(jade::BasicDelayEffect::switchAlgorithm::fade);
+    m_delay.setFeedback(m_feedbackLeft,0);
+    m_delay.setFeedback(m_feedbackRight,1);
+    m_delay.setCrossFeedback(m_crossFeedbackLeft,0);
+    m_delay.setCrossFeedback(m_crossFeedbackRight,1);
+    m_delay.setLowpassFrequency(15000.f,0);
+    m_delay.setLowpassFrequency(15000.f,1);
+    m_delay.setHighpassFrequency(2.f,0);
+    m_delay.setHighpassFrequency(2.f,1);
+    m_delay.setDryWet(m_dryWet);
+
+
+
+};
 
 void IRDisplay::paint(juce::Graphics &g)
 {
@@ -47,6 +85,11 @@ void IRDisplay::paint(juce::Graphics &g)
             Counter++;
         }
     }
+    else
+    {
+        g.setFont (12.0f*m_scaleFactor);
+        g.drawText("No BPM Info from Host", r.getX(), r.getY(),150*m_scaleFactor,20*m_scaleFactor, juce::Justification::centred);
+    }
     g.setColour(juce::Colours::yellow.withAlpha(0.7f)); //left channel
 
     // draw grid for ms and add text below
@@ -85,7 +128,8 @@ void IRDisplay::paint(juce::Graphics &g)
 
     g.drawLine(r.getX(), middle_y, r.getRight(), middle_y, 1);
 
-    paintFunctional(g);
+    //paintFunctional(g);
+    paintIR(g);
 
 
 }
@@ -237,6 +281,55 @@ void IRDisplay::paintFunctional(juce::Graphics &g)
             g.fillRect(r.getX()-xlinewidthHalf+xpixel, middle_y, xlinewidth, ypixel - middle_y);
         }
         left = !left;
+    }
+
+}
+
+void IRDisplay::paintIR(juce::Graphics &g)
+{
+    auto r = getLocalBounds();
+    int reducefac = 4;
+    r.reduce(10*m_scaleFactor, 10*m_scaleFactor);
+    int middle = r.getHeight()/2;
+    int middle_y = r.getY() + middle;
+    float displayrange = getDisplayRange(std::max(m_delay_msLeft, m_delay_msRight));
+
+    // define delta impulse in m_delta
+    int nr_of_samples = static_cast<int> (displayrange*0.001f*m_fs);
+    m_delta.setSize(2, nr_of_samples);
+    m_delta.clear();
+    auto dataPtr = m_delta.getArrayOfWritePointers();
+    dataPtr[0][0] = 1.f;
+    dataPtr[1][0] = 1.f;
+
+    // calculate impulse response
+    m_delay.reset();
+    m_delay.processSamples(m_delta);
+
+    // paint impulse response
+    float y = 0.f;
+    float x = 0.f;
+    int xlinewidth = static_cast<int> (4.f*m_scaleFactor+0.5f);
+    int xlinewidthHalf = static_cast<int> (2.f*m_scaleFactor+0.5f);
+    
+
+    for (int kk = 0; kk < m_delta.getNumSamples(); kk++)
+    {
+        g.setColour(juce::Colours::blue);
+
+        x = static_cast<float> (kk) / m_fs * 1000.f;
+        y = fabs(dataPtr[0][kk]);
+        if (y>1.f)
+            y = 1.f;
+        int xpixel = x / displayrange * r.getWidth();
+        int ypixel = r.getY() + middle - y * middle;
+        g.fillRect(r.getX() + xpixel-xlinewidthHalf, ypixel,xlinewidth , middle_y - ypixel);
+        y = fabs(dataPtr[1][kk]);
+        if (y>1.f)
+            y = 1.f;
+        ypixel = r.getY() + middle + y * middle;
+        g.setColour(juce::Colours::red);
+        g.fillRect(r.getX() + xpixel-xlinewidthHalf, middle_y, xlinewidth, ypixel - middle_y);
     }
 
 }

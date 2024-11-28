@@ -2,37 +2,36 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "BasicDelayEffect.h"
+
 class IRDisplay : public juce::Component
 {
 public:
-    IRDisplay(juce::AudioProcessorValueTreeState& vts):m_vts(vts)
-    {
-        m_delay_msLeft = 120.f;
-        m_delay_msRight = 250.f;
-        m_feedbackLeft = 0.5f;
-        m_feedbackRight = 0.5f;
-        m_crossFeedbackLeft = 0.3f;
-        m_crossFeedbackRight = 0.3f;
-        m_bpm = 120.f;
-        m_scaleFactor = 1.f;
-        m_dryWet = 0.5f;
-    };
+    IRDisplay(juce::AudioProcessorValueTreeState& vts);
 
     void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void setDelay_msLeft(float delay_msLeft){m_delay_msLeft = delay_msLeft;repaint();};
-    void setDelay_msRight(float delay_msRight){m_delay_msRight = delay_msRight;repaint();};
-    void setFeedbackLeft(float feedbackLeft){m_feedbackLeft = feedbackLeft;repaint();};
-    void setFeedbackRight(float feedbackRight){m_feedbackRight = feedbackRight;repaint();};
-    void setCrossFeedbackLeft(float crossFeedbackLeft){m_crossFeedbackLeft = crossFeedbackLeft;repaint();};
-    void setCrossFeedbackRight(float crossFeedbackRight){m_crossFeedbackRight = crossFeedbackRight;repaint();};
+    void setDelay_msLeft(float delay_msLeft){m_delay_msLeft = delay_msLeft; 
+    m_delay.setDelay_s(delay_msLeft*0.001f,0);repaint();};
+    void setDelay_msRight(float delay_msRight){m_delay_msRight = delay_msRight;
+    m_delay.setDelay_s(delay_msRight*0.001f,1);repaint();};
+    void setFeedbackLeft(float feedbackLeft){m_feedbackLeft = feedbackLeft;
+    m_delay.setFeedback(feedbackLeft,0);repaint();};
+    void setFeedbackRight(float feedbackRight){m_feedbackRight = feedbackRight;
+    m_delay.setFeedback(feedbackRight,1);repaint();};
+    void setCrossFeedbackLeft(float crossFeedbackLeft){m_crossFeedbackLeft = crossFeedbackLeft;
+    m_delay.setCrossFeedback(crossFeedbackLeft,0);repaint();};
+    void setCrossFeedbackRight(float crossFeedbackRight){m_crossFeedbackRight = crossFeedbackRight;
+    m_delay.setCrossFeedback(crossFeedbackRight,1);repaint();};
     void setBpm(float bpm){m_bpm = bpm;repaint();};
     void setScaleFactor(float scaleFactor){m_scaleFactor = scaleFactor;repaint();};
-    void setDryWet(float dryWet){m_dryWet = dryWet;repaint();};
+    void setDryWet(float dryWet){m_dryWet = dryWet;
+    m_delay.setDryWet(dryWet); repaint();};
 
 private:
     void paintFunctional(juce::Graphics& g);
+    void paintIR(juce::Graphics& g);
     juce::AudioProcessorValueTreeState& m_vts;
     float getDisplayRange(float maxdelay);
     float m_delay_msLeft;
@@ -44,5 +43,11 @@ private:
     float m_bpm;
     float m_scaleFactor;
     float m_dryWet;
+    float m_fs;
+    float m_maxLen_s;
+    int m_lenIR;
+    juce::AudioBuffer <float> m_delta;
+    jade::BasicDelayEffect m_delay;
+
 
 };

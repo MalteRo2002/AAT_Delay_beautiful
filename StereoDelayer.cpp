@@ -38,7 +38,7 @@ void StereoDelayerAudio::prepareToPlay(double sampleRate, int max_samplesPerBloc
     //m_delay.setHighpassFrequency(300.f,0);
     m_delay.setHighpassFrequency(5000.f,1);
 
-    m_playhead = m_processor->getPlayHead();
+    m_oldBpm = -2.f;
 }
 
 
@@ -46,6 +46,7 @@ int StereoDelayerAudio::processSynchronBlock(juce::AudioBuffer<float> & buffer, 
 {
     StereoDelayerAudioProcessor* processor = dynamic_cast<StereoDelayerAudioProcessor*> (m_processor);
     juce::ignoreUnused(midiMessages, NrOfBlocksSinceLastProcessBlock);
+    m_playhead = m_processor->getPlayHead();
     
     auto timeinfo = m_playhead->getPosition();
     float bpm = -1.f;

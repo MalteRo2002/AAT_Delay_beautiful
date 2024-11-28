@@ -36,7 +36,8 @@ public:
     void setSamplerate(float fs);
 
     void setDelay(size_t delay, size_t chn);
-    void setDelay_s(float delay_s, size_t chn){size_t delay = static_cast<size_t> (delay_s*m_fs); setDelay(delay, chn);};
+    void setDelay_s(float delay_s, size_t chn){
+        size_t delay = static_cast<size_t> (delay_s*m_fs); setDelay(delay, chn);};
 
     int processSamples(juce::AudioBuffer<float>& data);
     void setSwitchTime(size_t time){m_switchTime = time;};
@@ -51,6 +52,7 @@ public:
     void setLowpassFrequency(float fcut, size_t chn){m_lowpass[chn].setCutoff(fcut);};
     void setHighpassFrequency(float fcut, size_t chn){m_highpass[chn].setCutoff(fcut);};
     void setDryWet(float drywet){m_drywet = drywet;};
+    void reset();
 private:
     void changeBufferSize();
     void switchalgorithmChanged();

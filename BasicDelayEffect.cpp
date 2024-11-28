@@ -191,6 +191,17 @@ void jade::BasicDelayEffect::setHighpassFrequency(float fcut)
     }
 }
 
+void jade::BasicDelayEffect::reset()
+{
+    m_buffer.clear();
+    for (size_t kk = 0; kk < m_nrOfChns; kk++)
+    {
+        m_oldOut[kk] = 0.f;
+        m_lowpass[kk].reset();
+        m_highpass[kk].reset();
+    }
+}
+
 void jade::BasicDelayEffect::changeBufferSize()
 {
     m_buffer.setSize (static_cast<int>(m_nrOfChns), static_cast<int>(m_maxdelay));
