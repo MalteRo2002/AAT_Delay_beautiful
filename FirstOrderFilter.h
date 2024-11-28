@@ -119,13 +119,13 @@ private:
 	FilterDesign m_design;
 	void computeCoeffs() // music dsp
 	{
-		if (m_cutoff > 0.49 * m_fs)
+		if (m_cutoff > 0.49 * m_fs || m_cutoff > 14500.f)
 		{
 			m_b0 = 1.0;
 			m_a1 = m_b1 = 0.0;
 			return;			
 		}
-		if (m_cutoff < 10.f)
+		if (m_cutoff < 12.f)
 		{
 			m_b0 = 1.0;
 			m_a1 = m_b1 = 0.0;

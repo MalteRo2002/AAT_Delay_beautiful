@@ -67,10 +67,10 @@ int jade::BasicDelayEffect::processSamples(juce::AudioBuffer<float> &data)
         {
             float in;
             if (cc == 0 && nrofchns == 2)
-                in = dataPtr[cc][kk] + m_feedback[cc]*m_oldOut[cc] + m_Crossfeedback[cc]*m_oldOut[1];
+                in = dataPtr[cc][kk] + m_feedback[cc]*m_oldOut[cc] + m_Crossfeedback[1]*m_oldOut[1];
 
             if (cc == 1)
-                in = dataPtr[cc][kk] + m_feedback[cc]*m_oldOut[cc] + m_Crossfeedback[cc]*m_oldOut[0];
+                in = dataPtr[cc][kk] + m_feedback[cc]*m_oldOut[cc] + m_Crossfeedback[0]*m_oldOut[0];
 
             
             bufferPtr[cc][m_writePos] = in; 

@@ -415,7 +415,8 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
         AudioParameterFloatAttributes().withLabel (g_paramLowpassLeft.unitName)
                                         .withCategory (juce::AudioProcessorParameter::genericParameter)
                                         // or two additional lines with lambdas to convert data for display
-                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);
+                                        if (value<=14500.f)  return (String(value, MaxLen)); else return String("off"); }))
                                         // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
 
@@ -426,7 +427,8 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
         AudioParameterFloatAttributes().withLabel (g_paramLowpassRight.unitName)
                                         .withCategory (juce::AudioProcessorParameter::genericParameter)
                                         // or two additional lines with lambdas to convert data for display
-                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);
+                                        if (value<=14500.f)  return (String(value, MaxLen)); else return String("off"); }))
                                         // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
 
@@ -437,7 +439,8 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
         AudioParameterFloatAttributes().withLabel (g_paramHighpassLeft.unitName)
                                         .withCategory (juce::AudioProcessorParameter::genericParameter)
                                         // or two additional lines with lambdas to convert data for display
-                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);
+                                        if (value>=12.f)  return (String(value, MaxLen)); else return String("off"); }))
                                         // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
 
@@ -448,7 +451,8 @@ void StereoDelayerAudio::addParameter(std::vector<std::unique_ptr<juce::RangedAu
         AudioParameterFloatAttributes().withLabel (g_paramHighpassRight.unitName)
                                         .withCategory (juce::AudioProcessorParameter::genericParameter)
                                         // or two additional lines with lambdas to convert data for display
-                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);  return (String(value, MaxLen)); }))
+                                        .withStringFromValueFunction (std::move ([](float value, int MaxLen) { value = 0.1f*int(exp(value)*10);
+                                        if (value>=12.f)  return (String(value, MaxLen)); else return String("off"); }))
                                         // .withValueFromStringFunction (std::move ([](const String& text) {return text.getFloatValue(); }))
                         ));
     paramVector.push_back(std::make_unique<AudioParameterInt>(g_paramNumeratorLeft.ID,
@@ -535,6 +539,7 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
 StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioProcessorValueTreeState& apvts)
 :m_processor(p) ,m_apvts(apvts),m_IRDisplay(apvts)
 {
+    m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(m_DelayLeft_msSlider.getValue());};
     m_DelayLeft_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DelayLeft_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_DelayLeft_msSlider.setRange(g_paramDelayLeft_ms.minValue, g_paramDelayLeft_ms.maxValue);
@@ -543,8 +548,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DelayLeft_msSlider.setValue(*val);
     m_DelayLeft_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDelayLeft_ms.ID, m_DelayLeft_msSlider);
     addAndMakeVisible(m_DelayLeft_msSlider);
-    m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(m_DelayLeft_msSlider.getValue());};
 
+    m_DelayRight_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msRight(m_DelayRight_msSlider.getValue());};
     m_DelayRight_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DelayRight_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_DelayRight_msSlider.setRange(g_paramDelayRight_ms.minValue, g_paramDelayRight_ms.maxValue);
@@ -553,8 +558,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DelayRight_msSlider.setValue(*val);
     m_DelayRight_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDelayRight_ms.ID, m_DelayRight_msSlider);
     addAndMakeVisible(m_DelayRight_msSlider);
-    m_DelayRight_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msRight(m_DelayRight_msSlider.getValue());};
 
+    m_FeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setFeedbackLeft(m_FeedbackLeftSlider.getValue());};
     m_FeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_FeedbackLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_FeedbackLeftSlider.setRange(g_paramFeedbackLeft.minValue, g_paramFeedbackLeft.maxValue);
@@ -563,8 +568,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_FeedbackLeftSlider.setValue(*val);
     m_FeedbackLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramFeedbackLeft.ID, m_FeedbackLeftSlider);
     addAndMakeVisible(m_FeedbackLeftSlider);
-    m_FeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setFeedbackLeft(m_FeedbackLeftSlider.getValue());};
 
+    m_FeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setFeedbackRight(m_FeedbackRightSlider.getValue());};
     m_FeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_FeedbackRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_FeedbackRightSlider.setRange(g_paramFeedbackRight.minValue, g_paramFeedbackRight.maxValue);
@@ -573,8 +578,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_FeedbackRightSlider.setValue(*val);
     m_FeedbackRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramFeedbackRight.ID, m_FeedbackRightSlider);
     addAndMakeVisible(m_FeedbackRightSlider);
-    m_FeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setFeedbackRight(m_FeedbackRightSlider.getValue());};
 
+    m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
     m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_CrossFeedbackLeftSlider.setRange(g_paramCrossFeedbackLeft.minValue, g_paramCrossFeedbackLeft.maxValue);
@@ -583,8 +588,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_CrossFeedbackLeftSlider.setValue(*val);
     m_CrossFeedbackLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackLeft.ID, m_CrossFeedbackLeftSlider);
     addAndMakeVisible(m_CrossFeedbackLeftSlider);
-    m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
 
+    m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
     m_CrossFeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_CrossFeedbackRightSlider.setRange(g_paramCrossFeedbackRight.minValue, g_paramCrossFeedbackRight.maxValue);
@@ -593,7 +598,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_CrossFeedbackRightSlider.setValue(*val);
     m_CrossFeedbackRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackRight.ID, m_CrossFeedbackRightSlider);
     addAndMakeVisible(m_CrossFeedbackRightSlider);
-    m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
 
     m_LinkLR.setButtonText("Link L/R");
     m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, false);
@@ -609,6 +613,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msSlider);
     addAndMakeVisible(m_SwitchTime_msSlider);
 
+    m_DryWetSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetSlider.getValue());};
     m_DryWetSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DryWetSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_DryWetSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
@@ -617,8 +622,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DryWetSlider.setValue(*val);
     m_DryWetAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDryWet.ID, m_DryWetSlider);
     addAndMakeVisible(m_DryWetSlider);
-    m_DryWetSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetSlider.getValue());};
 
+    m_LowpassLeftSlider.onValueChange = [this] {m_IRDisplay.setLowpassLeft(expf(m_LowpassLeftSlider.getValue()));};
     m_LowpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_LowpassLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_LowpassLeftSlider.setRange(g_paramLowpassLeft.minValue, g_paramLowpassLeft.maxValue);
@@ -628,6 +633,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_LowpassLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramLowpassLeft.ID, m_LowpassLeftSlider);
     addAndMakeVisible(m_LowpassLeftSlider);
 
+    m_LowpassRightSlider.onValueChange = [this] {m_IRDisplay.setLowpassRight(expf(m_LowpassRightSlider.getValue()));};
     m_LowpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_LowpassRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_LowpassRightSlider.setRange(g_paramLowpassRight.minValue, g_paramLowpassRight.maxValue);
@@ -637,6 +643,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_LowpassRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramLowpassRight.ID, m_LowpassRightSlider);
     addAndMakeVisible(m_LowpassRightSlider);
 
+    m_HighpassLeftSlider.onValueChange = [this] {m_IRDisplay.setHighpassLeft(expf(m_HighpassLeftSlider.getValue()));};
     m_HighpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_HighpassLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_HighpassLeftSlider.setRange(g_paramHighpassLeft.minValue, g_paramHighpassLeft.maxValue);
@@ -646,6 +653,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_HighpassLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramHighpassLeft.ID, m_HighpassLeftSlider);
     addAndMakeVisible(m_HighpassLeftSlider);
 
+    m_HighpassRightSlider.onValueChange = [this] {m_IRDisplay.setHighpassRight(expf(m_HighpassRightSlider.getValue()));};
     m_HighpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_HighpassRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
     m_HighpassRightSlider.setRange(g_paramHighpassRight.minValue, g_paramHighpassRight.maxValue);
@@ -654,7 +662,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_HighpassRightSlider.setValue(*val);
     m_HighpassRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramHighpassRight.ID, m_HighpassRightSlider);
     addAndMakeVisible(m_HighpassRightSlider);
-
+ 
 
     m_AlgoSwitchCombo.addItemList(g_paramSwitchAlgo.choices,1);
     m_AlgoSwitchComboAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(m_apvts, g_paramSwitchAlgo.ID, m_AlgoSwitchCombo);
@@ -695,7 +703,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DenominatorRightSlider.setValue(*val);
     m_DenominatorRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDenominatorRight.ID, m_DenominatorRightSlider);
     addAndMakeVisible(m_DenominatorRightSlider);
-
+    m_IRDisplay.setScaleFactor(m_processor.getScaleFactor());
     addAndMakeVisible(m_IRDisplay);
     startTimerHz(15);
 }

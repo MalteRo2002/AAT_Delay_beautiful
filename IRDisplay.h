@@ -28,6 +28,17 @@ public:
     void setScaleFactor(float scaleFactor){m_scaleFactor = scaleFactor;repaint();};
     void setDryWet(float dryWet){m_dryWet = dryWet;
     m_delay.setDryWet(dryWet); repaint();};
+    void setFs(float fs){m_fs = fs; m_delay.setSamplerate(fs); repaint();};
+
+    void setLowpassLeft(float lowpassLeft){m_lowpassLeft = lowpassLeft;
+    m_delay.setLowpassFrequency(lowpassLeft,0);repaint();};
+    void setLowpassRight(float lowpassRight){m_lowpassRight = lowpassRight;
+    m_delay.setLowpassFrequency(lowpassRight,1);repaint();};
+    void setHighpassLeft(float highpassLeft){m_highpassLeft = highpassLeft;
+    m_delay.setHighpassFrequency(highpassLeft,0);repaint();};
+    void setHighpassRight(float highpassRight){m_highpassRight = highpassRight;
+    m_delay.setHighpassFrequency(highpassRight,1);repaint();};
+
 
 private:
     void paintFunctional(juce::Graphics& g);
@@ -46,8 +57,17 @@ private:
     float m_fs;
     float m_maxLen_s;
     int m_lenIR;
+
+    float m_lowpassLeft;
+    float m_lowpassRight;
+    float m_highpassLeft;
+    float m_highpassRight;
+
     juce::AudioBuffer <float> m_delta;
     jade::BasicDelayEffect m_delay;
+
+    juce::ToggleButton m_showFunctional;
+    bool m_showFunctionalState = false;
 
 
 };
