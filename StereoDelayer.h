@@ -11,6 +11,8 @@
 #include "BasicDelayEffect.h"
 #include "IRDisplay.h"
 
+#include "LavaLookAndFeel.h"
+
 class StereoDelayerAudioProcessor;
 
 // This is how we define our parameter as globals to use it in the audio processor as well as in the editor
@@ -324,4 +326,6 @@ private:
 
 	IRDisplay m_IRDisplay;
 	float m_oldBpm = -1.f;
+
+	LavaLookAndFeel m_lavaLookAndFeel;
 };

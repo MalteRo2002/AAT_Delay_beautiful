@@ -715,6 +715,8 @@ StereoDelayerGUI::~StereoDelayerGUI()
 
 void StereoDelayerGUI::paint(juce::Graphics &g)
 {
+    setLookAndFeel(&m_lavaLookAndFeel);
+
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId).brighter(0.3f));
 
     g.setColour (juce::Colours::white);
