@@ -1,9 +1,9 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
-class LavaLookAndFeel : public juce::LookAndFeel_V4
+class LavaLookAndFeelLeft : public juce::LookAndFeel_V4
 {
 public:
-    LavaLookAndFeel()
+    LavaLookAndFeelLeft()
     {
         setColour(juce::Slider::thumbColourId, juce::Colours::red);
     }

@@ -11,7 +11,10 @@
 #include "BasicDelayEffect.h"
 #include "IRDisplay.h"
 
-#include "LavaLookAndFeel.h"
+#include "LavaLookAndFeelLeft.h"
+#include "LavaLookAndFeelRight.h"
+
+#include "MouseButtonDetectOverlay.h"
 
 class StereoDelayerAudioProcessor;
 
@@ -206,6 +209,7 @@ public:
     // some necessary info for the host
     int getLatency(){return m_Latency;};
 	float getBpm(){return m_oldBpm;};
+
 private:
 	float m_fs = 44100.f;
 	juce::AudioProcessor* m_processor;
@@ -286,6 +290,7 @@ private:
 
 	juce::Slider m_DelayLeft_msSlider;
 	juce::Slider m_DelayRight_msSlider;
+	MouseButtonDetectOverlay m_DelayLeft_msOverlay{m_DelayLeft_msSlider, m_DelayRight_msSlider};
 	juce::Slider m_FeedbackLeftSlider;
 	juce::Slider m_FeedbackRightSlider;
 	juce::Slider m_CrossFeedbackLeftSlider;
@@ -327,5 +332,6 @@ private:
 	IRDisplay m_IRDisplay;
 	float m_oldBpm = -1.f;
 
-	LavaLookAndFeel m_lavaLookAndFeel;
+	LavaLookAndFeelLeft m_lavaLookAndFeelLeft;
+	LavaLookAndFeelRight m_lavaLookAndFeelRight;
 };

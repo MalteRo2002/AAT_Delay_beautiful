@@ -547,6 +547,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     auto val = m_apvts.getRawParameterValue(g_paramDelayLeft_ms.ID);
     m_DelayLeft_msSlider.setValue(*val);
     m_DelayLeft_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDelayLeft_ms.ID, m_DelayLeft_msSlider);
+    m_DelayLeft_msSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
     addAndMakeVisible(m_DelayLeft_msSlider);
 
     m_DelayRight_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msRight(m_DelayRight_msSlider.getValue());};
@@ -557,7 +558,12 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramDelayRight_ms.ID);
     m_DelayRight_msSlider.setValue(*val);
     m_DelayRight_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDelayRight_ms.ID, m_DelayRight_msSlider);
+    m_DelayRight_msSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_DelayRight_msSlider);
+
+    m_DelayLeft_msOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_DelayLeft_msOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_DelayLeft_msOverlay);
 
     m_FeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setFeedbackLeft(m_FeedbackLeftSlider.getValue());};
     m_FeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -715,8 +721,6 @@ StereoDelayerGUI::~StereoDelayerGUI()
 
 void StereoDelayerGUI::paint(juce::Graphics &g)
 {
-    setLookAndFeel(&m_lavaLookAndFeel);
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId).brighter(0.3f));
 
     g.setColour (juce::Colours::white);
@@ -754,7 +758,8 @@ void StereoDelayerGUI::resized()
     int distance_y = 20 * scaleFactor;
     int distance_x = 10 * scaleFactor;
     m_DelayLeft_msSlider.setBounds(startx,starty,knobwidth,knobheight);
-    m_DelayRight_msSlider.setBounds(startx,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_DelayRight_msSlider.setBounds(startx,starty,knobwidth,knobheight);
+    m_DelayLeft_msOverlay.setBounds(startx,starty,knobwidth,knobheight);
     m_NumeratorLeftSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_DenominatorLeftSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_NumeratorRightSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
