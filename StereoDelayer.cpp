@@ -1,6 +1,7 @@
 #include <math.h>
 #include "StereoDelayer.h"
 #include "PluginProcessor.h"
+#include "resources/images/stone_bin.h"
 
 
 StereoDelayerAudio::StereoDelayerAudio(juce::AudioProcessor* processor)
@@ -539,7 +540,7 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
 StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioProcessorValueTreeState& apvts)
 :m_processor(p) ,m_apvts(apvts),m_IRDisplay(apvts)
 {
-    setLookAndFeel(&m_lavaLookAndFeelLeft);
+    setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
 
     m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(m_DelayLeft_msSlider.getValue());};
     m_DelayLeft_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -619,6 +620,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
     addAndMakeVisible(m_CrossFeedbackOverlay);
 
+    m_LinkLR.onClick = [this] {StereoDelayerGUI::linkButtonClicked();};
     m_LinkLR.setButtonText("Link L/R");
     m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, false);
     m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
@@ -759,7 +761,17 @@ StereoDelayerGUI::~StereoDelayerGUI()
 
 void StereoDelayerGUI::paint(juce::Graphics &g)
 {
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId).brighter(0.3f));
+    
+//    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId).brighter(0.3f));
+
+    auto bounds = getLocalBounds();
+
+    if (auto image = juce::ImageFileFormat::loadFrom(stone_jpg, stone_jpg_len); image.isValid())
+    {
+        g.drawImageWithin(image, bounds.getX(), bounds.getY(),
+                        bounds.getWidth(), bounds.getHeight(),
+                        juce::RectanglePlacement::fillDestination);
+    }
 
     g.setColour (juce::Colours::white);
 
@@ -847,6 +859,170 @@ void StereoDelayerGUI::timerCallback()
         else
         {
             m_IRDisplay.setBpm(-1);
+        }
+    }
+}
+
+void StereoDelayerGUI::linkButtonClicked()
+{
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_DelayLeft_msSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_DelayLeft_msSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+        }
+    }
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_DelayRight_msSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_DelayRight_msSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
+        }
+    }
+    //--------------------------------
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_FeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_FeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+        }
+    }
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_FeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_FeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
+        }
+    }
+    //--------------------------------
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+        }
+    }
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
+        }
+    }
+    //--------------------------------
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_NumeratorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_NumeratorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+        }
+    }
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_NumeratorRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_NumeratorRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
+        }
+    }
+    //--------------------------------
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_DenominatorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_DenominatorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+        }
+    }
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_DenominatorRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_DenominatorRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
+        }
+    }
+    //--------------------------------
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_HighpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_HighpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+        }
+    }
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_HighpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_HighpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
+        }
+    }
+    //--------------------------------
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_LowpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_LowpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+        }
+    }
+    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    {
+        m_LowpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    }
+    else
+    {
+        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+        {
+            m_LowpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
         }
     }
 }

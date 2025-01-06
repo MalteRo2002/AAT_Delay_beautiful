@@ -13,6 +13,8 @@
 
 #include "LavaLookAndFeelLeft.h"
 #include "LavaLookAndFeelRight.h"
+#include "LavaLookAndFeelLinkLeft.h"
+#include "LavaLookAndFeelLinkRight.h"
 
 #include "MouseButtonDetectOverlay.h"
 
@@ -340,4 +342,8 @@ private:
 
 	LavaLookAndFeelLeft m_lavaLookAndFeelLeft;
 	LavaLookAndFeelRight m_lavaLookAndFeelRight;
+	LavaLookAndFeelLinkLeft m_lavaLookAndFeelLinkLeft;
+	LavaLookAndFeelLinkRight m_lavaLookAndFeelLinkRight;
+
+	void linkButtonClicked();
 };
