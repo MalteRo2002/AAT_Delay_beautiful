@@ -539,6 +539,8 @@ void StereoDelayerAudio::prepareParameter(std::unique_ptr<juce::AudioProcessorVa
 StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioProcessorValueTreeState& apvts)
 :m_processor(p) ,m_apvts(apvts),m_IRDisplay(apvts)
 {
+    setLookAndFeel(&m_lavaLookAndFeelLeft);
+
     m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(m_DelayLeft_msSlider.getValue());};
     m_DelayLeft_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DelayLeft_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
@@ -561,9 +563,9 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DelayRight_msSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_DelayRight_msSlider);
 
-    m_DelayLeft_msOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_DelayLeft_msOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    addAndMakeVisible(m_DelayLeft_msOverlay);
+    m_Delay_msOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_Delay_msOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_Delay_msOverlay);
 
     m_FeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setFeedbackLeft(m_FeedbackLeftSlider.getValue());};
     m_FeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -573,6 +575,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramFeedbackLeft.ID);
     m_FeedbackLeftSlider.setValue(*val);
     m_FeedbackLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramFeedbackLeft.ID, m_FeedbackLeftSlider);
+    m_FeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
     addAndMakeVisible(m_FeedbackLeftSlider);
 
     m_FeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setFeedbackRight(m_FeedbackRightSlider.getValue());};
@@ -583,7 +586,12 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramFeedbackRight.ID);
     m_FeedbackRightSlider.setValue(*val);
     m_FeedbackRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramFeedbackRight.ID, m_FeedbackRightSlider);
+    m_FeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_FeedbackRightSlider);
+
+    m_FeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_FeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_FeedbackOverlay);
 
     m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
     m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -593,6 +601,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramCrossFeedbackLeft.ID);
     m_CrossFeedbackLeftSlider.setValue(*val);
     m_CrossFeedbackLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackLeft.ID, m_CrossFeedbackLeftSlider);
+    m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
     addAndMakeVisible(m_CrossFeedbackLeftSlider);
 
     m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
@@ -603,7 +612,12 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramCrossFeedbackRight.ID);
     m_CrossFeedbackRightSlider.setValue(*val);
     m_CrossFeedbackRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackRight.ID, m_CrossFeedbackRightSlider);
+    m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_CrossFeedbackRightSlider);
+
+    m_CrossFeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_CrossFeedbackOverlay);
 
     m_LinkLR.setButtonText("Link L/R");
     m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, false);
@@ -637,6 +651,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramLowpassLeft.ID);
     m_LowpassLeftSlider.setValue(*val);
     m_LowpassLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramLowpassLeft.ID, m_LowpassLeftSlider);
+    m_LowpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
     addAndMakeVisible(m_LowpassLeftSlider);
 
     m_LowpassRightSlider.onValueChange = [this] {m_IRDisplay.setLowpassRight(expf(m_LowpassRightSlider.getValue()));};
@@ -647,7 +662,12 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramLowpassRight.ID);
     m_LowpassRightSlider.setValue(*val);
     m_LowpassRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramLowpassRight.ID, m_LowpassRightSlider);
+    m_LowpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_LowpassRightSlider);
+
+    m_LowpassOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_LowpassOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_LowpassOverlay);
 
     m_HighpassLeftSlider.onValueChange = [this] {m_IRDisplay.setHighpassLeft(expf(m_HighpassLeftSlider.getValue()));};
     m_HighpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -657,6 +677,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramHighpassLeft.ID);
     m_HighpassLeftSlider.setValue(*val);
     m_HighpassLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramHighpassLeft.ID, m_HighpassLeftSlider);
+    m_HighpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
     addAndMakeVisible(m_HighpassLeftSlider);
 
     m_HighpassRightSlider.onValueChange = [this] {m_IRDisplay.setHighpassRight(expf(m_HighpassRightSlider.getValue()));};
@@ -667,8 +688,12 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramHighpassRight.ID);
     m_HighpassRightSlider.setValue(*val);
     m_HighpassRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramHighpassRight.ID, m_HighpassRightSlider);
+    m_HighpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_HighpassRightSlider);
  
+    m_HighpassOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_HighpassOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_HighpassOverlay);
 
     m_AlgoSwitchCombo.addItemList(g_paramSwitchAlgo.choices,1);
     m_AlgoSwitchComboAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(m_apvts, g_paramSwitchAlgo.ID, m_AlgoSwitchCombo);
@@ -681,6 +706,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramNumeratorLeft.ID);
     m_NumeratorLeftSlider.setValue(*val);
     m_NumeratorLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramNumeratorLeft.ID, m_NumeratorLeftSlider);
+    m_NumeratorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
     addAndMakeVisible(m_NumeratorLeftSlider);
 
     m_DenominatorLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -690,6 +716,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramDenominatorLeft.ID);
     m_DenominatorLeftSlider.setValue(*val);
     m_DenominatorLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDenominatorLeft.ID, m_DenominatorLeftSlider);
+    m_DenominatorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
     addAndMakeVisible(m_DenominatorLeftSlider);
 
     m_NumeratorRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -699,6 +726,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     val = m_apvts.getRawParameterValue(g_paramNumeratorRight.ID);
     m_NumeratorRightSlider.setValue(*val);
     m_NumeratorRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramNumeratorRight.ID, m_NumeratorRightSlider);
+    m_NumeratorRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_NumeratorRightSlider);
 
     m_DenominatorRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -710,7 +738,17 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DenominatorRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDenominatorRight.ID, m_DenominatorRightSlider);
     addAndMakeVisible(m_DenominatorRightSlider);
     m_IRDisplay.setScaleFactor(m_processor.getScaleFactor());
+    m_DenominatorRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_IRDisplay);
+
+    m_NumeratorOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_NumeratorOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_NumeratorOverlay);
+
+    m_DenominatorOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_DenominatorOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    addAndMakeVisible(m_DenominatorOverlay);
+
     startTimerHz(15);
 }
 
@@ -757,22 +795,34 @@ void StereoDelayerGUI::resized()
     int knobheight = 80 * scaleFactor;
     int distance_y = 20 * scaleFactor;
     int distance_x = 10 * scaleFactor;
+
     m_DelayLeft_msSlider.setBounds(startx,starty,knobwidth,knobheight);
     m_DelayRight_msSlider.setBounds(startx,starty,knobwidth,knobheight);
-    m_DelayLeft_msOverlay.setBounds(startx,starty,knobwidth,knobheight);
+    m_Delay_msOverlay.setBounds(startx,starty,knobwidth,knobheight);
+
     m_NumeratorLeftSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_DenominatorLeftSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_NumeratorRightSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
-    m_DenominatorRightSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_NumeratorRightSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_DenominatorRightSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_NumeratorOverlay.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_DenominatorOverlay.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
 
-    m_FeedbackLeftSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_FeedbackRightSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
-    m_CrossFeedbackLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_CrossFeedbackRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_FeedbackLeftSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_FeedbackRightSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_FeedbackOverlay.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+
+    m_CrossFeedbackLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_CrossFeedbackRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_CrossFeedbackOverlay.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+
     m_LowpassLeftSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_LowpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_LowpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_LowpassOverlay.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+
     m_HighpassLeftSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_HighpassRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_HighpassRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_HighpassOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+
     m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
 
     int buttonWidth = 60*scaleFactor;

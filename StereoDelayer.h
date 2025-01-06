@@ -290,21 +290,27 @@ private:
 
 	juce::Slider m_DelayLeft_msSlider;
 	juce::Slider m_DelayRight_msSlider;
-	MouseButtonDetectOverlay m_DelayLeft_msOverlay{m_DelayLeft_msSlider, m_DelayRight_msSlider};
+	MouseButtonDetectOverlay m_Delay_msOverlay{m_DelayLeft_msSlider, m_DelayRight_msSlider};
 	juce::Slider m_FeedbackLeftSlider;
 	juce::Slider m_FeedbackRightSlider;
+	MouseButtonDetectOverlay m_FeedbackOverlay{m_FeedbackLeftSlider, m_FeedbackRightSlider};
 	juce::Slider m_CrossFeedbackLeftSlider;
 	juce::Slider m_CrossFeedbackRightSlider;
+	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider};
 	juce::Slider m_SwitchTime_msSlider;
 	juce::Slider m_DryWetSlider;
 	juce::Slider m_LowpassLeftSlider;
 	juce::Slider m_LowpassRightSlider;
+	MouseButtonDetectOverlay m_LowpassOverlay{m_LowpassLeftSlider, m_LowpassRightSlider};
 	juce::Slider m_HighpassLeftSlider;
 	juce::Slider m_HighpassRightSlider;
+	MouseButtonDetectOverlay m_HighpassOverlay{m_HighpassLeftSlider, m_HighpassRightSlider};
 	juce::Slider m_NumeratorLeftSlider;
 	juce::Slider m_DenominatorLeftSlider;
 	juce::Slider m_NumeratorRightSlider;
 	juce::Slider m_DenominatorRightSlider;
+	MouseButtonDetectOverlay m_NumeratorOverlay{m_NumeratorLeftSlider, m_NumeratorRightSlider};
+	MouseButtonDetectOverlay m_DenominatorOverlay{m_DenominatorLeftSlider, m_DenominatorRightSlider};
 
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DelayLeft_msAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DelayRight_msAttachment;
