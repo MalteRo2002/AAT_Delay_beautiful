@@ -303,7 +303,9 @@ private:
 	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider, m_apvts};
 	juce::Label m_CrossFeedbackLabel;
 	juce::Slider m_SwitchTime_msSlider;
+	juce::Label m_SwitchTimeLabel;
 	juce::Slider m_DryWetSlider;
+	juce::Label m_DryWetLabel;
 	juce::Slider m_LowpassLeftSlider;
 	juce::Slider m_LowpassRightSlider;
 	MouseButtonDetectOverlay m_LowpassOverlay{m_LowpassLeftSlider, m_LowpassRightSlider, m_apvts};

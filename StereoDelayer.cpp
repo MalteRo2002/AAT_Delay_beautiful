@@ -571,7 +571,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_Delay_msOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_Delay_msOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    m_Delay_msOverlay.setParamName("Delay: ");
+    m_Delay_msOverlay.setParamName("Delay");
     m_Delay_msOverlay.setUnitName(" ms");
     addAndMakeVisible(m_Delay_msOverlay);
 
@@ -604,7 +604,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_FeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_FeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    m_FeedbackOverlay.setParamName("Feedback: ");
+    m_FeedbackOverlay.setParamName("Feedback");
     m_FeedbackOverlay.setUnitName(" %");
     addAndMakeVisible(m_FeedbackOverlay);
 
@@ -637,7 +637,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_CrossFeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    m_CrossFeedbackOverlay.setParamName("Cross Feedback: ");
+    m_CrossFeedbackOverlay.setParamName("Cross Feedback");
     m_CrossFeedbackOverlay.setUnitName(" %");
     addAndMakeVisible(m_CrossFeedbackOverlay);
 
@@ -656,6 +656,11 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msSlider);
     addAndMakeVisible(m_SwitchTime_msSlider);
 
+    m_SwitchTimeLabel.setText("Switch Time", juce::dontSendNotification);
+    m_SwitchTimeLabel.setFont(juce::Font(15.0f));
+    m_SwitchTimeLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_SwitchTimeLabel);
+
     m_DryWetSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetSlider.getValue());};
     m_DryWetSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DryWetSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
@@ -665,6 +670,11 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DryWetSlider.setValue(*val);
     m_DryWetAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDryWet.ID, m_DryWetSlider);
     addAndMakeVisible(m_DryWetSlider);
+
+    m_DryWetLabel.setText("Dry / Wet", juce::dontSendNotification);
+    m_DryWetLabel.setFont(juce::Font(15.0f));
+    m_DryWetLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_DryWetLabel);
 
     m_LowpassLeftSlider.onValueChange = [this] {m_IRDisplay.setLowpassLeft(expf(m_LowpassLeftSlider.getValue()));};
     m_LowpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -695,7 +705,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_LowpassOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_LowpassOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    m_LowpassOverlay.setParamName("Lowpass: ");
+    m_LowpassOverlay.setParamName("Lowpass");
     m_LowpassOverlay.setUnitName(" Hz");
     addAndMakeVisible(m_LowpassOverlay);
 
@@ -728,7 +738,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_HighpassOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_HighpassOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    m_HighpassOverlay.setParamName("Highpass: ");
+    m_HighpassOverlay.setParamName("Highpass");
     m_HighpassOverlay.setUnitName(" Hz");
     addAndMakeVisible(m_HighpassOverlay);
 
@@ -785,7 +795,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_NumeratorOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_NumeratorOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    m_NumeratorOverlay.setParamName("Numerator: ");
+    m_NumeratorOverlay.setParamName("Numerator");
     addAndMakeVisible(m_NumeratorOverlay);
 
     m_DenominatorLabel.setText("Denominator", juce::dontSendNotification);
@@ -795,7 +805,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_DenominatorOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DenominatorOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    m_DenominatorOverlay.setParamName("Denominator: ");
+    m_DenominatorOverlay.setParamName("Denominator");
     addAndMakeVisible(m_DenominatorOverlay);
 
     startTimerHz(15);
@@ -889,7 +899,8 @@ void StereoDelayerGUI::resized()
     m_HighpassOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_HighpassLabel.setBounds(startx + 6*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
-    m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
+    m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + knobheight ,knobwidth,knobheight);
+    m_DryWetLabel.setBounds(startx + 7*(knobwidth + distance_x), starty + 2 * knobheight, knobwidth, distance_y);
 
     int buttonWidth = 60*scaleFactor;
     int buttonHeight = 30*scaleFactor;
@@ -897,6 +908,7 @@ void StereoDelayerGUI::resized()
 
     m_AlgoSwitchCombo.setBoundsRelative(0.9,0.01,0.08,0.04);
     m_SwitchTime_msSlider.setBounds(width-90*scaleFactor, 60*scaleFactor,knobwidth,knobheight);
+    m_SwitchTimeLabel.setBounds(width-90*scaleFactor, 60*scaleFactor + knobheight,knobwidth,distance_y);
 
 }
 
