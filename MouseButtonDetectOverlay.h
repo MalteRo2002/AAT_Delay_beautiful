@@ -167,31 +167,32 @@ public:
 
     void updatePopupText()
     {
+        auto transformValue = [](float value, const juce::String& paramName) -> float {
+            if (paramName == "Lowpass" || paramName == "Highpass")
+            {
+                return expf(value);
+            }
+            else if (paramName == "Feedback" || paramName == "Cross Feedback")
+            {
+                return value * 100.0f;
+            }
+            return value;
+        };
+
         if (m_apvts.getRawParameterValue("LinkLRID")->load())
         {
-            if (m_param == "Feedback" || m_param == "Cross Feedback")
-            {
-                popup.setText(m_param + ": " + juce::String(m_leftSlider.getValue() * 100.0, 2) + " %");
-            }
-            else
-            {
-                popup.setText(m_param + ": " + juce::String(m_leftSlider.getValue(), 2) + " " + m_unit);
-            }
+            float transformedValue = transformValue(m_leftSlider.getValue(), m_param);
+
+            popup.setText(m_param + ": " + juce::String(transformedValue, 2) + " " + m_unit);
         }
         else
         {
-            if (m_param == "Feedback" || m_param == "Cross Feedback")
-            {
-                popup.setText(
-                    "Left: " + juce::String(m_leftSlider.getValue() * 100.0, 2) + " %\n" +
-                    "Right: " + juce::String(m_rightSlider.getValue() * 100.0, 2) + " %");
-            }
-            else
-            {
-                popup.setText(
-                    "Left: " + juce::String(m_leftSlider.getValue(), 2) + " " + m_unit + "\n" +
-                    "Right: " + juce::String(m_rightSlider.getValue(), 2) + " " + m_unit);
-            }
+            float transformedLeft = transformValue(m_leftSlider.getValue(), m_param);
+            float transformedRight = transformValue(m_rightSlider.getValue(), m_param);
+
+            popup.setText(
+                "Left: " + juce::String(transformedLeft, 2) + " " + m_unit + "\n" +
+                "Right: " + juce::String(transformedRight, 2) + " " + m_unit);
         }
     }
 
