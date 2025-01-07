@@ -544,7 +544,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(m_DelayLeft_msSlider.getValue());};
     m_DelayLeft_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_DelayLeft_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_DelayLeft_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DelayLeft_msSlider.setRange(g_paramDelayLeft_ms.minValue, g_paramDelayLeft_ms.maxValue);
     m_DelayLeft_msSlider.setTextValueSuffix(g_paramDelayLeft_ms.unitName);
     auto val = m_apvts.getRawParameterValue(g_paramDelayLeft_ms.ID);
@@ -555,7 +555,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_DelayRight_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msRight(m_DelayRight_msSlider.getValue());};
     m_DelayRight_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_DelayRight_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_DelayRight_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DelayRight_msSlider.setRange(g_paramDelayRight_ms.minValue, g_paramDelayRight_ms.maxValue);
     m_DelayRight_msSlider.setTextValueSuffix(g_paramDelayRight_ms.unitName);
     val = m_apvts.getRawParameterValue(g_paramDelayRight_ms.ID);
@@ -564,13 +564,20 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DelayRight_msSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_DelayRight_msSlider);
 
+    m_delayLabel.setText("Delay", juce::dontSendNotification);
+    m_delayLabel.setFont(juce::Font(15.0f));
+    m_delayLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_delayLabel);
+
     m_Delay_msOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_Delay_msOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_Delay_msOverlay.setParamName("Delay: ");
+    m_Delay_msOverlay.setUnitName(" ms");
     addAndMakeVisible(m_Delay_msOverlay);
 
     m_FeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setFeedbackLeft(m_FeedbackLeftSlider.getValue());};
     m_FeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_FeedbackLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_FeedbackLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_FeedbackLeftSlider.setRange(g_paramFeedbackLeft.minValue, g_paramFeedbackLeft.maxValue);
     m_FeedbackLeftSlider.setTextValueSuffix(g_paramFeedbackLeft.unitName);
     val = m_apvts.getRawParameterValue(g_paramFeedbackLeft.ID);
@@ -581,7 +588,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_FeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setFeedbackRight(m_FeedbackRightSlider.getValue());};
     m_FeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_FeedbackRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_FeedbackRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_FeedbackRightSlider.setRange(g_paramFeedbackRight.minValue, g_paramFeedbackRight.maxValue);
     m_FeedbackRightSlider.setTextValueSuffix(g_paramFeedbackRight.unitName);
     val = m_apvts.getRawParameterValue(g_paramFeedbackRight.ID);
@@ -590,13 +597,20 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_FeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_FeedbackRightSlider);
 
+    m_FeedbackLabel.setText("Feedback", juce::dontSendNotification);
+    m_FeedbackLabel.setFont(juce::Font(15.0f));
+    m_FeedbackLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_FeedbackLabel);
+
     m_FeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_FeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_FeedbackOverlay.setParamName("Feedback: ");
+    m_FeedbackOverlay.setUnitName(" %");
     addAndMakeVisible(m_FeedbackOverlay);
 
     m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
     m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_CrossFeedbackLeftSlider.setRange(g_paramCrossFeedbackLeft.minValue, g_paramCrossFeedbackLeft.maxValue);
     m_CrossFeedbackLeftSlider.setTextValueSuffix(g_paramCrossFeedbackLeft.unitName);
     val = m_apvts.getRawParameterValue(g_paramCrossFeedbackLeft.ID);
@@ -607,7 +621,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
     m_CrossFeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_CrossFeedbackRightSlider.setRange(g_paramCrossFeedbackRight.minValue, g_paramCrossFeedbackRight.maxValue);
     m_CrossFeedbackRightSlider.setTextValueSuffix(g_paramCrossFeedbackRight.unitName);
     val = m_apvts.getRawParameterValue(g_paramCrossFeedbackRight.ID);
@@ -616,8 +630,15 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_CrossFeedbackRightSlider);
 
+    m_CrossFeedbackLabel.setText("Cross Feedback", juce::dontSendNotification);
+    m_CrossFeedbackLabel.setFont(juce::Font(15.0f));
+    m_CrossFeedbackLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_CrossFeedbackLabel);
+
     m_CrossFeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_CrossFeedbackOverlay.setParamName("Cross Feedback: ");
+    m_CrossFeedbackOverlay.setUnitName(" %");
     addAndMakeVisible(m_CrossFeedbackOverlay);
 
     m_LinkLR.onClick = [this] {StereoDelayerGUI::linkButtonClicked();};
@@ -627,7 +648,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_LinkLR);
 
     m_SwitchTime_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_SwitchTime_msSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
     m_SwitchTime_msSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
     val = m_apvts.getRawParameterValue(g_paramSwitchTime_ms.ID);
@@ -637,7 +658,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_DryWetSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetSlider.getValue());};
     m_DryWetSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_DryWetSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_DryWetSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DryWetSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
     m_DryWetSlider.setTextValueSuffix(g_paramDryWet.unitName);
     val = m_apvts.getRawParameterValue(g_paramDryWet.ID);
@@ -647,7 +668,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_LowpassLeftSlider.onValueChange = [this] {m_IRDisplay.setLowpassLeft(expf(m_LowpassLeftSlider.getValue()));};
     m_LowpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_LowpassLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_LowpassLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_LowpassLeftSlider.setRange(g_paramLowpassLeft.minValue, g_paramLowpassLeft.maxValue);
     m_LowpassLeftSlider.setTextValueSuffix(g_paramLowpassLeft.unitName);
     val = m_apvts.getRawParameterValue(g_paramLowpassLeft.ID);
@@ -658,7 +679,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_LowpassRightSlider.onValueChange = [this] {m_IRDisplay.setLowpassRight(expf(m_LowpassRightSlider.getValue()));};
     m_LowpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_LowpassRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_LowpassRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_LowpassRightSlider.setRange(g_paramLowpassRight.minValue, g_paramLowpassRight.maxValue);
     m_LowpassRightSlider.setTextValueSuffix(g_paramLowpassRight.unitName);
     val = m_apvts.getRawParameterValue(g_paramLowpassRight.ID);
@@ -667,13 +688,20 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_LowpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_LowpassRightSlider);
 
+    m_LowpassLabel.setText("Lowpass", juce::dontSendNotification);
+    m_LowpassLabel.setFont(juce::Font(15.0f));
+    m_LowpassLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_LowpassLabel);
+
     m_LowpassOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_LowpassOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_LowpassOverlay.setParamName("Lowpass: ");
+    m_LowpassOverlay.setUnitName(" Hz");
     addAndMakeVisible(m_LowpassOverlay);
 
     m_HighpassLeftSlider.onValueChange = [this] {m_IRDisplay.setHighpassLeft(expf(m_HighpassLeftSlider.getValue()));};
     m_HighpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_HighpassLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_HighpassLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_HighpassLeftSlider.setRange(g_paramHighpassLeft.minValue, g_paramHighpassLeft.maxValue);
     m_HighpassLeftSlider.setTextValueSuffix(g_paramHighpassLeft.unitName);
     val = m_apvts.getRawParameterValue(g_paramHighpassLeft.ID);
@@ -684,7 +712,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
     m_HighpassRightSlider.onValueChange = [this] {m_IRDisplay.setHighpassRight(expf(m_HighpassRightSlider.getValue()));};
     m_HighpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_HighpassRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_HighpassRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_HighpassRightSlider.setRange(g_paramHighpassRight.minValue, g_paramHighpassRight.maxValue);
     m_HighpassRightSlider.setTextValueSuffix(g_paramHighpassRight.unitName);
     val = m_apvts.getRawParameterValue(g_paramHighpassRight.ID);
@@ -693,8 +721,15 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_HighpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_HighpassRightSlider);
  
+    m_HighpassLabel.setText("Highpass", juce::dontSendNotification);
+    m_HighpassLabel.setFont(juce::Font(15.0f));
+    m_HighpassLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_HighpassLabel);
+
     m_HighpassOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_HighpassOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_HighpassOverlay.setParamName("Highpass: ");
+    m_HighpassOverlay.setUnitName(" Hz");
     addAndMakeVisible(m_HighpassOverlay);
 
     m_AlgoSwitchCombo.addItemList(g_paramSwitchAlgo.choices,1);
@@ -702,7 +737,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_AlgoSwitchCombo);
 
     m_NumeratorLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_NumeratorLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_NumeratorLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_NumeratorLeftSlider.setRange(g_paramNumeratorLeft.minValue, g_paramNumeratorLeft.maxValue);
     m_NumeratorLeftSlider.setTextValueSuffix(g_paramNumeratorLeft.unitName);
     val = m_apvts.getRawParameterValue(g_paramNumeratorLeft.ID);
@@ -712,7 +747,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_NumeratorLeftSlider);
 
     m_DenominatorLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_DenominatorLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_DenominatorLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DenominatorLeftSlider.setRange(g_paramDenominatorLeft.minValue, g_paramDenominatorLeft.maxValue);
     m_DenominatorLeftSlider.setTextValueSuffix(g_paramDenominatorLeft.unitName);
     val = m_apvts.getRawParameterValue(g_paramDenominatorLeft.ID);
@@ -722,7 +757,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_DenominatorLeftSlider);
 
     m_NumeratorRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_NumeratorRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_NumeratorRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_NumeratorRightSlider.setRange(g_paramNumeratorRight.minValue, g_paramNumeratorRight.maxValue);
     m_NumeratorRightSlider.setTextValueSuffix(g_paramNumeratorRight.unitName);
     val = m_apvts.getRawParameterValue(g_paramNumeratorRight.ID);
@@ -732,7 +767,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_NumeratorRightSlider);
 
     m_DenominatorRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_DenominatorRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+    m_DenominatorRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DenominatorRightSlider.setRange(g_paramDenominatorRight.minValue, g_paramDenominatorRight.maxValue);
     m_DenominatorRightSlider.setTextValueSuffix(g_paramDenominatorRight.unitName);
     val = m_apvts.getRawParameterValue(g_paramDenominatorRight.ID);
@@ -743,12 +778,24 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DenominatorRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
     addAndMakeVisible(m_IRDisplay);
 
+    m_NumeratorLabel.setText("Numerator", juce::dontSendNotification);
+    m_NumeratorLabel.setFont(juce::Font(15.0f));
+    m_NumeratorLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_NumeratorLabel);
+
     m_NumeratorOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_NumeratorOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_NumeratorOverlay.setParamName("Numerator: ");
     addAndMakeVisible(m_NumeratorOverlay);
+
+    m_DenominatorLabel.setText("Denominator", juce::dontSendNotification);
+    m_DenominatorLabel.setFont(juce::Font(15.0f));
+    m_DenominatorLabel.setJustificationType(juce::Justification::centred);
+    addAndMakeVisible(m_DenominatorLabel);
 
     m_DenominatorOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DenominatorOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_DenominatorOverlay.setParamName("Denominator: ");
     addAndMakeVisible(m_DenominatorOverlay);
 
     startTimerHz(15);
@@ -811,6 +858,7 @@ void StereoDelayerGUI::resized()
     m_DelayLeft_msSlider.setBounds(startx,starty,knobwidth,knobheight);
     m_DelayRight_msSlider.setBounds(startx,starty,knobwidth,knobheight);
     m_Delay_msOverlay.setBounds(startx,starty,knobwidth,knobheight);
+    m_delayLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
 
     m_NumeratorLeftSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_DenominatorLeftSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
@@ -818,22 +866,28 @@ void StereoDelayerGUI::resized()
     m_DenominatorRightSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_NumeratorOverlay.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_DenominatorOverlay.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_NumeratorLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
+    m_DenominatorLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
 
     m_FeedbackLeftSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_FeedbackRightSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_FeedbackOverlay.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_FeedbackLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
 
     m_CrossFeedbackLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_CrossFeedbackRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_CrossFeedbackOverlay.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_CrossFeedbackLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
 
     m_LowpassLeftSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_LowpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_LowpassOverlay.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_LowpassLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
 
     m_HighpassLeftSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_HighpassRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_HighpassOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_HighpassLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
 
     m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
 
@@ -865,164 +919,38 @@ void StereoDelayerGUI::timerCallback()
 
 void StereoDelayerGUI::linkButtonClicked()
 {
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
+    std::vector<std::pair<Slider*, LookAndFeel*>> leftSliders = {
+        {&m_DelayLeft_msSlider, &m_lavaLookAndFeelLeft},
+        {&m_FeedbackLeftSlider, &m_lavaLookAndFeelLeft},
+        {&m_CrossFeedbackLeftSlider, &m_lavaLookAndFeelLeft},
+        {&m_NumeratorLeftSlider, &m_lavaLookAndFeelLeft},
+        {&m_DenominatorLeftSlider, &m_lavaLookAndFeelLeft},
+        {&m_HighpassLeftSlider, &m_lavaLookAndFeelLeft},
+        {&m_LowpassLeftSlider, &m_lavaLookAndFeelLeft}
+    };
+
+    std::vector<std::pair<Slider*, LookAndFeel*>> rightSliders = {
+        {&m_DelayRight_msSlider, &m_lavaLookAndFeelRight},
+        {&m_FeedbackRightSlider, &m_lavaLookAndFeelRight},
+        {&m_CrossFeedbackRightSlider, &m_lavaLookAndFeelRight},
+        {&m_NumeratorRightSlider, &m_lavaLookAndFeelRight},
+        {&m_DenominatorRightSlider, &m_lavaLookAndFeelRight},
+        {&m_HighpassRightSlider, &m_lavaLookAndFeelRight},
+        {&m_LowpassRightSlider, &m_lavaLookAndFeelRight}
+    };
+
+    LookAndFeel* linkLeftLookAndFeel = &m_lavaLookAndFeelLinkLeft;
+    LookAndFeel* linkRightLookAndFeel = &m_lavaLookAndFeelLinkRight;
+
+    bool isLinked = m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load();
+
+    for (auto& slider : leftSliders)
     {
-        m_DelayLeft_msSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+        slider.first->setLookAndFeel(isLinked ? linkLeftLookAndFeel : slider.second);
     }
-    else
+
+    for (auto& slider : rightSliders)
     {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_DelayLeft_msSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
-        }
-    }
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_DelayRight_msSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_DelayRight_msSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
-        }
-    }
-    //--------------------------------
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_FeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_FeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
-        }
-    }
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_FeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_FeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
-        }
-    }
-    //--------------------------------
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
-        }
-    }
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
-        }
-    }
-    //--------------------------------
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_NumeratorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_NumeratorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
-        }
-    }
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_NumeratorRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_NumeratorRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
-        }
-    }
-    //--------------------------------
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_DenominatorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_DenominatorLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
-        }
-    }
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_DenominatorRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_DenominatorRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
-        }
-    }
-    //--------------------------------
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_HighpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_HighpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
-        }
-    }
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_HighpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_HighpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
-        }
-    }
-    //--------------------------------
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_LowpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_LowpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
-        }
-    }
-    if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-    {
-        m_LowpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    }
-    else
-    {
-        if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
-        {
-            m_LowpassRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
-        }
+        slider.first->setLookAndFeel(isLinked ? linkRightLookAndFeel : slider.second);
     }
 }
