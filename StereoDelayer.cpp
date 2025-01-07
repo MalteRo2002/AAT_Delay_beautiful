@@ -912,6 +912,7 @@ void StereoDelayerGUI::resized()
 
 }
 
+
 void StereoDelayerGUI::timerCallback()
 {
     float bpm = m_processor.m_algo.getBpm();
