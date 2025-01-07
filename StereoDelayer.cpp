@@ -858,7 +858,7 @@ void StereoDelayerGUI::resized()
     m_DelayLeft_msSlider.setBounds(startx,starty,knobwidth,knobheight);
     m_DelayRight_msSlider.setBounds(startx,starty,knobwidth,knobheight);
     m_Delay_msOverlay.setBounds(startx,starty,knobwidth,knobheight);
-    m_delayLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
+    m_delayLabel.setBounds(startx,starty + knobheight,knobwidth,distance_y);
 
     m_NumeratorLeftSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_DenominatorLeftSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
@@ -866,28 +866,28 @@ void StereoDelayerGUI::resized()
     m_DenominatorRightSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_NumeratorOverlay.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_DenominatorOverlay.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_NumeratorLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
-    m_DenominatorLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
+    m_NumeratorLabel.setBounds(startx + 1*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    m_DenominatorLabel.setBounds(startx + 2*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     m_FeedbackLeftSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_FeedbackRightSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_FeedbackOverlay.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_FeedbackLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
+    m_FeedbackLabel.setBounds(startx + 3*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     m_CrossFeedbackLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_CrossFeedbackRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_CrossFeedbackOverlay.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_CrossFeedbackLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
+    m_CrossFeedbackLabel.setBounds(startx + 4*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     m_LowpassLeftSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_LowpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_LowpassOverlay.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_LowpassLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
+    m_LowpassLabel.setBounds(startx + 5*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     m_HighpassLeftSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_HighpassRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_HighpassOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_HighpassLabel.setBounds(r.removeFromTop(knobheight).withWidth(knobwidth));
+    m_HighpassLabel.setBounds(startx + 6*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + distance_y + knobheight ,knobwidth,knobheight);
 
