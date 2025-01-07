@@ -39,4 +39,15 @@ public:
         g.setColour(juce::Colours::lightgrey);
         g.fillPath(p);
     }
+    
+    void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
+                          bool isMouseOverButton, bool isButtonDown) override
+    {
+        auto buttonArea = button.getLocalBounds();
+        auto edge = 4;
+        buttonArea.reduce(edge, edge);
+
+        g.setColour(juce::Colours::darkgrey);
+        g.fillRoundedRectangle(buttonArea.toFloat(), 5.0f);
+    }
 };

@@ -11,8 +11,8 @@ IRDisplay::IRDisplay(juce::AudioProcessorValueTreeState& vts)
     m_delay_msRight = 250.f;
     m_feedbackLeft = 0.5f;
     m_feedbackRight = 0.5f;
-    m_crossFeedbackLeft = 0.3f;
-    m_crossFeedbackRight = 0.3f;
+    m_crossFeedbackLeft = 0.0f;
+    m_crossFeedbackRight = 0.0f;
     m_bpm = -2.f;
     m_scaleFactor = 1.f;
     m_dryWet = 0.5f;
@@ -55,7 +55,7 @@ void IRDisplay::paint(juce::Graphics &g)
     auto r = getLocalBounds();
     auto s = getLocalBounds();
     r.reduce(7*m_scaleFactor, 8*m_scaleFactor);
-    g.drawRect(r, 1);
+    //g.drawRect(r, 1);
     r.reduce(3*m_scaleFactor, 2*m_scaleFactor);
     float x = 0.f;
     float denominator = 16.f;
@@ -95,7 +95,7 @@ void IRDisplay::paint(juce::Graphics &g)
         g.setFont (12.0f*m_scaleFactor);
         g.drawText("No BPM Info from Host", r.getX(), r.getY(),150*m_scaleFactor,20*m_scaleFactor, juce::Justification::centred);
     }
-    g.setColour(juce::Colours::yellow.withAlpha(0.7f)); //left channel
+    g.setColour(juce::Colours::grey.withAlpha(0.7f)); //left channel
 
     // draw grid for ms and add text below
     float ms = 0.f;
@@ -156,7 +156,7 @@ void IRDisplay::paintFunctional(juce::Graphics &g)
 
     // draw delay lines left
     float alphaFac = 0.98f;
-    g.setColour(juce::Colours::blue.brighter(0.6f).withAlpha(alphaFac)); //left channel
+    g.setColour(juce::Colours::orange.withAlpha(alphaFac)); //left channel
     // first value is always at x = 0 and heigt is drywet
     float y = r.getY() + (middle) *(m_dryWet);
 
@@ -171,7 +171,7 @@ void IRDisplay::paintFunctional(juce::Graphics &g)
         x += delay;
         int xpixel = x / displayrange * r.getWidth();
         alphaFac *= 0.96f;
-        g.setColour(juce::Colours::blue.brighter(0.6f).withAlpha(alphaFac)); //left channel
+        g.setColour(juce::Colours::orange.withAlpha(alphaFac)); //left channel
 
         int ypixel = r.getY() + (middle) *(1.f-y*m_dryWet);
         y *= m_feedbackLeft;
@@ -183,7 +183,7 @@ void IRDisplay::paintFunctional(juce::Graphics &g)
     }
     // draw delay lines right
     alphaFac = 0.98f;
-    g.setColour(juce::Colours::red.brighter(0.6f).withAlpha(alphaFac)); //right channel
+    g.setColour(juce::Colours::yellow.withAlpha(alphaFac)); //right channel
     // first value is always at x = 0 and heigt is drywet but in the direction of the bottom
     y = r.getBottom() - (middle) *(m_dryWet);
     g.drawLine(r.getX(), y, r.getX(), middle_y, 4*m_scaleFactor);
@@ -197,7 +197,7 @@ void IRDisplay::paintFunctional(juce::Graphics &g)
         x += delay;
         int xpixel = x / displayrange * r.getWidth();
         alphaFac *= 0.96f;
-        g.setColour(juce::Colours::red.brighter(0.6f).withAlpha(alphaFac)); //right channel
+        g.setColour(juce::Colours::yellow.withAlpha(alphaFac)); //right channel
 
         int ypixel = r.getBottom() - (middle) *(1.f-y*m_dryWet);
         y *= m_feedbackRight;
@@ -209,8 +209,8 @@ void IRDisplay::paintFunctional(juce::Graphics &g)
 
     // draw cross feedback
     alphaFac = 0.85f;
-    juce::Colour crossFeedbackColorFromLeft = juce::Colours::blue.brighter(2.9f).withAlpha(alphaFac);
-    juce::Colour crossFeedbackColorFromRight = juce::Colours::red.brighter(2.9f).withAlpha(alphaFac);
+    juce::Colour crossFeedbackColorFromLeft = juce::Colours::red.brighter(2.0f).withAlpha(alphaFac);
+    juce::Colour crossFeedbackColorFromRight = juce::Colours::yellow.brighter(2.0f).withAlpha(alphaFac);
     g.setColour(crossFeedbackColorFromLeft); //left channel
 
     // delay is first delayLeft_ms to the power of Crossfeedbackleft afterwords 
@@ -327,7 +327,7 @@ void IRDisplay::paintIR(juce::Graphics &g)
 
     for (int kk = 0; kk < m_delta.getNumSamples(); kk++)
     {
-        g.setColour(juce::Colours::blue);
+        g.setColour(juce::Colours::orange);
 
         x = static_cast<float> (kk) / m_fs * 1000.f;
         y = fabs(dataPtr[0][kk]);
@@ -340,7 +340,7 @@ void IRDisplay::paintIR(juce::Graphics &g)
         if (y>1.f)
             y = 1.f;
         ypixel = r.getY() + middle + y * middle;
-        g.setColour(juce::Colours::red);
+        g.setColour(juce::Colours::yellow);
         g.fillRect(r.getX() + xpixel-xlinewidthHalf, middle_y, xlinewidth, ypixel - middle_y);
     }
 

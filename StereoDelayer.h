@@ -17,6 +17,7 @@
 #include "LavaLookAndFeelLinkRight.h"
 
 #include "MouseButtonDetectOverlay.h"
+#include "AdvancedPopup.h"
 
 class StereoDelayerAudioProcessor;
 
@@ -61,50 +62,50 @@ const struct
 	const float defaultValue = 0.f;
 }g_paramFeedbackRight;
 
-const struct
-{
-	const std::string ID = "CrossFeedbackLeftID";
-	const std::string name = "CrossFeedbackLeft";
-	const std::string unitName = " %";
-	const float minValue = 0.f;
-	const float maxValue = 0.999f;
-	const float defaultValue = 0.f;
-}g_paramCrossFeedbackLeft;
+// const struct
+// {
+// 	const std::string ID = "CrossFeedbackLeftID";
+// 	const std::string name = "CrossFeedbackLeft";
+// 	const std::string unitName = " %";
+// 	const float minValue = 0.f;
+// 	const float maxValue = 0.999f;
+// 	const float defaultValue = 0.f;
+// }g_paramCrossFeedbackLeft;
 
-const struct
-{
-	const std::string ID = "CrossFeedbackRightID";
-	const std::string name = "CrossFeedbackRight";
-	const std::string unitName = " %";
-	const float minValue = 0.f;
-	const float maxValue = 0.999f;
-	const float defaultValue = 0.f;
-}g_paramCrossFeedbackRight;
+// const struct
+// {
+// 	const std::string ID = "CrossFeedbackRightID";
+// 	const std::string name = "CrossFeedbackRight";
+// 	const std::string unitName = " %";
+// 	const float minValue = 0.f;
+// 	const float maxValue = 0.999f;
+// 	const float defaultValue = 0.f;
+// }g_paramCrossFeedbackRight;
 
-const struct
-{
-	const std::string ID = "LinkLRID";
-	const std::string name = "LinkLR";
-	const bool defaultValue = false;
-}g_paramLinkLR;
+// const struct
+// {
+// 	const std::string ID = "LinkLRID";
+// 	const std::string name = "LinkLR";
+// 	const bool defaultValue = true;
+// }g_paramLinkLR;
 
-const struct
-{
-	const std::string ID = "SwitchAlgoID";
-	const std::string name = "SwitchAlgo";
-	const juce::StringArray choices = {"Digital","Fade","Tape"};
-	const int defaultValue = 1;
-}g_paramSwitchAlgo;
+// const struct
+// {
+// 	const std::string ID = "SwitchAlgoID";
+// 	const std::string name = "SwitchAlgo";
+// 	const juce::StringArray choices = {"Digital","Fade","Tape"};
+// 	const int defaultValue = 1;
+// }g_paramSwitchAlgo;
 
-const struct
-{
-	const std::string ID = "SwitchTime_msID";
-	const std::string name = "SwitchTime_ms";
-	const std::string unitName = " ms";
-	const float minValue = 1.f;
-	const float maxValue = 500.f;
-	const float defaultValue = 20.f;
-}g_paramSwitchTime_ms;
+// const struct
+// {
+// 	const std::string ID = "SwitchTime_msID";
+// 	const std::string name = "SwitchTime_ms";
+// 	const std::string unitName = " ms";
+// 	const float minValue = 1.f;
+// 	const float maxValue = 500.f;
+// 	const float defaultValue = 20.f;
+// }g_paramSwitchTime_ms;
 
 const struct
 {
@@ -296,10 +297,10 @@ private:
 	juce::Slider m_FeedbackLeftSlider;
 	juce::Slider m_FeedbackRightSlider;
 	MouseButtonDetectOverlay m_FeedbackOverlay{m_FeedbackLeftSlider, m_FeedbackRightSlider};
-	juce::Slider m_CrossFeedbackLeftSlider;
-	juce::Slider m_CrossFeedbackRightSlider;
-	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider};
-	juce::Slider m_SwitchTime_msSlider;
+	// juce::Slider m_CrossFeedbackLeftSlider;
+	// juce::Slider m_CrossFeedbackRightSlider;
+	// MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider};
+	// juce::Slider m_SwitchTime_msSlider;
 	juce::Slider m_DryWetSlider;
 	juce::Slider m_LowpassLeftSlider;
 	juce::Slider m_LowpassRightSlider;
@@ -318,9 +319,9 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DelayRight_msAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_FeedbackLeftAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_FeedbackRightAttachment;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_CrossFeedbackLeftAttachment;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_CrossFeedbackRightAttachment;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_SwitchTime_msAttachment;
+	// std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_CrossFeedbackLeftAttachment;
+	// std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_CrossFeedbackRightAttachment;
+	// std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_SwitchTime_msAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DryWetAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_LowpassLeftAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_LowpassRightAttachment;
@@ -331,11 +332,11 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_NumeratorRightAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DenominatorRightAttachment;
 
-	juce::ToggleButton m_LinkLR;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> m_LinkLRAttachment;
+	// juce::ToggleButton m_LinkLR;
+	// std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> m_LinkLRAttachment;
 
-	juce::ComboBox m_AlgoSwitchCombo;
-	std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> m_AlgoSwitchComboAttachment;
+	// juce::ComboBox m_AlgoSwitchCombo;
+	// std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> m_AlgoSwitchComboAttachment;
 
 	IRDisplay m_IRDisplay;
 	float m_oldBpm = -1.f;
@@ -346,4 +347,17 @@ private:
 	LavaLookAndFeelLinkRight m_lavaLookAndFeelLinkRight;
 
 	void linkButtonClicked();
+
+	juce::TextButton m_showPopupButton;
+    AdvancedPopup m_advancedPopup;
+
+    void togglePopupVisibility()
+    {
+        // Sichtbarkeit umschalten
+        m_advancedPopup.setVisible(!m_advancedPopup.isVisible());
+        if (m_advancedPopup.isVisible())
+        {
+            m_advancedPopup.toFront(true); // Bringt die Pop-up-Komponente nach vorne
+        }
+    }
 };
