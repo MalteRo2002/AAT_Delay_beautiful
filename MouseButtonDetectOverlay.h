@@ -105,12 +105,6 @@ public:
         popup.setVisible(false);
     }
 
-    MouseButtonDetectOverlay(juce::Slider& singleSlider, juce::AudioProcessorValueTreeState& vts)
-    : m_leftSlider(&singleSlider), m_rightSlider(nullptr), m_apvts(vts)
-    {
-        popup.setVisible(false);
-    }
-
     juce::String getParamName() { return m_param; }
     juce::String getUnitName() { return m_unit; }
 
@@ -189,7 +183,7 @@ public:
             return value;
         };
 
-        if (m_apvts.getRawParameterValue("LinkLRID")->load())
+        if (m_apvts.getRawParameterValue("LinkLRID")->load() || m_param == "Dry / Wet" || m_param == "Switch Time")
         {
             float transformedValue = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue(), m_param) : 0.0f;
 

@@ -656,15 +656,27 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     // m_SwitchTimeLabel.setJustificationType(juce::Justification::centred);
     // addAndMakeVisible(m_SwitchTimeLabel);
 
-    m_DryWetSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetSlider.getValue());};
-    m_DryWetSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    m_DryWetSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
-    m_DryWetSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
-    m_DryWetSlider.setTextValueSuffix(g_paramDryWet.unitName);
+    m_DryWetLeftSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetLeftSlider.getValue());};
+    m_DryWetLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_DryWetLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
+    m_DryWetLeftSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
+    m_DryWetLeftSlider.setTextValueSuffix(g_paramDryWet.unitName);
     val = m_apvts.getRawParameterValue(g_paramDryWet.ID);
-    m_DryWetSlider.setValue(*val);
-    m_DryWetAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDryWet.ID, m_DryWetSlider);
-    addAndMakeVisible(m_DryWetSlider);
+    m_DryWetLeftSlider.setValue(*val);
+    m_DryWetRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+    m_DryWetAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDryWet.ID, m_DryWetLeftSlider);
+    addAndMakeVisible(m_DryWetLeftSlider);
+
+    m_DryWetRightSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetRightSlider.getValue());};
+    m_DryWetRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_DryWetRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
+    m_DryWetRightSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
+    m_DryWetRightSlider.setTextValueSuffix(g_paramDryWet.unitName);
+    val = m_apvts.getRawParameterValue(g_paramDryWet.ID);
+    m_DryWetRightSlider.setValue(*val);
+    m_DryWetRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+    m_DryWetAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDryWet.ID, m_DryWetRightSlider);
+    addAndMakeVisible(m_DryWetRightSlider);
 
     m_DryWetLabel.setText("Dry / Wet", juce::dontSendNotification);
     m_DryWetLabel.setFont(juce::Font(15.0f));
@@ -875,10 +887,13 @@ void StereoDelayerGUI::resized()
     int distance_y = 20 * scaleFactor;
     int distance_x = 10 * scaleFactor;
 
-    m_DelayLeft_msSlider.setBounds(startx,starty,knobwidth,knobheight);
-    m_DelayRight_msSlider.setBounds(startx,starty,knobwidth,knobheight);
-    m_Delay_msOverlay.setBounds(startx,starty,knobwidth,knobheight);
-    m_delayLabel.setBounds(startx,starty + knobheight,knobwidth,distance_y);
+    int bigKnobwidth = 120 * scaleFactor;
+    int bigKnobheight = 120 * scaleFactor;
+
+    m_DelayLeft_msSlider.setBounds(width/2 - bigKnobwidth/2,starty*1.1,bigKnobwidth,bigKnobheight);
+    m_DelayRight_msSlider.setBounds(width/2 - bigKnobwidth/2,starty*1.1,bigKnobwidth,bigKnobheight);
+    m_Delay_msOverlay.setBounds(width/2 - bigKnobwidth/2,starty*1.1,bigKnobwidth,bigKnobheight);
+    m_delayLabel.setBounds(width/2 - bigKnobwidth/2,starty*1.1 + knobheight,bigKnobwidth,distance_y);
 
     m_NumeratorLeftSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_NumeratorRightSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
@@ -905,7 +920,8 @@ void StereoDelayerGUI::resized()
     m_HighpassOverlay.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_HighpassLabel.setBounds(startx + 5*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
-    m_DryWetSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
+    m_DryWetLeftSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
+    m_DryWetRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
     m_DryWetOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
     m_DryWetLabel.setBounds(startx + 6*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
@@ -951,7 +967,8 @@ void StereoDelayerGUI::linkButtonClicked()
         {&m_NumeratorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_DenominatorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_HighpassLeftSlider, &m_lavaLookAndFeelLeft},
-        {&m_LowpassLeftSlider, &m_lavaLookAndFeelLeft}
+        {&m_LowpassLeftSlider, &m_lavaLookAndFeelLeft},
+        {&m_DryWetLeftSlider, &m_lavaLookAndFeelLinkLeft}
     };
 
     std::vector<std::pair<Slider*, LookAndFeel*>> rightSliders = {
@@ -961,7 +978,8 @@ void StereoDelayerGUI::linkButtonClicked()
         {&m_NumeratorRightSlider, &m_lavaLookAndFeelRight},
         {&m_DenominatorRightSlider, &m_lavaLookAndFeelRight},
         {&m_HighpassRightSlider, &m_lavaLookAndFeelRight},
-        {&m_LowpassRightSlider, &m_lavaLookAndFeelRight}
+        {&m_LowpassRightSlider, &m_lavaLookAndFeelRight},
+        {&m_DryWetRightSlider, &m_lavaLookAndFeelLinkRight}
     };
 
     LookAndFeel* linkLeftLookAndFeel = &m_lavaLookAndFeelLinkLeft;

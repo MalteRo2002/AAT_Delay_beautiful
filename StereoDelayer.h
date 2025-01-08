@@ -305,9 +305,10 @@ private:
 	// juce::Label m_CrossFeedbackLabel;
 	// juce::Slider m_SwitchTime_msSlider;
 	// juce::Label m_SwitchTimeLabel;
-	juce::Slider m_DryWetSlider;
+	juce::Slider m_DryWetLeftSlider;
+	juce::Slider m_DryWetRightSlider;
 	juce::Label m_DryWetLabel;
-	MouseButtonDetectOverlay m_DryWetOverlay{m_DryWetSlider, m_apvts};
+	MouseButtonDetectOverlay m_DryWetOverlay{m_DryWetLeftSlider, m_DryWetRightSlider, m_apvts};
 	juce::Slider m_LowpassLeftSlider;
 	juce::Slider m_LowpassRightSlider;
 	MouseButtonDetectOverlay m_LowpassOverlay{m_LowpassLeftSlider, m_LowpassRightSlider, m_apvts};

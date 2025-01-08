@@ -50,14 +50,25 @@ class AdvancedPopup : public juce::Component, private juce::Timer
 public:
     AdvancedPopup(juce::AudioProcessorValueTreeState& apvts, IRDisplay& IRDisplay) : m_apvts(apvts), m_IRDisplay(IRDisplay)
     {
-        m_SwitchTime_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-        m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
-        m_SwitchTime_msSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
-        m_SwitchTime_msSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
+        m_SwitchTime_msLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+        m_SwitchTime_msLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+        m_SwitchTime_msLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
+        m_SwitchTime_msLeftSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
+        m_SwitchTime_msLeftSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
         auto val = m_apvts.getRawParameterValue(g_paramSwitchTime_ms.ID);
-        m_SwitchTime_msSlider.setValue(*val);
-        m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msSlider);
-        addAndMakeVisible(m_SwitchTime_msSlider);
+        m_SwitchTime_msLeftSlider.setValue(*val);
+        m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msLeftSlider);
+        addAndMakeVisible(m_SwitchTime_msLeftSlider);
+
+        m_SwitchTime_msRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+        m_SwitchTime_msRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+        m_SwitchTime_msRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
+        m_SwitchTime_msRightSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
+        m_SwitchTime_msRightSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
+        val = m_apvts.getRawParameterValue(g_paramSwitchTime_ms.ID);
+        m_SwitchTime_msRightSlider.setValue(*val);
+        m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msRightSlider);
+        addAndMakeVisible(m_SwitchTime_msRightSlider);
 
         m_SwitchTime_msOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_SwitchTime_msOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
@@ -140,7 +151,8 @@ public:
 
         m_LinkLR.setBounds(getWidth()/2-getWidth()/7,getHeight()/3-getHeight()/8,getWidth()*1/3,getHeight()/4);
 
-        m_SwitchTime_msSlider.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
+        m_SwitchTime_msLeftSlider.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
+        m_SwitchTime_msRightSlider.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
         m_SwitchTime_msOverlay.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
         
         m_AlgoSwitchCombo.setBounds(getWidth()/2-getWidth()/6,getHeight()*2/3-getHeight()/8,getWidth()*1/3,getHeight()/4);
@@ -150,15 +162,16 @@ public:
     {
         LinkButtonCallback = callback;
     }
-    
+
 private:
     juce::AudioProcessorValueTreeState& m_apvts;
 
     juce::Slider m_CrossFeedbackLeftSlider;
 	juce::Slider m_CrossFeedbackRightSlider;
 	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider, m_apvts};
-    juce::Slider m_SwitchTime_msSlider;
-    MouseButtonDetectOverlay m_SwitchTime_msOverlay{m_SwitchTime_msSlider, m_apvts};
+    juce::Slider m_SwitchTime_msLeftSlider;
+    juce::Slider m_SwitchTime_msRightSlider;
+    MouseButtonDetectOverlay m_SwitchTime_msOverlay{m_SwitchTime_msLeftSlider, m_SwitchTime_msRightSlider, m_apvts};
     juce::ToggleButton m_LinkLR;
     juce::ComboBox m_AlgoSwitchCombo;
 
@@ -222,23 +235,27 @@ private:
         if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
         {
             m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+            m_SwitchTime_msLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
         }
         else
         {
             if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
             {
                 m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLeft);
+                m_SwitchTime_msLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
             }
         }
         if (m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
         {
             m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
+            m_SwitchTime_msRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
         }
         else
         {
             if(!m_apvts.getRawParameterValue(g_paramLinkLR.ID)->load())
             {
                 m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelRight);
+                m_SwitchTime_msRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
             }
         }
     }
