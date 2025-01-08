@@ -913,7 +913,7 @@ void StereoDelayerGUI::resized()
     // m_AlgoSwitchCombo.setBoundsRelative(0.9,0.01,0.08,0.04);
     // m_SwitchTime_msSlider.setBounds(width-90*scaleFactor, 60*scaleFactor,knobwidth,knobheight);
     // m_SwitchTimeLabel.setBounds(width-90*scaleFactor, 60*scaleFactor + knobheight,knobwidth,distance_y);
-    
+
     m_showPopupButton.setBounds((width - buttonWidth*2) / 2, height - 25, buttonWidth*2, buttonHeight*0.8f);
     m_advancedPopup.setBounds((width - buttonWidth*5) / 2 , height - buttonHeight * 3 - 30, buttonWidth*5, buttonHeight*3);
 
@@ -942,7 +942,7 @@ void StereoDelayerGUI::linkButtonClicked()
     std::vector<std::pair<Slider*, LookAndFeel*>> leftSliders = {
         {&m_DelayLeft_msSlider, &m_lavaLookAndFeelLeft},
         {&m_FeedbackLeftSlider, &m_lavaLookAndFeelLeft},
-        {&m_CrossFeedbackLeftSlider, &m_lavaLookAndFeelLeft},
+        // {&m_CrossFeedbackLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_NumeratorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_DenominatorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_HighpassLeftSlider, &m_lavaLookAndFeelLeft},
@@ -952,7 +952,7 @@ void StereoDelayerGUI::linkButtonClicked()
     std::vector<std::pair<Slider*, LookAndFeel*>> rightSliders = {
         {&m_DelayRight_msSlider, &m_lavaLookAndFeelRight},
         {&m_FeedbackRightSlider, &m_lavaLookAndFeelRight},
-        {&m_CrossFeedbackRightSlider, &m_lavaLookAndFeelRight},
+        // {&m_CrossFeedbackRightSlider, &m_lavaLookAndFeelRight},
         {&m_NumeratorRightSlider, &m_lavaLookAndFeelRight},
         {&m_DenominatorRightSlider, &m_lavaLookAndFeelRight},
         {&m_HighpassRightSlider, &m_lavaLookAndFeelRight},

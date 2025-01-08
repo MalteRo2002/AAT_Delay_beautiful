@@ -360,13 +360,28 @@ private:
 	juce::TextButton m_showPopupButton;
     AdvancedPopup m_advancedPopup;
 
-    void togglePopupVisibility()
-    {
-        // Sichtbarkeit umschalten
-        m_advancedPopup.setVisible(!m_advancedPopup.isVisible());
-        if (m_advancedPopup.isVisible())
-        {
-            m_advancedPopup.toFront(true); // Bringt die Pop-up-Komponente nach vorne
-        }
-    }
+	void StereoDelayerGUI::togglePopupVisibility()
+	{
+		if (m_advancedPopup.isVisible())
+		{
+			int startY = m_advancedPopup.getY();
+			int targetY = getHeight();
+			m_advancedPopup.FadeOut(startY, targetY);
+		}
+		else
+		{
+			int popupHeight = getHeight() * 0.5f;
+			int startY = getHeight();
+			int targetY = getHeight() - popupHeight - 10;
+
+			m_advancedPopup.setBounds(
+				(getWidth() - m_advancedPopup.getWidth()) / 2,
+				startY,
+				m_advancedPopup.getWidth(),
+				popupHeight
+			);
+			m_advancedPopup.FadeIn(startY, targetY);
+		}
+	}
+
 };

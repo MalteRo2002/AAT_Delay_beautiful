@@ -45,7 +45,7 @@ const struct
 	const float defaultValue = 20.f;
 }g_paramSwitchTime_ms;
 
-class AdvancedPopup : public juce::Component
+class AdvancedPopup : public juce::Component, private juce::Timer
 {
 public:
     AdvancedPopup(juce::AudioProcessorValueTreeState& apvts, IRDisplay& IRDisplay) : m_apvts(apvts), m_IRDisplay(IRDisplay)
@@ -96,6 +96,29 @@ public:
         addAndMakeVisible(m_AlgoSwitchCombo);
     }
 
+void AdvancedPopup::FadeIn(int startY, int targetY)
+
+    {
+        animatingIn = true;
+        currentAlpha = 0.0f;
+        setAlpha(currentAlpha);
+        currentY = startY;
+        finalY = targetY;
+        setVisible(true);
+        startTimer(3);
+    }
+
+    void AdvancedPopup::FadeOut(int startY, int targetY)
+    {
+        animatingIn = false;
+        currentAlpha = 1.0f;
+        setAlpha(currentAlpha);
+        currentY = startY;
+        finalY = targetY;
+        startTimer(3);
+    }
+
+
     void paint(juce::Graphics& g) override
 {
     g.setColour(juce::Colours::grey);
@@ -116,9 +139,11 @@ public:
     }
 
 private:
+    juce::AudioProcessorValueTreeState& m_apvts;
+
     juce::Slider m_CrossFeedbackLeftSlider;
 	juce::Slider m_CrossFeedbackRightSlider;
-	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider};
+	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider, m_apvts};
     juce::Slider m_SwitchTime_msSlider;
     juce::ToggleButton m_LinkLR;
     juce::ComboBox m_AlgoSwitchCombo;
@@ -134,8 +159,46 @@ private:
 	LavaLookAndFeelLinkLeft m_lavaLookAndFeelLinkLeft;
 	LavaLookAndFeelLinkRight m_lavaLookAndFeelLinkRight;
 
-    juce::AudioProcessorValueTreeState& m_apvts;
     IRDisplay& m_IRDisplay;
+
+    void timerCallback() override
+    {
+        const float alphaStep = 0.2f;
+        const int positionStep = 10;
+
+        if (animatingIn)
+        {
+            currentAlpha += alphaStep;
+            currentY -= (currentY - finalY) > positionStep ? positionStep : (currentY - finalY);
+
+            if (currentAlpha >= 1.0f && currentY <= finalY)
+            {
+                currentAlpha = 1.0f;
+                currentY = finalY;
+                stopTimer();
+            }
+        }
+        else
+        {
+            currentAlpha -= alphaStep;
+
+            if (currentAlpha <= 0.0f)
+            {
+                currentAlpha = 0.0f;
+                stopTimer();
+                setVisible(false);
+            }
+        }
+
+        setAlpha(currentAlpha);
+        setTopLeftPosition(getX(), currentY);
+        repaint();
+    }
+
+    float currentAlpha = 0.0f;
+    int currentY = 0;
+    int finalY = 0;
+    bool animatingIn = true;
 
     void linkButtonClicked()
     {
