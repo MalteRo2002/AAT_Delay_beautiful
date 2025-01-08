@@ -118,7 +118,7 @@ public:
 
         m_LinkLR.onClick = [this] {linkButtonClicked(); if (LinkButtonCallback) LinkButtonCallback();};
         m_LinkLR.setButtonText("Link L/R");
-        m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, false);
+        m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, true);
         m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
         addAndMakeVisible(m_LinkLR);
 

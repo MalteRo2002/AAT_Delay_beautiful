@@ -846,7 +846,7 @@ void StereoDelayerGUI::resized()
     int numeratorX = delayX - knobWidth - distanceX * 2;
     int numeratorY = delayY - distanceY;
     m_NumeratorLeftSlider.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
-    m_NumeratorRightSlider.setBounds(numeratorX, numeratorY + knobHeight + distanceY, knobWidth*0.9, knobHeight*0.9);
+    m_NumeratorRightSlider.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
     m_NumeratorOverlay.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
     m_NumeratorLabel.setBounds(numeratorX, numeratorY + knobHeight*0.9, knobWidth, distanceY);
 
@@ -854,7 +854,7 @@ void StereoDelayerGUI::resized()
     int denominatorX = numeratorX;
     int denominatorY = delayY + distanceY*4;
     m_DenominatorLeftSlider.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
-    m_DenominatorRightSlider.setBounds(denominatorX, denominatorY + knobHeight + distanceY, knobWidth*0.9, knobHeight*0.9);
+    m_DenominatorRightSlider.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
     m_DenominatorOverlay.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
     m_DenominatorLabel.setBounds(denominatorX, denominatorY + knobHeight*0.9, knobWidth, distanceY);
 
@@ -862,7 +862,7 @@ void StereoDelayerGUI::resized()
     int feedbackX = numeratorX - knobWidth*1.2 - distanceX;
     int feedbackY = delayY + knobWidth/3;
     m_FeedbackLeftSlider.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
-    m_FeedbackRightSlider.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight+1.1);
+    m_FeedbackRightSlider.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
     m_FeedbackOverlay.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
     m_FeedbackLabel.setBounds(feedbackX, feedbackY + knobHeight*1.1, knobWidth, distanceY);
 
@@ -886,7 +886,7 @@ void StereoDelayerGUI::resized()
     m_DryWetLeftSlider.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
     m_DryWetRightSlider.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
     m_DryWetOverlay.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
-    m_DryWetLabel.setBounds(mixX, mixY + knobHeight, knobWidth*1.1, distanceY);
+    m_DryWetLabel.setBounds(mixX, mixY + knobHeight*1.1, knobWidth*1.1, distanceY);
 
     // Buttons unten in der unteren Hälfte
     int buttonWidth = 80 * scaleFactor;
