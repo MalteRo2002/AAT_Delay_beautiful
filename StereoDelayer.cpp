@@ -949,3 +949,14 @@ void StereoDelayerGUI::linkButtonClicked()
         slider.first->setLookAndFeel(isLinked ? linkRightLookAndFeel : slider.second);
     }
 }
+
+void StereoDelayerGUI::mouseDown(const juce::MouseEvent& event)
+{
+    
+    if (m_advancedPopup.isVisible() && !m_advancedPopup.getBounds().contains(event.getPosition()))
+    {
+        togglePopupVisibility();
+    }
+
+    Component::mouseDown(event);
+}

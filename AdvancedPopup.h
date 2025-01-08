@@ -174,7 +174,8 @@ public:
         m_LinkLR.setBounds(width / 2 - buttonWidth / 2, height / 3 - buttonHeight / 2, buttonWidth, buttonHeight);
 
         x = sectionWidth * 2;
-        m_SwitchTime_msSlider.setBounds(x, 0, sectionWidth, sliderHeight);
+        m_SwitchTime_msLeftSlider.setBounds(x, 0, sectionWidth, sliderHeight);
+        m_SwitchTime_msRightSlider.setBounds(x, 0, sectionWidth, sliderHeight);
         m_SwitchTime_msOverlay.setBounds(x, 0, sectionWidth, sliderHeight);
         m_SwitchTime_msLabel.setBounds(x, sliderHeight, sectionWidth, labelHeight);
 
