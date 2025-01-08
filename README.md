@@ -34,9 +34,6 @@ AAT_Delay_beautiful is an audio plugin that provides control over delay paramete
        - Use the **left mouse button** to adjust the left channel.
        - Use the **right mouse button** to adjust the right channel.
 
-3. **Immediate Feedback:**
-   - The **IR-Display** provides real-time visualization of the changes applied to the delay parameters.
-
 ## Credits
 
 - **Plugin by:** J. Bitzer
