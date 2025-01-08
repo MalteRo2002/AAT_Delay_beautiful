@@ -50,6 +50,8 @@ class AdvancedPopup : public juce::Component, private juce::Timer
 public:
     AdvancedPopup(juce::AudioProcessorValueTreeState& apvts, IRDisplay& IRDisplay) : m_apvts(apvts), m_IRDisplay(IRDisplay)
     {
+        setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
+
         m_SwitchTime_msLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_SwitchTime_msLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_SwitchTime_msLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
@@ -164,20 +166,20 @@ public:
         const int sectionHeight = sliderHeight + labelHeight;
 
         int x = 0;
-        m_CrossFeedbackLeftSlider.setBounds(x, 0, sectionWidth, sliderHeight);
-        m_CrossFeedbackRightSlider.setBounds(x, 0, sectionWidth, sliderHeight);
-        m_CrossFeedbackOverlay.setBounds(x, 0, sectionWidth, sliderHeight);
-        m_CrossFeedbackLabel.setBounds(x, sliderHeight, sectionWidth, labelHeight);
+        m_CrossFeedbackLeftSlider.setBounds(x, height/2 - sliderHeight/2, sectionWidth, sliderHeight);
+        m_CrossFeedbackRightSlider.setBounds(x, height/2 - sliderHeight/2, sectionWidth, sliderHeight);
+        m_CrossFeedbackOverlay.setBounds(x, height/2 - sliderHeight/2, sectionWidth, sliderHeight);
+        m_CrossFeedbackLabel.setBounds(x, height/2 + sliderHeight - sliderHeight/2, sectionWidth, labelHeight);
 
         const int buttonWidth = width / 3;
         const int buttonHeight = height / 4;
         m_LinkLR.setBounds(width / 2 - buttonWidth / 2, height / 3 - buttonHeight / 2, buttonWidth, buttonHeight);
 
         x = sectionWidth * 2;
-        m_SwitchTime_msLeftSlider.setBounds(x, 0, sectionWidth, sliderHeight);
-        m_SwitchTime_msRightSlider.setBounds(x, 0, sectionWidth, sliderHeight);
-        m_SwitchTime_msOverlay.setBounds(x, 0, sectionWidth, sliderHeight);
-        m_SwitchTime_msLabel.setBounds(x, sliderHeight, sectionWidth, labelHeight);
+        m_SwitchTime_msLeftSlider.setBounds(x, height/2 - sliderHeight/2, sectionWidth, sliderHeight);
+        m_SwitchTime_msRightSlider.setBounds(x, height/2 - sliderHeight/2, sectionWidth, sliderHeight);
+        m_SwitchTime_msOverlay.setBounds(x, height/2 - sliderHeight/2, sectionWidth, sliderHeight);
+        m_SwitchTime_msLabel.setBounds(x, height/2 + sliderHeight - sliderHeight/2, sectionWidth, labelHeight);
 
         const int comboWidth = width / 3;
         const int comboHeight = height / 4;

@@ -47,6 +47,39 @@ public:
         g.fillRoundedRectangle(buttonArea.toFloat(), 5.0f);
     }
 
+    void drawComboBox(Graphics& g, int width, int height, bool isButtonDown, int buttonX, int buttonY, int buttonW, int buttonH, ComboBox& box) override
+    {
+        auto cornerSize = 3.0f;
+        auto bounds = Rectangle<int>(width, height).toFloat().reduced(0.5f, 0.5f);
+
+        g.setColour(juce::Colours::darkgrey);
+        g.fillRoundedRectangle(bounds, cornerSize);
+
+        g.setColour(box.findColour(ComboBox::outlineColourId));
+        g.drawRoundedRectangle(bounds, cornerSize, 1.0f);
+
+        auto arrowColour = box.findColour(ComboBox::arrowColourId).withAlpha(box.isEnabled() ? 0.9f : 0.2f);
+        Path path;
+        auto arrowX = buttonX + buttonW * 0.5f;
+        auto arrowY = buttonY + buttonH * 0.5f + (isButtonDown ? 1.0f : 0.0f);
+
+        auto iconW = 4.0f;
+        auto iconH = 2.0f;
+
+        path.startNewSubPath(arrowX - iconW, arrowY - iconH);
+        path.lineTo(arrowX + iconW, arrowY - iconH);
+        path.lineTo(arrowX, arrowY + iconH);
+        path.closeSubPath();
+
+        g.setColour(arrowColour);
+        g.fillPath(path);
+    }
+
+    void drawPopupMenuBackground(Graphics& g, int width, int height) override
+{
+    g.fillAll(juce::Colours::darkgrey); // Setzt den Hintergrund auf Dunkelgrau
+}
+
     void drawLabel(juce::Graphics& g, juce::Label& label) override
     {
         g.setColour(label.findColour(juce::Label::textColourId));

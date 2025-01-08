@@ -48,14 +48,14 @@ void IRDisplay::paint(juce::Graphics &g)
     g.fillAll(juce::Colours::darkgrey.darker(0.9f));
 
     // paint coordinate system and 1/16 grid
-    g.setColour(juce::Colours::white.darker(0.1f)); //left channel
+    g.setColour(juce::Colours::white.darker(0.6f)); //left channel
     float maxdelay = std::max(m_delay_msLeft, m_delay_msRight);
     float displayrange = getDisplayRange(maxdelay);
 
     auto r = getLocalBounds();
     auto s = getLocalBounds();
     r.reduce(7*m_scaleFactor, 8*m_scaleFactor);
-    //g.drawRect(r, 1);
+    // g.drawRect(0, 0, getWidth(), getHeight(), 2);
     r.reduce(3*m_scaleFactor, 2*m_scaleFactor);
     float x = 0.f;
     float denominator = 16.f;

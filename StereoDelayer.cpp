@@ -815,81 +815,97 @@ void StereoDelayerGUI::paint(juce::Graphics &g)
 
 void StereoDelayerGUI::resized()
 {
-	auto r = getLocalBounds();
+    auto r = getLocalBounds();
     
-    // if you have to place several components, use scaleFactor
-    //int width = r.getWidth();
-	//float scaleFactor = float(width)/g_minGuiSize_x;
-
-    // use the given canvas in r
     int height = getHeight();
     int width = getWidth();
 
     float scaleFactor = m_processor.getScaleFactor();
-// IRDisplay
-    m_IRDisplay.setBounds((width - 7*width/8) / 2, 0, 7*width/8, height/2);
+
+    // Grundlegende Größen
+    int knobWidth = 80 * scaleFactor;
+    int knobHeight = 80 * scaleFactor;
+    int bigKnobWidth = 120 * scaleFactor;
+    int bigKnobHeight = 120 * scaleFactor;
+    int distanceX = 10 * scaleFactor;
+    int distanceY = 20 * scaleFactor;
+
+    // Display in der oberen Hälfte
+    int displayHeight = height*0.45; // Display nimmt die obere Hälfte ein
+    m_IRDisplay.setBounds(0, 0, width, displayHeight);
     m_IRDisplay.setScaleFactor(scaleFactor);
-// layout
-    r.removeFromTop(height/2);
-    r.removeFromLeft(width/10);
-    int startx = r.getX() ;
-    int starty = r.getY() ;
-    int knobwidth = 80 * scaleFactor;
-    int knobheight = 80 * scaleFactor;
-    int distance_y = 20 * scaleFactor;
-    int distance_x = 10 * scaleFactor;
 
-    int bigKnobwidth = 120 * scaleFactor;
-    int bigKnobheight = 120 * scaleFactor;
+    // Platz für Slider und Buttons in der unteren Hälfte
+    r.removeFromTop(displayHeight);
 
-    m_DelayLeft_msSlider.setBounds(width/2 - bigKnobwidth/2,starty*1.1,bigKnobwidth,bigKnobheight);
-    m_DelayRight_msSlider.setBounds(width/2 - bigKnobwidth/2,starty*1.1,bigKnobwidth,bigKnobheight);
-    m_Delay_msOverlay.setBounds(width/2 - bigKnobwidth/2,starty*1.1,bigKnobwidth,bigKnobheight);
-    m_delayLabel.setBounds(width/2 - bigKnobwidth/2,starty*1.1 + knobheight,bigKnobwidth,distance_y);
+    // Delay-Slider zentral in der unteren Hälfte
+    int delayX = width / 2 - bigKnobWidth / 2;
+    int delayY = r.getY() + 30 * scaleFactor;
+    m_DelayLeft_msSlider.setBounds(delayX, delayY, bigKnobWidth, bigKnobHeight);
+    m_DelayRight_msSlider.setBounds(delayX, delayY, bigKnobWidth, bigKnobHeight);
+    m_Delay_msOverlay.setBounds(delayX, delayY, bigKnobWidth, bigKnobHeight);
+    m_delayLabel.setBounds(delayX, delayY + bigKnobHeight, bigKnobWidth, distanceY);
 
-    m_NumeratorLeftSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_NumeratorRightSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_NumeratorOverlay.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_NumeratorLabel.setBounds(startx + 1*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    // Numerator-Slider links über dem Delay
+    int numeratorX = delayX - knobWidth - distanceX * 2;
+    int numeratorY = delayY - distanceY;
+    m_NumeratorLeftSlider.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
+    m_NumeratorRightSlider.setBounds(numeratorX, numeratorY + knobHeight + distanceY, knobWidth*0.9, knobHeight*0.9);
+    m_NumeratorOverlay.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
+    m_NumeratorLabel.setBounds(numeratorX, numeratorY + knobHeight*0.9, knobWidth, distanceY);
 
-    m_DenominatorLeftSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_DenominatorRightSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_DenominatorOverlay.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_DenominatorLabel.setBounds(startx + 2*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    // Denominator-Slider unter dem Numerator
+    int denominatorX = numeratorX;
+    int denominatorY = delayY + distanceY*4;
+    m_DenominatorLeftSlider.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
+    m_DenominatorRightSlider.setBounds(denominatorX, denominatorY + knobHeight + distanceY, knobWidth*0.9, knobHeight*0.9);
+    m_DenominatorOverlay.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
+    m_DenominatorLabel.setBounds(denominatorX, denominatorY + knobHeight*0.9, knobWidth, distanceY);
 
-    m_FeedbackLeftSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_FeedbackRightSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_FeedbackOverlay.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_FeedbackLabel.setBounds(startx + 3*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    // Feedback-Slider links neben Delay
+    int feedbackX = numeratorX - knobWidth*1.2 - distanceX;
+    int feedbackY = delayY + knobWidth/3;
+    m_FeedbackLeftSlider.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
+    m_FeedbackRightSlider.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight+1.1);
+    m_FeedbackOverlay.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
+    m_FeedbackLabel.setBounds(feedbackX, feedbackY + knobHeight*1.1, knobWidth, distanceY);
 
-    m_LowpassLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_LowpassRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_LowpassOverlay.setBounds(startx + 4*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_LowpassLabel.setBounds(startx + 4*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    // Filter-Slider rechts oben übereinander
+    int filterX = delayX + bigKnobWidth + distanceX * 2;
+    int lowpassY = delayY - distanceY;
+    int highpassY = delayY + distanceY*4;
+    m_LowpassLeftSlider.setBounds(filterX, lowpassY, knobWidth*0.9, knobHeight*0.9);
+    m_LowpassRightSlider.setBounds(filterX, lowpassY, knobWidth*0.9, knobHeight*0.9);
+    m_LowpassOverlay.setBounds(filterX, lowpassY, knobWidth*0.9, knobHeight*0.9);
+    m_LowpassLabel.setBounds(filterX, lowpassY + knobHeight*0.9, knobWidth, distanceY);
 
-    m_HighpassLeftSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_HighpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_HighpassOverlay.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_HighpassLabel.setBounds(startx + 5*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    m_HighpassLeftSlider.setBounds(filterX, highpassY, knobWidth*0.9, knobHeight*0.9);
+    m_HighpassRightSlider.setBounds(filterX, highpassY, knobWidth*0.9, knobHeight*0.9);
+    m_HighpassOverlay.setBounds(filterX, highpassY, knobWidth*0.9, knobHeight*0.9);
+    m_HighpassLabel.setBounds(filterX, highpassY + knobHeight*0.9, knobWidth, distanceY);
 
-    m_DryWetLeftSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
-    m_DryWetRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
-    m_DryWetOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
-    m_DryWetLabel.setBounds(startx + 6*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    // Mix-Slider rechts neben Filter
+    int mixX = filterX + knobWidth*1.2 + distanceX;
+    int mixY = delayY + knobWidth/3;
+    m_DryWetLeftSlider.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
+    m_DryWetRightSlider.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
+    m_DryWetOverlay.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
+    m_DryWetLabel.setBounds(mixX, mixY + knobHeight, knobWidth*1.1, distanceY);
 
-    int buttonWidth = 80*scaleFactor;
-    int buttonHeight = 20*scaleFactor;
-    int margin = 5*scaleFactor;
-
+    // Buttons unten in der unteren Hälfte
+    int buttonWidth = 80 * scaleFactor;
+    int buttonHeight = 20 * scaleFactor;
+    int buttonMargin = 10 * scaleFactor;
     int buttonX = (width - buttonWidth) / 2;
-    int buttonY = height - buttonHeight - margin;
+    int buttonY = r.getBottom() - 2 * buttonHeight - buttonMargin;
 
-    m_showPopupButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
-    
-    int popupBottom = height - 25 - buttonHeight * 0.8f; // Oberkante des Buttons
-    int popupTop = popupBottom - buttonHeight * 3 - 30; // Dynamische Anpassung der Oberkante
-    
-    m_advancedPopup.setBounds((width - buttonWidth * 5) / 2, popupTop, buttonWidth * 5, buttonHeight * 3);
+    // Position der Buttons
+    m_showPopupButton.setBounds(buttonX, buttonY + buttonHeight, buttonWidth, buttonHeight);
+
+    // Optional: Popup unterhalb des Buttons
+    int popupWidth = buttonWidth * 5;
+    int popupHeight = buttonHeight * 3;
+    m_advancedPopup.setBounds((width - popupWidth) / 2, buttonY - popupHeight - buttonMargin, popupWidth, popupHeight);
 }
 
 
