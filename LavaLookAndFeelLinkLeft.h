@@ -1,14 +1,14 @@
-#include <juce_audio_processors/juce_audio_processors.h>
-
 class LavaLookAndFeelLinkLeft : public juce::LookAndFeel_V4
 {
 public:
     LavaLookAndFeelLinkLeft()
     {
         setColour(juce::Slider::thumbColourId, juce::Colours::red);
+        setColour(juce::Label::textColourId, juce::Colours::white);
+        setColour(juce::Label::backgroundColourId, juce::Colours::darkgrey.withAlpha(0.8f));
     }
 
-        void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
+    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
                           const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) override
     {
         auto radius = (float) juce::jmin(width / 2, height / 2) - 4.0f;
@@ -24,10 +24,6 @@ public:
                                                 juce::Colours::black, rx + rw, ry + rw, false);
         g.setGradientFill(backgroundGradient);
         g.fillEllipse(rx, ry, rw, rw);
-
-        // // Outline
-        // g.setColour(juce::Colours::black);
-        // g.drawEllipse(rx-10, ry-10, rw, rw, 5.0f);
 
         // Draw the pointer
         juce::Path p;
@@ -49,5 +45,14 @@ public:
 
         g.setColour(juce::Colours::darkgrey);
         g.fillRoundedRectangle(buttonArea.toFloat(), 5.0f);
+    }
+
+    void drawLabel(juce::Graphics& g, juce::Label& label) override
+    {
+        g.setColour(label.findColour(juce::Label::textColourId));
+
+        g.setFont(juce::Font(14.0f, juce::Font::bold));
+
+        g.drawFittedText(label.getText(), label.getLocalBounds(), juce::Justification::centred, 1);
     }
 };
