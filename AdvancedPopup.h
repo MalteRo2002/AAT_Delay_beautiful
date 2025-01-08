@@ -51,7 +51,7 @@ public:
     AdvancedPopup(juce::AudioProcessorValueTreeState& apvts, IRDisplay& IRDisplay) : m_apvts(apvts), m_IRDisplay(IRDisplay)
     {
         m_SwitchTime_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-        m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+        m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
         m_SwitchTime_msSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
         m_SwitchTime_msSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
         auto val = m_apvts.getRawParameterValue(g_paramSwitchTime_ms.ID);
@@ -59,9 +59,15 @@ public:
         m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msSlider);
         addAndMakeVisible(m_SwitchTime_msSlider);
 
+        m_SwitchTime_msOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+        m_SwitchTime_msOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+        m_SwitchTime_msOverlay.setParamName("Switch Time");
+        m_SwitchTime_msOverlay.setUnitName(" ms");
+        addAndMakeVisible(m_SwitchTime_msOverlay);
+
         m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
         m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-        m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+        m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
         m_CrossFeedbackLeftSlider.setRange(g_paramCrossFeedbackLeft.minValue, g_paramCrossFeedbackLeft.maxValue);
         m_CrossFeedbackLeftSlider.setTextValueSuffix(g_paramCrossFeedbackLeft.unitName);
         val = m_apvts.getRawParameterValue(g_paramCrossFeedbackLeft.ID);
@@ -72,7 +78,7 @@ public:
 
         m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
         m_CrossFeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-        m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
+        m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
         m_CrossFeedbackRightSlider.setRange(g_paramCrossFeedbackRight.minValue, g_paramCrossFeedbackRight.maxValue);
         m_CrossFeedbackRightSlider.setTextValueSuffix(g_paramCrossFeedbackRight.unitName);
         val = m_apvts.getRawParameterValue(g_paramCrossFeedbackRight.ID);
@@ -83,6 +89,8 @@ public:
 
         m_CrossFeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+        m_CrossFeedbackOverlay.setParamName("Cross Feedback");
+        m_CrossFeedbackOverlay.setUnitName(" %");
         addAndMakeVisible(m_CrossFeedbackOverlay);
 
         m_LinkLR.onClick = [this] {linkButtonClicked();};
@@ -96,8 +104,7 @@ public:
         addAndMakeVisible(m_AlgoSwitchCombo);
     }
 
-void AdvancedPopup::FadeIn(int startY, int targetY)
-
+    void FadeIn(int startY, int targetY)
     {
         animatingIn = true;
         currentAlpha = 0.0f;
@@ -108,7 +115,7 @@ void AdvancedPopup::FadeIn(int startY, int targetY)
         startTimer(3);
     }
 
-    void AdvancedPopup::FadeOut(int startY, int targetY)
+    void FadeOut(int startY, int targetY)
     {
         animatingIn = false;
         currentAlpha = 1.0f;
@@ -120,10 +127,10 @@ void AdvancedPopup::FadeIn(int startY, int targetY)
 
 
     void paint(juce::Graphics& g) override
-{
+    {
     g.setColour(juce::Colours::grey);
     g.fillRoundedRectangle(getLocalBounds().toFloat(), 20.0f); // Abgerundetes Rechteck
-}
+    }
 
     void resized() override
     {
@@ -134,6 +141,7 @@ void AdvancedPopup::FadeIn(int startY, int targetY)
         m_LinkLR.setBounds(getWidth()/2-getWidth()/7,getHeight()/3-getHeight()/8,getWidth()*1/3,getHeight()/4);
 
         m_SwitchTime_msSlider.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
+        m_SwitchTime_msOverlay.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
         
         m_AlgoSwitchCombo.setBounds(getWidth()/2-getWidth()/6,getHeight()*2/3-getHeight()/8,getWidth()*1/3,getHeight()/4);
     }
@@ -145,6 +153,7 @@ private:
 	juce::Slider m_CrossFeedbackRightSlider;
 	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider, m_apvts};
     juce::Slider m_SwitchTime_msSlider;
+    MouseButtonDetectOverlay m_SwitchTime_msOverlay{m_SwitchTime_msSlider, m_apvts};
     juce::ToggleButton m_LinkLR;
     juce::ComboBox m_AlgoSwitchCombo;
 

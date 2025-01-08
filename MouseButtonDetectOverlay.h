@@ -100,7 +100,13 @@ private:
 class MouseButtonDetectOverlay : public juce::Slider
 {
 public:
-    MouseButtonDetectOverlay(juce::Slider& leftSlider, juce::Slider& rightSlider, juce::AudioProcessorValueTreeState& vts) : m_leftSlider(leftSlider), m_rightSlider(rightSlider), m_apvts(vts)
+    MouseButtonDetectOverlay(juce::Slider& leftSlider, juce::Slider& rightSlider, juce::AudioProcessorValueTreeState& vts) : m_leftSlider(&leftSlider), m_rightSlider(&rightSlider), m_apvts(vts)
+    {
+        popup.setVisible(false);
+    }
+
+    MouseButtonDetectOverlay(juce::Slider& singleSlider, juce::AudioProcessorValueTreeState& vts)
+    : m_leftSlider(&singleSlider), m_rightSlider(nullptr), m_apvts(vts)
     {
         popup.setVisible(false);
     }
@@ -115,24 +121,24 @@ public:
     {
         if (event.mods.isLeftButtonDown())
         {
-            m_leftSlider.mouseDown(event); // Let the slider behave as normal
+            m_leftSlider->mouseDown(event); // Let the slider behave as normal
         }
         if (event.mods.isRightButtonDown())
         {
-            m_rightSlider.mouseDown(event); // Let the slider behave as normal
+            m_rightSlider->mouseDown(event); // Let the slider behave as normal
         }
     }
 
     void mouseDrag(const juce::MouseEvent& event) override
     {
-        if (event.mods.isLeftButtonDown())
+        if (m_leftSlider != nullptr && event.mods.isLeftButtonDown())
         {
-            m_leftSlider.mouseDrag(event); // Let the slider behave as normal
+            m_leftSlider->mouseDrag(event); // Let the slider behave as normal
             updatePopupText();
         }
-        if (event.mods.isRightButtonDown())
+        if (m_leftSlider != nullptr && event.mods.isRightButtonDown())
         {
-            m_rightSlider.mouseDrag(event); // Let the slider behave as normal
+            m_rightSlider->mouseDrag(event); // Let the slider behave as normal
             updatePopupText();
         }
         juce::Slider::mouseDrag(event);
@@ -151,6 +157,10 @@ public:
             int popupX = sliderBounds.getCentreX() - (popupWidth / 2);
             int startY = sliderBounds.getBottom() - 20;
             int targetY = sliderBounds.getBottom() + 5;
+
+            auto parentBounds = parent->getLocalBounds();
+            popupX = juce::jlimit(parentBounds.getX(), parentBounds.getRight() - popupWidth, popupX);
+            targetY = juce::jlimit(parentBounds.getY(), parentBounds.getBottom() - popupHeight, targetY);
 
             popup.setBounds(popupX, startY, popupWidth, popupHeight);
             popup.setVisible(true);
@@ -181,14 +191,14 @@ public:
 
         if (m_apvts.getRawParameterValue("LinkLRID")->load())
         {
-            float transformedValue = transformValue(m_leftSlider.getValue(), m_param);
+            float transformedValue = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue(), m_param) : 0.0f;
 
             popup.setText(m_param + ": " + juce::String(transformedValue, 2) + " " + m_unit);
         }
         else
         {
-            float transformedLeft = transformValue(m_leftSlider.getValue(), m_param);
-            float transformedRight = transformValue(m_rightSlider.getValue(), m_param);
+            float transformedLeft = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue(), m_param) : 0.0f;
+            float transformedRight = (m_leftSlider != nullptr) ? transformValue(m_rightSlider->getValue(), m_param) : 0.0f;
 
             popup.setText(
                 "Left: " + juce::String(transformedLeft, 2) + " " + m_unit + "\n" +
@@ -206,8 +216,8 @@ public:
 
 
 private:
-    juce::Slider& m_leftSlider;
-    juce::Slider& m_rightSlider;
+    juce::Slider* m_leftSlider;
+    juce::Slider* m_rightSlider;
     InfoPopup popup;
     juce::String valueUnit; 
     juce::AudioProcessorValueTreeState& m_apvts;

@@ -307,6 +307,7 @@ private:
 	// juce::Label m_SwitchTimeLabel;
 	juce::Slider m_DryWetSlider;
 	juce::Label m_DryWetLabel;
+	MouseButtonDetectOverlay m_DryWetOverlay{m_DryWetSlider, m_apvts};
 	juce::Slider m_LowpassLeftSlider;
 	juce::Slider m_LowpassRightSlider;
 	MouseButtonDetectOverlay m_LowpassOverlay{m_LowpassLeftSlider, m_LowpassRightSlider, m_apvts};
@@ -372,7 +373,8 @@ private:
 		{
 			int popupHeight = getHeight() * 0.5f;
 			int startY = getHeight();
-			int targetY = getHeight() - popupHeight - 10;
+			int buttonTopY = m_showPopupButton.getY();
+			int targetY = buttonTopY - popupHeight - 2;
 
 			m_advancedPopup.setBounds(
 				(getWidth() - m_advancedPopup.getWidth()) / 2,

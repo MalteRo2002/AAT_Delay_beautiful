@@ -671,6 +671,11 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DryWetLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_DryWetLabel);
 
+    m_DryWetOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    m_DryWetOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    m_DryWetOverlay.setParamName("Dry / Wet");
+    addAndMakeVisible(m_DryWetOverlay);
+
     m_LowpassLeftSlider.onValueChange = [this] {m_IRDisplay.setLowpassLeft(expf(m_LowpassLeftSlider.getValue()));};
     m_LowpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_LowpassLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
@@ -904,19 +909,27 @@ void StereoDelayerGUI::resized()
     m_HighpassLabel.setBounds(startx + 6*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + knobheight ,knobwidth,knobheight);
+    m_DryWetOverlay.setBounds(startx + 7*(knobwidth + distance_x) ,starty + knobheight ,knobwidth,knobheight);
     m_DryWetLabel.setBounds(startx + 7*(knobwidth + distance_x), starty + 2 * knobheight, knobwidth, distance_y);
 
-    int buttonWidth = 60*scaleFactor;
-    int buttonHeight = 30*scaleFactor;
+    int buttonWidth = 80*scaleFactor;
+    int buttonHeight = 20*scaleFactor;
+    int margin = 5*scaleFactor;
     // m_LinkLR.setBounds(10,3*height/4,buttonWidth,buttonHeight);
 
     // m_AlgoSwitchCombo.setBoundsRelative(0.9,0.01,0.08,0.04);
     // m_SwitchTime_msSlider.setBounds(width-90*scaleFactor, 60*scaleFactor,knobwidth,knobheight);
     // m_SwitchTimeLabel.setBounds(width-90*scaleFactor, 60*scaleFactor + knobheight,knobwidth,distance_y);
+    
+    int buttonX = (width - buttonWidth) / 2;
+    int buttonY = height - buttonHeight - margin;
 
-    m_showPopupButton.setBounds((width - buttonWidth*2) / 2, height - 25, buttonWidth*2, buttonHeight*0.8f);
-    m_advancedPopup.setBounds((width - buttonWidth*5) / 2 , height - buttonHeight * 3 - 30, buttonWidth*5, buttonHeight*3);
-
+    m_showPopupButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+    
+    int popupBottom = height - 25 - buttonHeight * 0.8f; // Oberkante des Buttons
+    int popupTop = popupBottom - buttonHeight * 3 - 30; // Dynamische Anpassung der Oberkante
+    
+    m_advancedPopup.setBounds((width - buttonWidth * 5) / 2, popupTop, buttonWidth * 5, buttonHeight * 3);
 }
 
 
