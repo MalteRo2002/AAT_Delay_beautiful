@@ -76,6 +76,11 @@ public:
         m_SwitchTime_msOverlay.setUnitName(" ms");
         addAndMakeVisible(m_SwitchTime_msOverlay);
 
+        m_SwitchTime_msLabel.setText("Switch Time", juce::dontSendNotification);
+        m_SwitchTime_msLabel.setFont(juce::Font(15.0f));
+        m_SwitchTime_msLabel.setJustificationType(juce::Justification::centred);
+        addAndMakeVisible(m_SwitchTime_msLabel);
+
         m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
         m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
@@ -97,6 +102,11 @@ public:
         m_CrossFeedbackRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackRight.ID, m_CrossFeedbackRightSlider);
         m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
         addAndMakeVisible(m_CrossFeedbackRightSlider);
+
+        m_CrossFeedbackLabel.setText("Cross Feedback", juce::dontSendNotification);
+        m_CrossFeedbackLabel.setFont(juce::Font(15.0f));
+        m_CrossFeedbackLabel.setJustificationType(juce::Justification::centred);
+        addAndMakeVisible(m_CrossFeedbackLabel);
 
         m_CrossFeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
@@ -140,23 +150,39 @@ public:
     void paint(juce::Graphics& g) override
     {
     g.setColour(juce::Colours::grey);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 20.0f); // Abgerundetes Rechteck
+    g.fillRoundedRectangle(getLocalBounds().toFloat(), 20.0f);
     }
 
     void resized() override
     {
-        m_CrossFeedbackLeftSlider.setBounds(0,0,getWidth()*1/3,getHeight());
-        m_CrossFeedbackRightSlider.setBounds(0,0, getWidth()*1/3,getHeight());
-        m_CrossFeedbackOverlay.setBounds(0,0,getWidth()*1/3,getHeight());
+        const int width = getWidth();
+        const int height = getHeight();
 
-        m_LinkLR.setBounds(getWidth()/2-getWidth()/7,getHeight()/3-getHeight()/8,getWidth()*1/3,getHeight()/4);
+        const int sectionWidth = width / 3;
+        const int sliderHeight = height / 2;
+        const int labelHeight = 20;
+        const int sectionHeight = sliderHeight + labelHeight;
 
-        m_SwitchTime_msLeftSlider.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
-        m_SwitchTime_msRightSlider.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
-        m_SwitchTime_msOverlay.setBounds(getWidth()*2/3,0,getWidth()*1/3,getHeight());
-        
-        m_AlgoSwitchCombo.setBounds(getWidth()/2-getWidth()/6,getHeight()*2/3-getHeight()/8,getWidth()*1/3,getHeight()/4);
+        int x = 0;
+        m_CrossFeedbackLeftSlider.setBounds(x, 0, sectionWidth, sliderHeight);
+        m_CrossFeedbackRightSlider.setBounds(x, 0, sectionWidth, sliderHeight);
+        m_CrossFeedbackOverlay.setBounds(x, 0, sectionWidth, sliderHeight);
+        m_CrossFeedbackLabel.setBounds(x, sliderHeight, sectionWidth, labelHeight);
+
+        const int buttonWidth = width / 3;
+        const int buttonHeight = height / 4;
+        m_LinkLR.setBounds(width / 2 - buttonWidth / 2, height / 3 - buttonHeight / 2, buttonWidth, buttonHeight);
+
+        x = sectionWidth * 2;
+        m_SwitchTime_msSlider.setBounds(x, 0, sectionWidth, sliderHeight);
+        m_SwitchTime_msOverlay.setBounds(x, 0, sectionWidth, sliderHeight);
+        m_SwitchTime_msLabel.setBounds(x, sliderHeight, sectionWidth, labelHeight);
+
+        const int comboWidth = width / 3;
+        const int comboHeight = height / 4;
+        m_AlgoSwitchCombo.setBounds(width / 2 - comboWidth / 2, height * 2 / 3 - comboHeight / 2, comboWidth, comboHeight);
     }
+
 
     void setButtonCallback(std::function<void()> callback)
     {
@@ -168,9 +194,11 @@ private:
 
     juce::Slider m_CrossFeedbackLeftSlider;
 	juce::Slider m_CrossFeedbackRightSlider;
+    juce::Label m_CrossFeedbackLabel;
 	MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider, m_apvts};
     juce::Slider m_SwitchTime_msLeftSlider;
     juce::Slider m_SwitchTime_msRightSlider;
+    juce::Label m_SwitchTime_msLabel;
     MouseButtonDetectOverlay m_SwitchTime_msOverlay{m_SwitchTime_msLeftSlider, m_SwitchTime_msRightSlider, m_apvts};
     juce::ToggleButton m_LinkLR;
     juce::ComboBox m_AlgoSwitchCombo;

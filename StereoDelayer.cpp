@@ -608,54 +608,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_FeedbackOverlay.setUnitName(" %");
     addAndMakeVisible(m_FeedbackOverlay);
 
-    // m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
-    // m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
-    // m_CrossFeedbackLeftSlider.setRange(g_paramCrossFeedbackLeft.minValue, g_paramCrossFeedbackLeft.maxValue);
-    // m_CrossFeedbackLeftSlider.setTextValueSuffix(g_paramCrossFeedbackLeft.unitName);
-    // val = m_apvts.getRawParameterValue(g_paramCrossFeedbackLeft.ID);
-    // m_CrossFeedbackLeftSlider.setValue(*val);
-    // m_CrossFeedbackLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackLeft.ID, m_CrossFeedbackLeftSlider);
-    // m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    // addAndMakeVisible(m_CrossFeedbackLeftSlider);
-
-    // m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
-    // m_CrossFeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
-    // m_CrossFeedbackRightSlider.setRange(g_paramCrossFeedbackRight.minValue, g_paramCrossFeedbackRight.maxValue);
-    // m_CrossFeedbackRightSlider.setTextValueSuffix(g_paramCrossFeedbackRight.unitName);
-    // val = m_apvts.getRawParameterValue(g_paramCrossFeedbackRight.ID);
-    // m_CrossFeedbackRightSlider.setValue(*val);
-    // m_CrossFeedbackRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackRight.ID, m_CrossFeedbackRightSlider);
-    // m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    // addAndMakeVisible(m_CrossFeedbackRightSlider);
-
-    // m_CrossFeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    // m_CrossFeedbackOverlay.setParamName("Cross Feedback");
-    // m_CrossFeedbackOverlay.setUnitName(" %");
-    // addAndMakeVisible(m_CrossFeedbackOverlay);
-
-    // m_LinkLR.onClick = [this] {StereoDelayerGUI::linkButtonClicked();};
-    // m_LinkLR.setButtonText("Link L/R");
-    // m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, false);
-    // m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
-    // addAndMakeVisible(m_LinkLR);
-
-    // m_SwitchTime_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
-    // m_SwitchTime_msSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
-    // m_SwitchTime_msSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
-    // val = m_apvts.getRawParameterValue(g_paramSwitchTime_ms.ID);
-    // m_SwitchTime_msSlider.setValue(*val);
-    // m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msSlider);
-    // addAndMakeVisible(m_SwitchTime_msSlider);
-
-    // m_SwitchTimeLabel.setText("Switch Time", juce::dontSendNotification);
-    // m_SwitchTimeLabel.setFont(juce::Font(15.0f));
-    // m_SwitchTimeLabel.setJustificationType(juce::Justification::centred);
-    // addAndMakeVisible(m_SwitchTimeLabel);
-
     m_DryWetLeftSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetLeftSlider.getValue());};
     m_DryWetLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DryWetLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
