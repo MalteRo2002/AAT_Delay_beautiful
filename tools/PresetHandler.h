@@ -41,6 +41,8 @@
 #include <vector>
 
 #include "../PluginSettings.h"
+#include "../LavaLookAndFeelLinkLeft.h"
+
 const int g_maxNumberOfCategories = 20;
 
 class PresetHandler
@@ -145,6 +147,8 @@ private:
 	TextButton m_prevButton;
 	TextButton m_saveButton;
 	ComboBox m_categoriesCombo;
+
+	LavaLookAndFeelLinkLeft m_lavaLookAndFeelLinkLeft;
 
 	PresetHandler& m_presetHandler;
 

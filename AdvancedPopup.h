@@ -149,9 +149,27 @@ public:
 
     void paint(juce::Graphics& g) override
     {
-    g.setColour(juce::Colours::grey);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), 20.0f);
+        auto bounds = getLocalBounds().toFloat();
+        float cornerSize = 20.0f;
+
+        juce::Path roundedRectangle;
+        roundedRectangle.addRoundedRectangle(bounds, cornerSize);
+
+        g.reduceClipRegion(roundedRectangle);
+
+        juce::ColourGradient gradient(juce::Colours::darkgrey, bounds.getCentreX(), bounds.getY(),
+                                    juce::Colours::grey, bounds.getCentreX(), bounds.getBottom(),
+                                    false);
+        g.setGradientFill(gradient);
+        g.fillPath(roundedRectangle);
+
+        g.setColour(juce::Colours::white.withAlpha(0.8f));
+        g.drawRoundedRectangle(bounds, cornerSize, 2.0f);
+
+        juce::DropShadow shadow(juce::Colours::black.withAlpha(0.5f), 10, {0, 4});
+        shadow.drawForPath(g, roundedRectangle);
     }
+
 
     void resized() override
     {

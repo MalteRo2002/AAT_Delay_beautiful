@@ -1,3 +1,5 @@
+#pragma once
+
 class LavaLookAndFeelLinkLeft : public juce::LookAndFeel_V4
 {
 public:
