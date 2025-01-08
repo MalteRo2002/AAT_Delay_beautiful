@@ -299,12 +299,6 @@ private:
 	juce::Slider m_FeedbackRightSlider;
 	MouseButtonDetectOverlay m_FeedbackOverlay{m_FeedbackLeftSlider, m_FeedbackRightSlider, m_apvts};
 	juce::Label m_FeedbackLabel;
-	// juce::Slider m_CrossFeedbackLeftSlider;
-	// juce::Slider m_CrossFeedbackRightSlider;
-	// MouseButtonDetectOverlay m_CrossFeedbackOverlay{m_CrossFeedbackLeftSlider, m_CrossFeedbackRightSlider, m_apvts};
-	// juce::Label m_CrossFeedbackLabel;
-	// juce::Slider m_SwitchTime_msSlider;
-	// juce::Label m_SwitchTimeLabel;
 	juce::Slider m_DryWetSlider;
 	juce::Label m_DryWetLabel;
 	MouseButtonDetectOverlay m_DryWetOverlay{m_DryWetSlider, m_apvts};
@@ -342,12 +336,6 @@ private:
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_NumeratorRightAttachment;
 	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_DenominatorRightAttachment;
 
-	// juce::ToggleButton m_LinkLR;
-	// std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> m_LinkLRAttachment;
-
-	// juce::ComboBox m_AlgoSwitchCombo;
-	// std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> m_AlgoSwitchComboAttachment;
-
 	IRDisplay m_IRDisplay;
 	float m_oldBpm = -1.f;
 
@@ -357,6 +345,8 @@ private:
 	LavaLookAndFeelLinkRight m_lavaLookAndFeelLinkRight;
 
 	void linkButtonClicked();
+
+	void mouseDown(const juce::MouseEvent& event) override;
 
 	juce::TextButton m_showPopupButton;
     AdvancedPopup m_advancedPopup;
@@ -371,7 +361,7 @@ private:
 		}
 		else
 		{
-			int popupHeight = getHeight() * 0.5f;
+			int popupHeight = getHeight() * 0.4f;
 			int startY = getHeight();
 			int buttonTopY = m_showPopupButton.getY();
 			int targetY = buttonTopY - popupHeight - 2;
@@ -385,5 +375,4 @@ private:
 			m_advancedPopup.FadeIn(startY, targetY);
 		}
 	}
-
 };

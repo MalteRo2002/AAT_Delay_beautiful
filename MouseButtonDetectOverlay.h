@@ -121,11 +121,11 @@ public:
     {
         if (event.mods.isLeftButtonDown())
         {
-            m_leftSlider->mouseDown(event); // Let the slider behave as normal
+            m_leftSlider->mouseDown(event);
         }
         if (event.mods.isRightButtonDown())
         {
-            m_rightSlider->mouseDown(event); // Let the slider behave as normal
+            m_rightSlider->mouseDown(event); 
         }
     }
 
@@ -133,12 +133,12 @@ public:
     {
         if (m_leftSlider != nullptr && event.mods.isLeftButtonDown())
         {
-            m_leftSlider->mouseDrag(event); // Let the slider behave as normal
+            m_leftSlider->mouseDrag(event);
             updatePopupText();
         }
         if (m_leftSlider != nullptr && event.mods.isRightButtonDown())
         {
-            m_rightSlider->mouseDrag(event); // Let the slider behave as normal
+            m_rightSlider->mouseDrag(event);
             updatePopupText();
         }
         juce::Slider::mouseDrag(event);
@@ -177,12 +177,12 @@ public:
 
     void updatePopupText()
     {
-        auto transformValue = [](float value, const juce::String& paramName) -> float {
-            if (paramName == "Lowpass" || paramName == "Highpass")
+        auto transformValue = [this](float value) -> float {
+            if (m_param == "Lowpass" || m_param == "Highpass")
             {
                 return expf(value);
             }
-            else if (paramName == "Feedback" || paramName == "Cross Feedback")
+            else if (m_param == "Feedback" || m_param == "Cross Feedback")
             {
                 return value * 100.0f;
             }
@@ -191,14 +191,14 @@ public:
 
         if (m_apvts.getRawParameterValue("LinkLRID")->load())
         {
-            float transformedValue = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue(), m_param) : 0.0f;
+            float transformedValue = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue()) : 0.0f;
 
             popup.setText(m_param + ": " + juce::String(transformedValue, 2) + " " + m_unit);
         }
         else
         {
-            float transformedLeft = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue(), m_param) : 0.0f;
-            float transformedRight = (m_leftSlider != nullptr) ? transformValue(m_rightSlider->getValue(), m_param) : 0.0f;
+            float transformedLeft = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue()) : 0.0f;
+            float transformedRight = (m_rightSlider != nullptr) ? transformValue(m_rightSlider->getValue()) : 0.0f;
 
             popup.setText(
                 "Left: " + juce::String(transformedLeft, 2) + " " + m_unit + "\n" +
@@ -216,11 +216,11 @@ public:
 
 
 private:
+    juce::AudioProcessorValueTreeState& m_apvts;
     juce::Slider* m_leftSlider;
     juce::Slider* m_rightSlider;
     InfoPopup popup;
     juce::String valueUnit; 
-    juce::AudioProcessorValueTreeState& m_apvts;
     juce::String m_param;
     juce::String m_unit;
 };

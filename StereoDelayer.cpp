@@ -608,54 +608,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_FeedbackOverlay.setUnitName(" %");
     addAndMakeVisible(m_FeedbackOverlay);
 
-    // m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
-    // m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
-    // m_CrossFeedbackLeftSlider.setRange(g_paramCrossFeedbackLeft.minValue, g_paramCrossFeedbackLeft.maxValue);
-    // m_CrossFeedbackLeftSlider.setTextValueSuffix(g_paramCrossFeedbackLeft.unitName);
-    // val = m_apvts.getRawParameterValue(g_paramCrossFeedbackLeft.ID);
-    // m_CrossFeedbackLeftSlider.setValue(*val);
-    // m_CrossFeedbackLeftAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackLeft.ID, m_CrossFeedbackLeftSlider);
-    // m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
-    // addAndMakeVisible(m_CrossFeedbackLeftSlider);
-
-    // m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
-    // m_CrossFeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
-    // m_CrossFeedbackRightSlider.setRange(g_paramCrossFeedbackRight.minValue, g_paramCrossFeedbackRight.maxValue);
-    // m_CrossFeedbackRightSlider.setTextValueSuffix(g_paramCrossFeedbackRight.unitName);
-    // val = m_apvts.getRawParameterValue(g_paramCrossFeedbackRight.ID);
-    // m_CrossFeedbackRightSlider.setValue(*val);
-    // m_CrossFeedbackRightAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramCrossFeedbackRight.ID, m_CrossFeedbackRightSlider);
-    // m_CrossFeedbackRightSlider.setLookAndFeel(&m_lavaLookAndFeelLinkRight);
-    // addAndMakeVisible(m_CrossFeedbackRightSlider);
-
-    // m_CrossFeedbackOverlay.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_CrossFeedbackOverlay.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    // m_CrossFeedbackOverlay.setParamName("Cross Feedback");
-    // m_CrossFeedbackOverlay.setUnitName(" %");
-    // addAndMakeVisible(m_CrossFeedbackOverlay);
-
-    // m_LinkLR.onClick = [this] {StereoDelayerGUI::linkButtonClicked();};
-    // m_LinkLR.setButtonText("Link L/R");
-    // m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, false);
-    // m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
-    // addAndMakeVisible(m_LinkLR);
-
-    // m_SwitchTime_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    // m_SwitchTime_msSlider.setTextBoxStyle(juce::Slider::TextBoxAbove, false, 70, 20);
-    // m_SwitchTime_msSlider.setRange(g_paramSwitchTime_ms.minValue, g_paramSwitchTime_ms.maxValue);
-    // m_SwitchTime_msSlider.setTextValueSuffix(g_paramSwitchTime_ms.unitName);
-    // val = m_apvts.getRawParameterValue(g_paramSwitchTime_ms.ID);
-    // m_SwitchTime_msSlider.setValue(*val);
-    // m_SwitchTime_msAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramSwitchTime_ms.ID, m_SwitchTime_msSlider);
-    // addAndMakeVisible(m_SwitchTime_msSlider);
-
-    // m_SwitchTimeLabel.setText("Switch Time", juce::dontSendNotification);
-    // m_SwitchTimeLabel.setFont(juce::Font(15.0f));
-    // m_SwitchTimeLabel.setJustificationType(juce::Justification::centred);
-    // addAndMakeVisible(m_SwitchTimeLabel);
-
     m_DryWetSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetSlider.getValue());};
     m_DryWetSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DryWetSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
@@ -742,10 +694,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_HighpassOverlay.setUnitName(" Hz");
     addAndMakeVisible(m_HighpassOverlay);
 
-    // m_AlgoSwitchCombo.addItemList(g_paramSwitchAlgo.choices,1);
-    // m_AlgoSwitchComboAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(m_apvts, g_paramSwitchAlgo.ID, m_AlgoSwitchCombo);
-    // addAndMakeVisible(m_AlgoSwitchCombo);
-
     m_NumeratorLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_NumeratorLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_NumeratorLeftSlider.setRange(g_paramNumeratorLeft.minValue, g_paramNumeratorLeft.maxValue);
@@ -808,12 +756,10 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DenominatorOverlay.setParamName("Denominator");
     addAndMakeVisible(m_DenominatorOverlay);
 
-    // Button, um das Pop-up anzuzeigen
     m_showPopupButton.setButtonText("Advanced Settings");
     m_showPopupButton.onClick = [this] { togglePopupVisibility(); };
     addAndMakeVisible(m_showPopupButton);
 
-    // Pop-up-Komponente erstellen und hinzufügen
     m_advancedPopup.setVisible(false);
     m_advancedPopup.setButtonCallback([this] { StereoDelayerGUI::linkButtonClicked(); });
     addChildComponent(m_advancedPopup);
@@ -918,8 +864,8 @@ void StereoDelayerGUI::resized()
 
     m_showPopupButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
     
-    int popupBottom = height - 25 - buttonHeight * 0.8f; // Oberkante des Buttons
-    int popupTop = popupBottom - buttonHeight * 3 - 30; // Dynamische Anpassung der Oberkante
+    int popupBottom = height - 25 - buttonHeight * 0.8f;
+    int popupTop = popupBottom - buttonHeight * 3 - 30;
     
     m_advancedPopup.setBounds((width - buttonWidth * 5) / 2, popupTop, buttonWidth * 5, buttonHeight * 3);
 }
@@ -947,7 +893,6 @@ void StereoDelayerGUI::linkButtonClicked()
     std::vector<std::pair<Slider*, LookAndFeel*>> leftSliders = {
         {&m_DelayLeft_msSlider, &m_lavaLookAndFeelLeft},
         {&m_FeedbackLeftSlider, &m_lavaLookAndFeelLeft},
-        // {&m_CrossFeedbackLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_NumeratorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_DenominatorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_HighpassLeftSlider, &m_lavaLookAndFeelLeft},
@@ -957,7 +902,6 @@ void StereoDelayerGUI::linkButtonClicked()
     std::vector<std::pair<Slider*, LookAndFeel*>> rightSliders = {
         {&m_DelayRight_msSlider, &m_lavaLookAndFeelRight},
         {&m_FeedbackRightSlider, &m_lavaLookAndFeelRight},
-        // {&m_CrossFeedbackRightSlider, &m_lavaLookAndFeelRight},
         {&m_NumeratorRightSlider, &m_lavaLookAndFeelRight},
         {&m_DenominatorRightSlider, &m_lavaLookAndFeelRight},
         {&m_HighpassRightSlider, &m_lavaLookAndFeelRight},
@@ -978,4 +922,15 @@ void StereoDelayerGUI::linkButtonClicked()
     {
         slider.first->setLookAndFeel(isLinked ? linkRightLookAndFeel : slider.second);
     }
+}
+
+void StereoDelayerGUI::mouseDown(const juce::MouseEvent& event)
+{
+
+    if (m_advancedPopup.isVisible() && !m_advancedPopup.getBounds().contains(event.getPosition()))
+    {
+        togglePopupVisibility();
+    }
+
+    Component::mouseDown(event);
 }
