@@ -814,7 +814,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_showPopupButton);
 
     // Pop-up-Komponente erstellen und hinzufügen
-    m_advancedPopup.setVisible(false);           // Standardmäßig ausblenden
+    m_advancedPopup.setVisible(false);
+    m_advancedPopup.setButtonCallback([this] { StereoDelayerGUI::linkButtonClicked(); });
     addChildComponent(m_advancedPopup);
 
     startTimerHz(15);

@@ -93,7 +93,7 @@ public:
         m_CrossFeedbackOverlay.setUnitName(" %");
         addAndMakeVisible(m_CrossFeedbackOverlay);
 
-        m_LinkLR.onClick = [this] {linkButtonClicked();};
+        m_LinkLR.onClick = [this] {linkButtonClicked(); if (LinkButtonCallback) LinkButtonCallback();};
         m_LinkLR.setButtonText("Link L/R");
         m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, false);
         m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
@@ -146,6 +146,11 @@ public:
         m_AlgoSwitchCombo.setBounds(getWidth()/2-getWidth()/6,getHeight()*2/3-getHeight()/8,getWidth()*1/3,getHeight()/4);
     }
 
+    void setButtonCallback(std::function<void()> callback)
+    {
+        LinkButtonCallback = callback;
+    }
+    
 private:
     juce::AudioProcessorValueTreeState& m_apvts;
 
@@ -169,6 +174,9 @@ private:
 	LavaLookAndFeelLinkRight m_lavaLookAndFeelLinkRight;
 
     IRDisplay& m_IRDisplay;
+
+    std::function<void()> LinkButtonCallback;
+
 
     void timerCallback() override
     {

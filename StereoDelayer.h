@@ -361,7 +361,7 @@ private:
 	juce::TextButton m_showPopupButton;
     AdvancedPopup m_advancedPopup;
 
-	void StereoDelayerGUI::togglePopupVisibility()
+	void togglePopupVisibility()
 	{
 		if (m_advancedPopup.isVisible())
 		{
