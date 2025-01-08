@@ -299,6 +299,7 @@ void PresetHandler::DeployFactoryPresets()
 PresetComponent::PresetComponent(PresetHandler& ph)
 	:m_presetHandler(ph), m_somethingchanged(false)
 {
+	setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
 	bool hasCat = m_presetHandler.gethasCategories();
 	m_hidecategory = !hasCat;
 

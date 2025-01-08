@@ -706,10 +706,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_HighpassOverlay.setUnitName(" Hz");
     addAndMakeVisible(m_HighpassOverlay);
 
-    // m_AlgoSwitchCombo.addItemList(g_paramSwitchAlgo.choices,1);
-    // m_AlgoSwitchComboAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(m_apvts, g_paramSwitchAlgo.ID, m_AlgoSwitchCombo);
-    // addAndMakeVisible(m_AlgoSwitchCombo);
-
     m_NumeratorLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_NumeratorLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_NumeratorLeftSlider.setRange(g_paramNumeratorLeft.minValue, g_paramNumeratorLeft.maxValue);
@@ -931,7 +927,6 @@ void StereoDelayerGUI::linkButtonClicked()
     std::vector<std::pair<Slider*, LookAndFeel*>> leftSliders = {
         {&m_DelayLeft_msSlider, &m_lavaLookAndFeelLeft},
         {&m_FeedbackLeftSlider, &m_lavaLookAndFeelLeft},
-        // {&m_CrossFeedbackLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_NumeratorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_DenominatorLeftSlider, &m_lavaLookAndFeelLeft},
         {&m_HighpassLeftSlider, &m_lavaLookAndFeelLeft},
@@ -942,7 +937,6 @@ void StereoDelayerGUI::linkButtonClicked()
     std::vector<std::pair<Slider*, LookAndFeel*>> rightSliders = {
         {&m_DelayRight_msSlider, &m_lavaLookAndFeelRight},
         {&m_FeedbackRightSlider, &m_lavaLookAndFeelRight},
-        // {&m_CrossFeedbackRightSlider, &m_lavaLookAndFeelRight},
         {&m_NumeratorRightSlider, &m_lavaLookAndFeelRight},
         {&m_DenominatorRightSlider, &m_lavaLookAndFeelRight},
         {&m_HighpassRightSlider, &m_lavaLookAndFeelRight},
@@ -968,7 +962,7 @@ void StereoDelayerGUI::linkButtonClicked()
 
 void StereoDelayerGUI::mouseDown(const juce::MouseEvent& event)
 {
-    
+
     if (m_advancedPopup.isVisible() && !m_advancedPopup.getBounds().contains(event.getPosition()))
     {
         togglePopupVisibility();
