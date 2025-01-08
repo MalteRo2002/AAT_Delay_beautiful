@@ -862,7 +862,7 @@ void StereoDelayerGUI::resized()
 
     float scaleFactor = m_processor.getScaleFactor();
 // IRDisplay
-    m_IRDisplay.setBounds(0,0,7*width/8,height/2);
+    m_IRDisplay.setBounds((width - 7*width/8) / 2, 0, 7*width/8, height/2);
     m_IRDisplay.setScaleFactor(scaleFactor);
 // layout
     r.removeFromTop(height/2);
@@ -880,12 +880,13 @@ void StereoDelayerGUI::resized()
     m_delayLabel.setBounds(startx,starty + knobheight,knobwidth,distance_y);
 
     m_NumeratorLeftSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_DenominatorLeftSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_NumeratorRightSlider.setBounds(startx + 1*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_DenominatorRightSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_NumeratorOverlay.setBounds(startx + 1*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_DenominatorOverlay.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_NumeratorLabel.setBounds(startx + 1*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+
+    m_DenominatorLeftSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_DenominatorRightSlider.setBounds(startx + 2*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_DenominatorOverlay.setBounds(startx + 2*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
     m_DenominatorLabel.setBounds(startx + 2*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     m_FeedbackLeftSlider.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
@@ -893,34 +894,24 @@ void StereoDelayerGUI::resized()
     m_FeedbackOverlay.setBounds(startx + 3*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
     m_FeedbackLabel.setBounds(startx + 3*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
-    // m_CrossFeedbackLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    // m_CrossFeedbackRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    // m_CrossFeedbackOverlay.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    // m_CrossFeedbackLabel.setBounds(startx + 4*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    m_LowpassLeftSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_LowpassRightSlider.setBounds(startx + 4*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_LowpassOverlay.setBounds(startx + 4*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_LowpassLabel.setBounds(startx + 4*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
-    m_LowpassLeftSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_LowpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_LowpassOverlay.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_LowpassLabel.setBounds(startx + 5*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
+    m_HighpassLeftSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_HighpassRightSlider.setBounds(startx + 5*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
+    m_HighpassOverlay.setBounds(startx + 5*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
+    m_HighpassLabel.setBounds(startx + 5*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
-    m_HighpassLeftSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_HighpassRightSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty,knobwidth,knobheight);
-    m_HighpassOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty ,knobwidth,knobheight);
-    m_HighpassLabel.setBounds(startx + 6*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
-
-    m_DryWetSlider.setBounds(startx + 7*(knobwidth + distance_x) ,starty + knobheight ,knobwidth,knobheight);
-    m_DryWetOverlay.setBounds(startx + 7*(knobwidth + distance_x) ,starty + knobheight ,knobwidth,knobheight);
-    m_DryWetLabel.setBounds(startx + 7*(knobwidth + distance_x), starty + 2 * knobheight, knobwidth, distance_y);
+    m_DryWetSlider.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
+    m_DryWetOverlay.setBounds(startx + 6*(knobwidth + distance_x) ,starty, knobwidth,knobheight);
+    m_DryWetLabel.setBounds(startx + 6*(knobwidth + distance_x), starty + knobheight, knobwidth, distance_y);
 
     int buttonWidth = 80*scaleFactor;
     int buttonHeight = 20*scaleFactor;
     int margin = 5*scaleFactor;
-    // m_LinkLR.setBounds(10,3*height/4,buttonWidth,buttonHeight);
 
-    // m_AlgoSwitchCombo.setBoundsRelative(0.9,0.01,0.08,0.04);
-    // m_SwitchTime_msSlider.setBounds(width-90*scaleFactor, 60*scaleFactor,knobwidth,knobheight);
-    // m_SwitchTimeLabel.setBounds(width-90*scaleFactor, 60*scaleFactor + knobheight,knobwidth,distance_y);
-    
     int buttonX = (width - buttonWidth) / 2;
     int buttonY = height - buttonHeight - margin;
 
