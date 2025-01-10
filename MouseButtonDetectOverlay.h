@@ -185,14 +185,14 @@ public:
 
         if (m_apvts.getRawParameterValue("LinkLRID")->load() || m_param == "Dry / Wet" || m_param == "Switch Time")
         {
-            float transformedValue = (m_leftSlider != nullptr) ? static_cast<float>(transformValue(m_leftSlider->getValue())) : 0.0f;
+            float transformedValue = (m_leftSlider != nullptr) ? transformValue(static_cast<float>(m_leftSlider->getValue())) : 0.0f;
 
             popup.setText(m_param + ": " + juce::String(transformedValue, 2) + " " + m_unit);
         }
         else
         {
-            float transformedLeft = (m_leftSlider != nullptr) ? static_cast<float>(transformValue(m_leftSlider->getValue())) : 0.0f;
-            float transformedRight = (m_rightSlider != nullptr) ? static_cast<float>(transformValue(m_rightSlider->getValue())) : 0.0f;
+            float transformedLeft = (m_leftSlider != nullptr) ? transformValue(static_cast<float>(m_leftSlider->getValue())) : 0.0f;
+            float transformedRight = (m_rightSlider != nullptr) ? transformValue(static_cast<float>(m_rightSlider->getValue())) : 0.0f;
 
             popup.setText(
                 "Left: " + juce::String(transformedLeft, 2) + " " + m_unit + "\n" +
@@ -200,11 +200,11 @@ public:
         }
     }
 
-
     void setValueUnit(const juce::String& unit) { valueUnit = unit; }
 
     void paint(juce::Graphics& g) override
     {
+        (void)g;
         // Do not draw anything, making the slider invisible
     }
 
