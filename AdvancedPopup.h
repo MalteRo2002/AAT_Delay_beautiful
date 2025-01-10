@@ -210,6 +210,7 @@ public:
         LinkButtonCallback = callback;
     }
 
+    juce::ToggleButton m_LinkLR;
 private:
     juce::AudioProcessorValueTreeState& m_apvts;
 
@@ -221,7 +222,6 @@ private:
     juce::Slider m_SwitchTime_msRightSlider;
     juce::Label m_SwitchTime_msLabel;
     MouseButtonDetectOverlay m_SwitchTime_msOverlay{m_SwitchTime_msLeftSlider, m_SwitchTime_msRightSlider, m_apvts};
-    juce::ToggleButton m_LinkLR;
     juce::ComboBox m_AlgoSwitchCombo;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> m_CrossFeedbackLeftAttachment;

@@ -778,6 +778,9 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_advancedPopup.setButtonCallback([this] { StereoDelayerGUI::linkButtonClicked(); });
     addChildComponent(m_advancedPopup);
 
+    m_advancedPopup.m_LinkLR.setToggleState(true, true);
+    m_IRDisplay.repaint();
+
     startTimerHz(15);
 }
 
