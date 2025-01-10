@@ -45,7 +45,7 @@ public:
             juce::Colours::white.withAlpha(0.1f),
             0.0f, 0.0f,
             juce::Colours::transparentBlack,
-            0.0f, getHeight(), false
+            0.0f, static_cast<float>(getHeight()), false
         ));
         g.fillRoundedRectangle(getLocalBounds().toFloat(), 10.0f);
 
@@ -138,7 +138,7 @@ public:
         juce::Slider::mouseDrag(event);
     }
 
-    void mouseEnter(const juce::MouseEvent& event) override
+    void mouseEnter(const juce::MouseEvent&) override
     {
         if (auto* parent = getParentComponent())
         {
@@ -185,14 +185,14 @@ public:
 
         if (m_apvts.getRawParameterValue("LinkLRID")->load() || m_param == "Dry / Wet" || m_param == "Switch Time")
         {
-            float transformedValue = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue()) : 0.0f;
+            float transformedValue = (m_leftSlider != nullptr) ? static_cast<float>(transformValue(m_leftSlider->getValue())) : 0.0f;
 
             popup.setText(m_param + ": " + juce::String(transformedValue, 2) + " " + m_unit);
         }
         else
         {
-            float transformedLeft = (m_leftSlider != nullptr) ? transformValue(m_leftSlider->getValue()) : 0.0f;
-            float transformedRight = (m_rightSlider != nullptr) ? transformValue(m_rightSlider->getValue()) : 0.0f;
+            float transformedLeft = (m_leftSlider != nullptr) ? static_cast<float>(transformValue(m_leftSlider->getValue())) : 0.0f;
+            float transformedRight = (m_rightSlider != nullptr) ? static_cast<float>(transformValue(m_rightSlider->getValue())) : 0.0f;
 
             popup.setText(
                 "Left: " + juce::String(transformedLeft, 2) + " " + m_unit + "\n" +

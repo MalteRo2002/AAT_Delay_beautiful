@@ -79,11 +79,10 @@ public:
         addAndMakeVisible(m_SwitchTime_msOverlay);
 
         m_SwitchTime_msLabel.setText("Switch Time", juce::dontSendNotification);
-        m_SwitchTime_msLabel.setFont(juce::Font(15.0f));
         m_SwitchTime_msLabel.setJustificationType(juce::Justification::centred);
         addAndMakeVisible(m_SwitchTime_msLabel);
 
-        m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(m_CrossFeedbackLeftSlider.getValue());};
+        m_CrossFeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackLeft(static_cast<float>(m_CrossFeedbackLeftSlider.getValue()));};
         m_CrossFeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_CrossFeedbackLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
         m_CrossFeedbackLeftSlider.setRange(g_paramCrossFeedbackLeft.minValue, g_paramCrossFeedbackLeft.maxValue);
@@ -94,7 +93,7 @@ public:
         m_CrossFeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
         addAndMakeVisible(m_CrossFeedbackLeftSlider);
 
-        m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(m_CrossFeedbackRightSlider.getValue());};
+        m_CrossFeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setCrossFeedbackRight(static_cast<float>(m_CrossFeedbackRightSlider.getValue()));};
         m_CrossFeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
         m_CrossFeedbackRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
         m_CrossFeedbackRightSlider.setRange(g_paramCrossFeedbackRight.minValue, g_paramCrossFeedbackRight.maxValue);
@@ -106,7 +105,6 @@ public:
         addAndMakeVisible(m_CrossFeedbackRightSlider);
 
         m_CrossFeedbackLabel.setText("Cross Feedback", juce::dontSendNotification);
-        m_CrossFeedbackLabel.setFont(juce::Font(15.0f));
         m_CrossFeedbackLabel.setJustificationType(juce::Justification::centred);
         addAndMakeVisible(m_CrossFeedbackLabel);
 
@@ -118,7 +116,7 @@ public:
 
         m_LinkLR.onClick = [this] {linkButtonClicked(); if (LinkButtonCallback) LinkButtonCallback();};
         m_LinkLR.setButtonText("Link L/R");
-        m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, true);
+        m_LinkLR.setToggleState(g_paramLinkLR.defaultValue, juce::sendNotification);
         m_LinkLRAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(m_apvts, g_paramLinkLR.ID, m_LinkLR);
         addAndMakeVisible(m_LinkLR);
 
@@ -181,7 +179,6 @@ public:
         const int sectionWidth = width / 3;
         const int sliderHeight = height / 2;
         const int labelHeight = 20;
-        const int sectionHeight = sliderHeight + labelHeight;
 
         int x = 0;
         m_CrossFeedbackLeftSlider.setBounds(x, height/2 - sliderHeight/2, sectionWidth, sliderHeight);

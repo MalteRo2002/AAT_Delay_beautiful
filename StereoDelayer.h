@@ -368,7 +368,7 @@ private:
 		}
 		else
 		{
-			int popupHeight = getHeight() * 0.5f;
+			int popupHeight = static_cast<int>(getHeight() * 0.5f);
 			int startY = getHeight();
 			int buttonTopY = m_showPopupButton.getY();
 			int targetY = buttonTopY - popupHeight - 2;

@@ -9,7 +9,7 @@ public:
     }
 
         void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
-                          const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) override
+                          const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override
     {
         auto radius = (float) juce::jmin(width / 2, height / 2) - 4.0f;
         auto centreX = (float) x + (float) width * 0.5f;

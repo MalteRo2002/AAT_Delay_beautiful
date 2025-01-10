@@ -542,7 +542,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 {
     setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
 
-    m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(m_DelayLeft_msSlider.getValue());};
+    m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(static_cast<float>(m_DelayLeft_msSlider.getValue()));};
     m_DelayLeft_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DelayLeft_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DelayLeft_msSlider.setRange(g_paramDelayLeft_ms.minValue, g_paramDelayLeft_ms.maxValue);
@@ -553,7 +553,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DelayLeft_msSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
     addAndMakeVisible(m_DelayLeft_msSlider);
 
-    m_DelayRight_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msRight(m_DelayRight_msSlider.getValue());};
+    m_DelayRight_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msRight(static_cast<float>(m_DelayRight_msSlider.getValue()));};
     m_DelayRight_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DelayRight_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DelayRight_msSlider.setRange(g_paramDelayRight_ms.minValue, g_paramDelayRight_ms.maxValue);
@@ -565,7 +565,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_DelayRight_msSlider);
 
     m_delayLabel.setText("Delay", juce::dontSendNotification);
-    m_delayLabel.setFont(juce::Font(15.0f));
     m_delayLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_delayLabel);
 
@@ -575,7 +574,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_Delay_msOverlay.setUnitName(" ms");
     addAndMakeVisible(m_Delay_msOverlay);
 
-    m_FeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setFeedbackLeft(m_FeedbackLeftSlider.getValue());};
+    m_FeedbackLeftSlider.onValueChange = [this] {m_IRDisplay.setFeedbackLeft(static_cast<float>(m_FeedbackLeftSlider.getValue()));};
     m_FeedbackLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_FeedbackLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_FeedbackLeftSlider.setRange(g_paramFeedbackLeft.minValue, g_paramFeedbackLeft.maxValue);
@@ -586,7 +585,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_FeedbackLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
     addAndMakeVisible(m_FeedbackLeftSlider);
 
-    m_FeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setFeedbackRight(m_FeedbackRightSlider.getValue());};
+    m_FeedbackRightSlider.onValueChange = [this] {m_IRDisplay.setFeedbackRight(static_cast<float>(m_FeedbackRightSlider.getValue()));};
     m_FeedbackRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_FeedbackRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_FeedbackRightSlider.setRange(g_paramFeedbackRight.minValue, g_paramFeedbackRight.maxValue);
@@ -598,7 +597,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_FeedbackRightSlider);
 
     m_FeedbackLabel.setText("Feedback", juce::dontSendNotification);
-    m_FeedbackLabel.setFont(juce::Font(15.0f));
     m_FeedbackLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_FeedbackLabel);
 
@@ -608,7 +606,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_FeedbackOverlay.setUnitName(" %");
     addAndMakeVisible(m_FeedbackOverlay);
 
-    m_DryWetLeftSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetLeftSlider.getValue());};
+    m_DryWetLeftSlider.onValueChange = [this] {m_IRDisplay.setDryWet(static_cast<float>(m_DryWetLeftSlider.getValue()));};
     m_DryWetLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DryWetLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DryWetLeftSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
@@ -619,7 +617,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DryWetAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(m_apvts, g_paramDryWet.ID, m_DryWetLeftSlider);
     addAndMakeVisible(m_DryWetLeftSlider);
 
-    m_DryWetRightSlider.onValueChange = [this] {m_IRDisplay.setDryWet(m_DryWetRightSlider.getValue());};
+    m_DryWetRightSlider.onValueChange = [this] {m_IRDisplay.setDryWet(static_cast<float>(m_DryWetRightSlider.getValue()));};
     m_DryWetRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DryWetRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_DryWetRightSlider.setRange(g_paramDryWet.minValue, g_paramDryWet.maxValue);
@@ -631,7 +629,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_DryWetRightSlider);
 
     m_DryWetLabel.setText("Dry / Wet", juce::dontSendNotification);
-    m_DryWetLabel.setFont(juce::Font(15.0f));
     m_DryWetLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_DryWetLabel);
 
@@ -640,7 +637,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_DryWetOverlay.setParamName("Dry / Wet");
     addAndMakeVisible(m_DryWetOverlay);
 
-    m_LowpassLeftSlider.onValueChange = [this] {m_IRDisplay.setLowpassLeft(expf(m_LowpassLeftSlider.getValue()));};
+    m_LowpassLeftSlider.onValueChange = [this] {m_IRDisplay.setLowpassLeft(static_cast<float>(exp(static_cast<double>(m_LowpassLeftSlider.getValue()))));};
     m_LowpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_LowpassLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_LowpassLeftSlider.setRange(g_paramLowpassLeft.minValue, g_paramLowpassLeft.maxValue);
@@ -651,7 +648,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_LowpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
     addAndMakeVisible(m_LowpassLeftSlider);
 
-    m_LowpassRightSlider.onValueChange = [this] {m_IRDisplay.setLowpassRight(expf(m_LowpassRightSlider.getValue()));};
+    m_LowpassRightSlider.onValueChange = [this] {m_IRDisplay.setLowpassRight(static_cast<float>(exp(static_cast<double>(m_LowpassRightSlider.getValue()))));};
     m_LowpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_LowpassRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_LowpassRightSlider.setRange(g_paramLowpassRight.minValue, g_paramLowpassRight.maxValue);
@@ -663,7 +660,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_LowpassRightSlider);
 
     m_LowpassLabel.setText("Lowpass", juce::dontSendNotification);
-    m_LowpassLabel.setFont(juce::Font(15.0f));
     m_LowpassLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_LowpassLabel);
 
@@ -673,7 +669,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_LowpassOverlay.setUnitName(" Hz");
     addAndMakeVisible(m_LowpassOverlay);
 
-    m_HighpassLeftSlider.onValueChange = [this] {m_IRDisplay.setHighpassLeft(expf(m_HighpassLeftSlider.getValue()));};
+    m_HighpassLeftSlider.onValueChange = [this] {m_IRDisplay.setHighpassLeft(static_cast<float>(exp(static_cast<double>(m_HighpassLeftSlider.getValue()))));};
     m_HighpassLeftSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_HighpassLeftSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_HighpassLeftSlider.setRange(g_paramHighpassLeft.minValue, g_paramHighpassLeft.maxValue);
@@ -684,7 +680,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_HighpassLeftSlider.setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
     addAndMakeVisible(m_HighpassLeftSlider);
 
-    m_HighpassRightSlider.onValueChange = [this] {m_IRDisplay.setHighpassRight(expf(m_HighpassRightSlider.getValue()));};
+    m_HighpassRightSlider.onValueChange = [this] {m_IRDisplay.setHighpassRight(static_cast<float>(exp(static_cast<double>(m_HighpassRightSlider.getValue()))));};
     m_HighpassRightSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_HighpassRightSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
     m_HighpassRightSlider.setRange(g_paramHighpassRight.minValue, g_paramHighpassRight.maxValue);
@@ -696,7 +692,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_HighpassRightSlider);
  
     m_HighpassLabel.setText("Highpass", juce::dontSendNotification);
-    m_HighpassLabel.setFont(juce::Font(15.0f));
     m_HighpassLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_HighpassLabel);
 
@@ -749,7 +744,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_IRDisplay);
 
     m_NumeratorLabel.setText("Numerator", juce::dontSendNotification);
-    m_NumeratorLabel.setFont(juce::Font(15.0f));
     m_NumeratorLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_NumeratorLabel);
 
@@ -759,7 +753,6 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     addAndMakeVisible(m_NumeratorOverlay);
 
     m_DenominatorLabel.setText("Denominator", juce::dontSendNotification);
-    m_DenominatorLabel.setFont(juce::Font(15.0f));
     m_DenominatorLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(m_DenominatorLabel);
 
@@ -778,7 +771,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
     m_advancedPopup.setButtonCallback([this] { StereoDelayerGUI::linkButtonClicked(); });
     addChildComponent(m_advancedPopup);
 
-    m_advancedPopup.m_LinkLR.setToggleState(true, true);
+    m_advancedPopup.m_LinkLR.setToggleState(true, juce::sendNotification);
+
     m_IRDisplay.repaint();
 
     startTimerHz(15);
@@ -786,6 +780,7 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 
 StereoDelayerGUI::~StereoDelayerGUI()
 {
+    setLookAndFeel(nullptr);
     stopTimer();
 }
 
@@ -821,87 +816,75 @@ void StereoDelayerGUI::resized()
 
     float scaleFactor = m_processor.getScaleFactor();
 
-    // Grundlegende Größen
-    int knobWidth = 80 * scaleFactor;
-    int knobHeight = 80 * scaleFactor;
-    int bigKnobWidth = 120 * scaleFactor;
-    int bigKnobHeight = 120 * scaleFactor;
-    int distanceX = 10 * scaleFactor;
-    int distanceY = 20 * scaleFactor;
+    int knobWidth = static_cast<int>(80 * scaleFactor);
+    int knobHeight = static_cast<int>(80 * scaleFactor);
+    int bigKnobWidth = static_cast<int>(120 * scaleFactor);
+    int bigKnobHeight = static_cast<int>(120 * scaleFactor);
+    int distanceX = static_cast<int>(10 * scaleFactor);
+    int distanceY = static_cast<int>(20 * scaleFactor);
 
-    // Display in der oberen Hälfte
-    int displayHeight = height*0.45; // Display nimmt die obere Hälfte ein
+    int displayHeight = static_cast<int>(height * 0.45);
     m_IRDisplay.setBounds(0, 0, width, displayHeight);
     m_IRDisplay.setScaleFactor(scaleFactor);
 
-    // Platz für Slider und Buttons in der unteren Hälfte
     r.removeFromTop(displayHeight);
 
-    // Delay-Slider zentral in der unteren Hälfte
     int delayX = width / 2 - bigKnobWidth / 2;
-    int delayY = r.getY() + 30 * scaleFactor;
+    int delayY = r.getY() + static_cast<int>(30 * scaleFactor);
     m_DelayLeft_msSlider.setBounds(delayX, delayY, bigKnobWidth, bigKnobHeight);
     m_DelayRight_msSlider.setBounds(delayX, delayY, bigKnobWidth, bigKnobHeight);
     m_Delay_msOverlay.setBounds(delayX, delayY, bigKnobWidth, bigKnobHeight);
     m_delayLabel.setBounds(delayX, delayY + bigKnobHeight, bigKnobWidth, distanceY);
 
-    // Numerator-Slider links über dem Delay
     int numeratorX = delayX - knobWidth - distanceX * 2;
     int numeratorY = delayY - distanceY;
-    m_NumeratorLeftSlider.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
-    m_NumeratorRightSlider.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
-    m_NumeratorOverlay.setBounds(numeratorX, numeratorY, knobWidth*0.9, knobHeight*0.9);
-    m_NumeratorLabel.setBounds(numeratorX, numeratorY + knobHeight*0.9, knobWidth, distanceY);
+    m_NumeratorLeftSlider.setBounds(numeratorX, numeratorY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_NumeratorRightSlider.setBounds(numeratorX, numeratorY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_NumeratorOverlay.setBounds(numeratorX, numeratorY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_NumeratorLabel.setBounds(numeratorX, numeratorY + static_cast<int>(knobHeight*0.9), knobWidth, distanceY);
 
-    // Denominator-Slider unter dem Numerator
     int denominatorX = numeratorX;
     int denominatorY = delayY + distanceY*4;
-    m_DenominatorLeftSlider.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
-    m_DenominatorRightSlider.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
-    m_DenominatorOverlay.setBounds(denominatorX, denominatorY, knobWidth*0.9, knobHeight*0.9);
-    m_DenominatorLabel.setBounds(denominatorX, denominatorY + knobHeight*0.9, knobWidth, distanceY);
+    m_DenominatorLeftSlider.setBounds(denominatorX, denominatorY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_DenominatorRightSlider.setBounds(denominatorX, denominatorY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_DenominatorOverlay.setBounds(denominatorX, denominatorY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_DenominatorLabel.setBounds(denominatorX, denominatorY + static_cast<int>(knobHeight*0.9), knobWidth, distanceY);
 
-    // Feedback-Slider links neben Delay
-    int feedbackX = numeratorX - knobWidth*1.2 - distanceX;
+    int feedbackX = numeratorX - static_cast<int>(knobWidth * 1.2f) - distanceX;
     int feedbackY = delayY + knobWidth/3;
-    m_FeedbackLeftSlider.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
-    m_FeedbackRightSlider.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
-    m_FeedbackOverlay.setBounds(feedbackX, feedbackY, knobWidth*1.1, knobHeight*1.1);
-    m_FeedbackLabel.setBounds(feedbackX, feedbackY + knobHeight*1.1, knobWidth, distanceY);
+    m_FeedbackLeftSlider.setBounds(feedbackX, feedbackY, static_cast<int>(knobWidth*1.1), static_cast<int>(knobHeight*1.1));
+    m_FeedbackRightSlider.setBounds(feedbackX, feedbackY, static_cast<int>(knobWidth*1.1), static_cast<int>(knobHeight*1.1));
+    m_FeedbackOverlay.setBounds(feedbackX, feedbackY, static_cast<int>(knobWidth*1.1), static_cast<int>(knobHeight*1.1));
+    m_FeedbackLabel.setBounds(feedbackX, feedbackY + static_cast<int>(knobHeight*1.1), knobWidth, distanceY);
 
-    // Filter-Slider rechts oben übereinander
     int filterX = delayX + bigKnobWidth + distanceX * 2;
     int lowpassY = delayY - distanceY;
     int highpassY = delayY + distanceY*4;
-    m_LowpassLeftSlider.setBounds(filterX, lowpassY, knobWidth*0.9, knobHeight*0.9);
-    m_LowpassRightSlider.setBounds(filterX, lowpassY, knobWidth*0.9, knobHeight*0.9);
-    m_LowpassOverlay.setBounds(filterX, lowpassY, knobWidth*0.9, knobHeight*0.9);
-    m_LowpassLabel.setBounds(filterX, lowpassY + knobHeight*0.9, knobWidth, distanceY);
+    m_LowpassLeftSlider.setBounds(filterX, lowpassY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_LowpassRightSlider.setBounds(filterX, lowpassY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_LowpassOverlay.setBounds(filterX, lowpassY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_LowpassLabel.setBounds(filterX, lowpassY + static_cast<int>(knobHeight*0.9), knobWidth, distanceY);
 
-    m_HighpassLeftSlider.setBounds(filterX, highpassY, knobWidth*0.9, knobHeight*0.9);
-    m_HighpassRightSlider.setBounds(filterX, highpassY, knobWidth*0.9, knobHeight*0.9);
-    m_HighpassOverlay.setBounds(filterX, highpassY, knobWidth*0.9, knobHeight*0.9);
-    m_HighpassLabel.setBounds(filterX, highpassY + knobHeight*0.9, knobWidth, distanceY);
+    m_HighpassLeftSlider.setBounds(filterX, highpassY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_HighpassRightSlider.setBounds(filterX, highpassY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_HighpassOverlay.setBounds(filterX, highpassY, static_cast<int>(knobWidth*0.9), static_cast<int>(knobHeight*0.9));
+    m_HighpassLabel.setBounds(filterX, highpassY + static_cast<int>(knobHeight*0.9), knobWidth, distanceY);
 
-    // Mix-Slider rechts neben Filter
-    int mixX = filterX + knobWidth*1.2 + distanceX;
-    int mixY = delayY + knobWidth/3;
-    m_DryWetLeftSlider.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
-    m_DryWetRightSlider.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
-    m_DryWetOverlay.setBounds(mixX, mixY, knobWidth*1.1, knobHeight*1.1);
-    m_DryWetLabel.setBounds(mixX, mixY + knobHeight*1.1, knobWidth*1.1, distanceY);
+    int mixX = filterX + static_cast<int>(knobWidth*1.2) + distanceX;
+    int mixY = delayY + static_cast<int>(knobWidth/3);
+    m_DryWetLeftSlider.setBounds(mixX, mixY, static_cast<int>(knobWidth*1.1), static_cast<int>(knobHeight*1.1));
+    m_DryWetRightSlider.setBounds(mixX, mixY, static_cast<int>(knobWidth*1.1), static_cast<int>(knobHeight*1.1));
+    m_DryWetOverlay.setBounds(mixX, mixY, static_cast<int>(knobWidth*1.1), static_cast<int>(knobHeight*1.1));
+    m_DryWetLabel.setBounds(mixX, mixY + static_cast<int>(knobHeight*1.1), static_cast<int>(knobWidth*1.1), distanceY);
 
-    // Buttons unten in der unteren Hälfte
-    int buttonWidth = 80 * scaleFactor;
-    int buttonHeight = 20 * scaleFactor;
-    int buttonMargin = 10 * scaleFactor;
+    int buttonWidth = static_cast<int>(80 * scaleFactor);
+    int buttonHeight = static_cast<int>(20 * scaleFactor);
+    int buttonMargin = static_cast<int>(10 * scaleFactor);
     int buttonX = (width - buttonWidth) / 2;
     int buttonY = r.getBottom() - 2 * buttonHeight - buttonMargin;
 
-    // Position der Buttons
     m_showPopupButton.setBounds(buttonX, buttonY + buttonHeight, buttonWidth, buttonHeight);
 
-    // Optional: Popup unterhalb des Buttons
     int popupWidth = buttonWidth * 5;
     int popupHeight = buttonHeight * 3;
     m_advancedPopup.setBounds((width - popupWidth) / 2, buttonY - popupHeight - buttonMargin, popupWidth, popupHeight);
