@@ -6,7 +6,7 @@
 
 set(TARGET_NAME StereoDelayer)
 
-project(${TARGET_NAME} VERSION 1.0.1)
+project(${TARGET_NAME} VERSION 1.0.2)
 
 configure_file(Versioning.h.in Versioning.h)
 

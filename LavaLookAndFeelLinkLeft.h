@@ -11,7 +11,7 @@ public:
     }
 
     void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
-                          const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) override
+                          const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override
     {
         auto radius = (float) juce::jmin(width / 2, height / 2) - 4.0f;
         auto centreX = (float) x + (float) width * 0.5f;
@@ -41,6 +41,10 @@ public:
     void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
                           bool isMouseOverButton, bool isButtonDown) override
     {
+        (void)backgroundColour;
+        (void)isMouseOverButton;
+        (void)isButtonDown;
+
         auto buttonArea = button.getLocalBounds();
         auto edge = 4;
         buttonArea.reduce(edge, edge);
@@ -78,16 +82,23 @@ public:
     }
 
     void drawPopupMenuBackground(Graphics& g, int width, int height) override
-{
-    g.fillAll(juce::Colours::darkgrey); // Setzt den Hintergrund auf Dunkelgrau
-}
+    {
+        (void)width;
+        (void)height;
+    
+        g.fillAll(juce::Colours::darkgrey);
+    }
 
     void drawLabel(juce::Graphics& g, juce::Label& label) override
     {
         g.setColour(label.findColour(juce::Label::textColourId));
 
-        g.setFont(juce::Font(14.0f, juce::Font::bold));
+        juce::FontOptions fontOptions = juce::FontOptions().withHeight(15.0f);
 
+        juce::Font font(fontOptions);
+        font.setStyleFlags(juce::Font::bold);
+
+        g.setFont(font);
         g.drawFittedText(label.getText(), label.getLocalBounds(), juce::Justification::centred, 1);
     }
 };
