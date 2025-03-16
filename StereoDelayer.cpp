@@ -542,6 +542,8 @@ StereoDelayerGUI::StereoDelayerGUI(StereoDelayerAudioProcessor& p, juce::AudioPr
 {
     setLookAndFeel(&m_lavaLookAndFeelLinkLeft);
 
+    m_image = juce::ImageFileFormat::loadFrom(stone_jpg, stone_jpg_len);
+
     m_DelayLeft_msSlider.onValueChange = [this] {m_IRDisplay.setDelay_msLeft(m_DelayLeft_msSlider.getValue());};
     m_DelayLeft_msSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m_DelayLeft_msSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 70, 20);
@@ -796,12 +798,9 @@ void StereoDelayerGUI::paint(juce::Graphics &g)
 
     auto bounds = getLocalBounds();
 
-    if (auto image = juce::ImageFileFormat::loadFrom(stone_jpg, stone_jpg_len); image.isValid())
-    {
-        g.drawImageWithin(image, bounds.getX(), bounds.getY(),
-                        bounds.getWidth(), bounds.getHeight(),
-                        juce::RectanglePlacement::fillDestination);
-    }
+    g.drawImageWithin(m_image, bounds.getX(), bounds.getY(),
+                    bounds.getWidth(), bounds.getHeight(),
+                    juce::RectanglePlacement::fillDestination);
 
     g.setColour (juce::Colours::white);
 

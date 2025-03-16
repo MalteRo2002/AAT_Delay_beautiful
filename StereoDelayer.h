@@ -351,6 +351,8 @@ private:
 	LavaLookAndFeelLinkLeft m_lavaLookAndFeelLinkLeft;
 	LavaLookAndFeelLinkRight m_lavaLookAndFeelLinkRight;
 
+	juce::Image m_image;
+
 	void linkButtonClicked();
 
 	void mouseDown(const juce::MouseEvent& event) override;
